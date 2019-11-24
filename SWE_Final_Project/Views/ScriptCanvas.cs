@@ -7,11 +7,16 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Drawing;
 using SWE_Final_Project.Managers;
+using SWE_Final_Project.Views.States;
 
 namespace SWE_Final_Project.Views {
-    class ScriptCanvas: System.Windows.Forms.PictureBox {
+    class ScriptCanvas: PictureBox {
         public ScriptCanvas(): base() {
+            // fill in the father container
             Dock = DockStyle.Fill;
+
+            // allow drop operation
+            AllowDrop = true;
 
             // to avoid flashing when invalidating
             DoubleBuffered = true;
@@ -21,15 +26,30 @@ namespace SWE_Final_Project.Views {
             Cursor = Cursors.Cross;
         }
 
-        protected override void OnMouseUp(MouseEventArgs e) {
+        protected override void OnDragEnter(DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.Bitmap))
+                e.Effect = DragDropEffects.Copy;
+        }
 
+        protected override void OnDragDrop(DragEventArgs e) {
+            //var bmp = (Bitmap) e.Data.GetData(DataFormats.Bitmap);
+
+            // get the client point
+            Point clientPoint = PointToClient(new Point(e.X, e.Y));
+
+            // add the state at the location of client point
+            if (MouseManager.CurrentHoldingType == HoldingType.START)
+                Controls.Add(new StartStateView(clientPoint.X, clientPoint.Y, "", true));
+
+            // reset the holding type to NONE
+            MouseManager.CurrentHoldingType = HoldingType.NONE;
+
+            // paint on the picture-box
+            Invalidate();
         }
 
         protected override void OnMouseDoubleClick(MouseEventArgs e) {
-            // set the mouse status with holding-status and location
-            MouseManager.setMouseStatus(MouseManager.MouseHolding.HOLDING_NEW_STATE, e.X, e.Y);
-
-            this.Controls.Add(new StateView(e.X, e.Y, "motherfucker\nyou are an asshole"));
+            Controls.Add(new StartStateView(e.X, e.Y, "", true));
 
             // paint on the picture-box
             Invalidate();
@@ -37,15 +57,8 @@ namespace SWE_Final_Project.Views {
 
         protected override void OnPaint(PaintEventArgs e) {
             Graphics g = e.Graphics;
-            g.DrawLine(Pens.Black, 0, 0, 10, 10);
+            //g.DrawLine(Pens.Black, 0, 0, 10, 10);
 
-            // if here's a new state coming
-            if (MouseManager.CurrentMouseHolding == MouseManager.MouseHolding.HOLDING_NEW_STATE) {
-
-
-                // after painting, reset the mouse status into LOUNGING
-                MouseManager.setMouseStatus(MouseManager.MouseHolding.LOUNGING);
-            }
         }
     }
 }

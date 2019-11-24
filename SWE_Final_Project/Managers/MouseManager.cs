@@ -5,7 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SWE_Final_Project.Managers {
+    // the mouse can hold the 3 types of states: START, END, and GENERAL
+    enum HoldingType {
+        START, END, GENERAL, NONE
+    }
+
     // for managing the status of the mouse
+    class MouseManager {
+
+        static private HoldingType mCurrentHoldingType = HoldingType.NONE;
+        internal static HoldingType CurrentHoldingType { get => mCurrentHoldingType; set => mCurrentHoldingType = value; }
+    }
+
+    /*
     class MouseManager {
         // the enum for checking the mouse is holding something or not
         public enum MouseHolding {
@@ -40,4 +52,5 @@ namespace SWE_Final_Project.Managers {
             mMouseY = y;
         }
     }
+    */
 }

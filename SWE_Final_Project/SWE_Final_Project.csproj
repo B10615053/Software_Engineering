@@ -61,7 +61,13 @@
     <Compile Include="Views\ScriptTabPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Views\StateView.cs">
+    <Compile Include="Views\StateInfoTableLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\States\StartStateView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Views\States\StateView.cs">
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="Form1.resx">

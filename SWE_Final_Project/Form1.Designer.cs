@@ -23,49 +23,59 @@
         /// 這個方法的內容。
         /// </summary>
         private void InitializeComponent() {
-            this.baseTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayout_base = new System.Windows.Forms.TableLayoutPanel();
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
-            this.mainWithoutCmdTableLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.screenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayout_main = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayout_mainWithoutCmd = new System.Windows.Forms.TableLayoutPanel();
             this.scriptsTabControl = new System.Windows.Forms.TabControl();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.baseTableLayout.SuspendLayout();
+            this.statesListPanel = new System.Windows.Forms.Panel();
+            this.tableLayout_cmd = new System.Windows.Forms.TableLayoutPanel();
+            this.txtCmdUserInput = new System.Windows.Forms.TextBox();
+            this.txtCmdOutput = new System.Windows.Forms.TextBox();
+            this.panelInfoContainer = new System.Windows.Forms.Panel();
+            this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
-            this.mainTableLayout.SuspendLayout();
-            this.mainWithoutCmdTableLayout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tableLayout_main.SuspendLayout();
+            this.tableLayout_mainWithoutCmd.SuspendLayout();
+            this.tableLayout_cmd.SuspendLayout();
             this.SuspendLayout();
             // 
-            // baseTableLayout
+            // tableLayout_base
             // 
-            this.baseTableLayout.ColumnCount = 1;
-            this.baseTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.baseTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.baseTableLayout.Controls.Add(this.mainMenuStrip, 0, 0);
-            this.baseTableLayout.Controls.Add(this.mainTableLayout, 0, 1);
-            this.baseTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.baseTableLayout.Location = new System.Drawing.Point(0, 0);
-            this.baseTableLayout.Name = "baseTableLayout";
-            this.baseTableLayout.RowCount = 2;
-            this.baseTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.434783F));
-            this.baseTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.56522F));
-            this.baseTableLayout.Size = new System.Drawing.Size(1230, 552);
-            this.baseTableLayout.TabIndex = 0;
+            this.tableLayout_base.ColumnCount = 2;
+            this.tableLayout_base.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.91057F));
+            this.tableLayout_base.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.08943F));
+            this.tableLayout_base.Controls.Add(this.mainMenuStrip, 0, 0);
+            this.tableLayout_base.Controls.Add(this.tableLayout_main, 0, 1);
+            this.tableLayout_base.Controls.Add(this.panelInfoContainer, 1, 1);
+            this.tableLayout_base.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayout_base.Location = new System.Drawing.Point(0, 0);
+            this.tableLayout_base.Name = "tableLayout_base";
+            this.tableLayout_base.RowCount = 2;
+            this.tableLayout_base.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.tableLayout_base.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayout_base.Size = new System.Drawing.Size(1634, 754);
+            this.tableLayout_base.TabIndex = 0;
             // 
             // mainMenuStrip
             // 
+            this.tableLayout_base.SetColumnSpan(this.mainMenuStrip, 2);
             this.mainMenuStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.runToolStripMenuItem,
+            this.screenshotToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Size = new System.Drawing.Size(1230, 29);
+            this.mainMenuStrip.Size = new System.Drawing.Size(1634, 27);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
@@ -77,7 +87,7 @@
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(47, 25);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(47, 23);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newScriptToolStripMenuItem
@@ -106,87 +116,156 @@
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.saveAsToolStripMenuItem.Text = "Save Script as...";
             // 
-            // mainTableLayout
+            // runToolStripMenuItem
             // 
-            this.mainTableLayout.ColumnCount = 1;
-            this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.mainTableLayout.Controls.Add(this.mainWithoutCmdTableLayout, 0, 0);
-            this.mainTableLayout.Controls.Add(this.pictureBox1, 0, 1);
-            this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainTableLayout.Location = new System.Drawing.Point(3, 32);
-            this.mainTableLayout.Name = "mainTableLayout";
-            this.mainTableLayout.RowCount = 2;
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72.72727F));
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.27273F));
-            this.mainTableLayout.Size = new System.Drawing.Size(1224, 517);
-            this.mainTableLayout.TabIndex = 1;
+            this.runToolStripMenuItem.Name = "runToolStripMenuItem";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(51, 23);
+            this.runToolStripMenuItem.Text = "Run";
             // 
-            // mainWithoutCmdTableLayout
+            // screenshotToolStripMenuItem
             // 
-            this.mainWithoutCmdTableLayout.AutoScroll = true;
-            this.mainWithoutCmdTableLayout.ColumnCount = 2;
-            this.mainWithoutCmdTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.87521F));
-            this.mainWithoutCmdTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.12479F));
-            this.mainWithoutCmdTableLayout.Controls.Add(this.scriptsTabControl, 1, 0);
-            this.mainWithoutCmdTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainWithoutCmdTableLayout.Location = new System.Drawing.Point(3, 3);
-            this.mainWithoutCmdTableLayout.Name = "mainWithoutCmdTableLayout";
-            this.mainWithoutCmdTableLayout.RowCount = 1;
-            this.mainWithoutCmdTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainWithoutCmdTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.mainWithoutCmdTableLayout.Size = new System.Drawing.Size(1218, 369);
-            this.mainWithoutCmdTableLayout.TabIndex = 0;
+            this.screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
+            this.screenshotToolStripMenuItem.Size = new System.Drawing.Size(100, 23);
+            this.screenshotToolStripMenuItem.Text = "Screenshot";
+            // 
+            // tableLayout_main
+            // 
+            this.tableLayout_main.ColumnCount = 1;
+            this.tableLayout_main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayout_main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayout_main.Controls.Add(this.tableLayout_mainWithoutCmd, 0, 0);
+            this.tableLayout_main.Controls.Add(this.tableLayout_cmd, 0, 1);
+            this.tableLayout_main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayout_main.Location = new System.Drawing.Point(3, 30);
+            this.tableLayout_main.Name = "tableLayout_main";
+            this.tableLayout_main.RowCount = 2;
+            this.tableLayout_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72.72727F));
+            this.tableLayout_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.27273F));
+            this.tableLayout_main.Size = new System.Drawing.Size(1414, 721);
+            this.tableLayout_main.TabIndex = 1;
+            // 
+            // tableLayout_mainWithoutCmd
+            // 
+            this.tableLayout_mainWithoutCmd.AutoScroll = true;
+            this.tableLayout_mainWithoutCmd.ColumnCount = 2;
+            this.tableLayout_mainWithoutCmd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.87521F));
+            this.tableLayout_mainWithoutCmd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 86.12479F));
+            this.tableLayout_mainWithoutCmd.Controls.Add(this.scriptsTabControl, 1, 0);
+            this.tableLayout_mainWithoutCmd.Controls.Add(this.statesListPanel, 0, 0);
+            this.tableLayout_mainWithoutCmd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayout_mainWithoutCmd.Location = new System.Drawing.Point(3, 3);
+            this.tableLayout_mainWithoutCmd.Name = "tableLayout_mainWithoutCmd";
+            this.tableLayout_mainWithoutCmd.RowCount = 1;
+            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 371F));
+            this.tableLayout_mainWithoutCmd.Size = new System.Drawing.Size(1408, 518);
+            this.tableLayout_mainWithoutCmd.TabIndex = 0;
             // 
             // scriptsTabControl
             // 
             this.scriptsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scriptsTabControl.Location = new System.Drawing.Point(172, 3);
+            this.scriptsTabControl.Location = new System.Drawing.Point(198, 3);
             this.scriptsTabControl.Name = "scriptsTabControl";
             this.scriptsTabControl.SelectedIndex = 0;
-            this.scriptsTabControl.Size = new System.Drawing.Size(1043, 363);
+            this.scriptsTabControl.Size = new System.Drawing.Size(1207, 512);
             this.scriptsTabControl.TabIndex = 0;
             // 
-            // pictureBox1
+            // statesListPanel
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(3, 378);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(100, 50);
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
+            this.statesListPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statesListPanel.Location = new System.Drawing.Point(3, 3);
+            this.statesListPanel.Name = "statesListPanel";
+            this.statesListPanel.Size = new System.Drawing.Size(189, 512);
+            this.statesListPanel.TabIndex = 1;
+            // 
+            // tableLayout_cmd
+            // 
+            this.tableLayout_cmd.BackColor = System.Drawing.Color.Black;
+            this.tableLayout_cmd.ColumnCount = 1;
+            this.tableLayout_cmd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayout_cmd.Controls.Add(this.txtCmdUserInput, 0, 1);
+            this.tableLayout_cmd.Controls.Add(this.txtCmdOutput, 0, 0);
+            this.tableLayout_cmd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayout_cmd.Location = new System.Drawing.Point(3, 527);
+            this.tableLayout_cmd.Name = "tableLayout_cmd";
+            this.tableLayout_cmd.RowCount = 2;
+            this.tableLayout_cmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayout_cmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.tableLayout_cmd.Size = new System.Drawing.Size(1408, 191);
+            this.tableLayout_cmd.TabIndex = 1;
+            // 
+            // txtCmdUserInput
+            // 
+            this.txtCmdUserInput.BackColor = System.Drawing.Color.Black;
+            this.txtCmdUserInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtCmdUserInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCmdUserInput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCmdUserInput.ForeColor = System.Drawing.SystemColors.Window;
+            this.txtCmdUserInput.Location = new System.Drawing.Point(3, 167);
+            this.txtCmdUserInput.Name = "txtCmdUserInput";
+            this.txtCmdUserInput.Size = new System.Drawing.Size(1402, 18);
+            this.txtCmdUserInput.TabIndex = 0;
+            // 
+            // txtCmdOutput
+            // 
+            this.txtCmdOutput.BackColor = System.Drawing.Color.Black;
+            this.txtCmdOutput.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtCmdOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCmdOutput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCmdOutput.Location = new System.Drawing.Point(3, 3);
+            this.txtCmdOutput.Multiline = true;
+            this.txtCmdOutput.Name = "txtCmdOutput";
+            this.txtCmdOutput.ReadOnly = true;
+            this.txtCmdOutput.Size = new System.Drawing.Size(1402, 158);
+            this.txtCmdOutput.TabIndex = 1;
+            // 
+            // panelInfoContainer
+            // 
+            this.panelInfoContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelInfoContainer.Location = new System.Drawing.Point(1423, 30);
+            this.panelInfoContainer.Name = "panelInfoContainer";
+            this.panelInfoContainer.Size = new System.Drawing.Size(208, 721);
+            this.panelInfoContainer.TabIndex = 2;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1230, 552);
-            this.Controls.Add(this.baseTableLayout);
+            this.ClientSize = new System.Drawing.Size(1634, 754);
+            this.Controls.Add(this.tableLayout_base);
             this.Name = "Form1";
-            this.Text = "Form1";
-            this.baseTableLayout.ResumeLayout(false);
-            this.baseTableLayout.PerformLayout();
+            this.Text = "State Machine Simulator - G03";
+            this.tableLayout_base.ResumeLayout(false);
+            this.tableLayout_base.PerformLayout();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
-            this.mainTableLayout.ResumeLayout(false);
-            this.mainWithoutCmdTableLayout.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tableLayout_main.ResumeLayout(false);
+            this.tableLayout_mainWithoutCmd.ResumeLayout(false);
+            this.tableLayout_cmd.ResumeLayout(false);
+            this.tableLayout_cmd.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel baseTableLayout;
+        private System.Windows.Forms.TableLayoutPanel tableLayout_base;
         private System.Windows.Forms.MenuStrip mainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newScriptToolStripMenuItem;
-        private System.Windows.Forms.TableLayoutPanel mainTableLayout;
-        private System.Windows.Forms.TableLayoutPanel mainWithoutCmdTableLayout;
+        private System.Windows.Forms.TableLayoutPanel tableLayout_main;
+        private System.Windows.Forms.TableLayoutPanel tableLayout_mainWithoutCmd;
         private System.Windows.Forms.TabControl scriptsTabControl;
         private System.Windows.Forms.ToolStripMenuItem openScriptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem screenshotToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tableLayout_cmd;
+        private System.Windows.Forms.TextBox txtCmdUserInput;
+        private System.Windows.Forms.TextBox txtCmdOutput;
+        private System.Windows.Forms.Panel statesListPanel;
+        public System.Windows.Forms.Panel panelInfoContainer;
     }
 }
 

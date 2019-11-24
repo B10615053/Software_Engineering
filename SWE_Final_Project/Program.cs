@@ -6,6 +6,8 @@ using System.Windows.Forms;
 
 namespace SWE_Final_Project {
     static class Program {
+        public static Form1 form;
+
         /// <summary>
         /// 應用程式的主要進入點。
         /// </summary>
@@ -13,7 +15,9 @@ namespace SWE_Final_Project {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            form = new Form1();
+            Application.Run(form);
         }
     }
 }
