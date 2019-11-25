@@ -40,6 +40,9 @@
             this.txtCmdUserInput = new System.Windows.Forms.TextBox();
             this.txtCmdOutput = new System.Windows.Forms.TextBox();
             this.panelInfoContainer = new System.Windows.Forms.Panel();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stepByStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -72,7 +75,8 @@
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.runToolStripMenuItem,
-            this.screenshotToolStripMenuItem});
+            this.screenshotToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Size = new System.Drawing.Size(1634, 27);
@@ -93,31 +97,34 @@
             // newScriptToolStripMenuItem
             // 
             this.newScriptToolStripMenuItem.Name = "newScriptToolStripMenuItem";
-            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.newScriptToolStripMenuItem.Text = "New Script";
             this.newScriptToolStripMenuItem.Click += new System.EventHandler(this.NewScriptToolStripMenuItem_Click);
             // 
             // openScriptToolStripMenuItem
             // 
             this.openScriptToolStripMenuItem.Name = "openScriptToolStripMenuItem";
-            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.openScriptToolStripMenuItem.Text = "Open Script";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "Save Script";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveAsToolStripMenuItem.Text = "Save Script as...";
             // 
             // runToolStripMenuItem
             // 
+            this.runToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stepByStepToolStripMenuItem,
+            this.runThroughToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             this.runToolStripMenuItem.Size = new System.Drawing.Size(51, 23);
             this.runToolStripMenuItem.Text = "Run";
@@ -157,18 +164,20 @@
             this.tableLayout_mainWithoutCmd.Name = "tableLayout_mainWithoutCmd";
             this.tableLayout_mainWithoutCmd.RowCount = 1;
             this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 371F));
+            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 518F));
             this.tableLayout_mainWithoutCmd.Size = new System.Drawing.Size(1408, 518);
             this.tableLayout_mainWithoutCmd.TabIndex = 0;
             // 
             // scriptsTabControl
             // 
             this.scriptsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.scriptsTabControl.Font = new System.Drawing.Font("Consolas", 9F);
             this.scriptsTabControl.Location = new System.Drawing.Point(198, 3);
             this.scriptsTabControl.Name = "scriptsTabControl";
             this.scriptsTabControl.SelectedIndex = 0;
             this.scriptsTabControl.Size = new System.Drawing.Size(1207, 512);
             this.scriptsTabControl.TabIndex = 0;
+            this.scriptsTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptsTabControl_KeyDown);
             // 
             // statesListPanel
             // 
@@ -227,6 +236,24 @@
             this.panelInfoContainer.Size = new System.Drawing.Size(208, 721);
             this.panelInfoContainer.TabIndex = 2;
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(80, 23);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // stepByStepToolStripMenuItem
+            // 
+            this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.stepByStepToolStripMenuItem.Text = "Step by step";
+            // 
+            // runThroughToolStripMenuItem
+            // 
+            this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
+            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.runThroughToolStripMenuItem.Text = "Run through";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -266,6 +293,9 @@
         private System.Windows.Forms.TextBox txtCmdOutput;
         private System.Windows.Forms.Panel statesListPanel;
         public System.Windows.Forms.Panel panelInfoContainer;
+        private System.Windows.Forms.ToolStripMenuItem stepByStepToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runThroughToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
 

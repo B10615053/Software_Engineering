@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using SWE_Final_Project.Managers;
 
 namespace SWE_Final_Project.Views.States {
     abstract class StateView: PictureBox {
@@ -14,20 +15,28 @@ namespace SWE_Final_Project.Views.States {
         // is the item let user to drag or the instance on the script
         protected readonly bool mIsInstanceOnScript;
 
+        // is the cursor moving on this state-view currently
+        protected bool mIsMouseMovingOn = false;
+
+        // the tag of view, e.g., "START", "END", "GENERAL"
         private string mTag;
         public string TheTag { get => mTag; set => mTag = value; }
 
         // state content text
         private string mStateContent = "";
+        internal string StateContent { get => mStateContent; }
 
-        // =======
+        /* ================================================= */
 
         // for calculating the state size
-        private static readonly int ENLARGING_RATIO = 6;
+        private static readonly int ENLARGING_RATIO = 7;
 
         // size of START & END
         public static readonly Size UNTEXTABLE_STATE_SIZE = new Size(25, 25);
 
+        private static readonly Size SMALLEST_GENERAL_STATE_SIZE = new Size(75, 50);
+
+        /* ================================================= */
 
         // constructor
         public StateView(int x, int y, string stateContent, bool isTextable, bool isInstance) {
@@ -64,7 +73,7 @@ namespace SWE_Final_Project.Views.States {
             resizeStateByContent(newStateContent.Trim());
 
             // set the location
-            relocateState(Location.X, Location.Y);
+            relocateState(Location.X, Location.Y, false);
         }
 
         // re-size the state once the content text has changed
@@ -75,6 +84,11 @@ namespace SWE_Final_Project.Views.States {
             // calculate the state size
             int stateWidth = mStateContent.Length * ENLARGING_RATIO;
             int stateHeight = mStateContent.Split('\n').Length * 3 * ENLARGING_RATIO;
+
+            if (stateWidth < SMALLEST_GENERAL_STATE_SIZE.Width)
+                stateWidth = SMALLEST_GENERAL_STATE_SIZE.Width;
+            if (stateHeight < SMALLEST_GENERAL_STATE_SIZE.Height)
+                stateHeight = SMALLEST_GENERAL_STATE_SIZE.Height;
 
             // set the size
             Size = new Size(stateWidth, stateHeight);
@@ -95,19 +109,34 @@ namespace SWE_Final_Project.Views.States {
         }
 
         // re-locate the state
-        public void relocateState(int leftUpCornerX, int leftUpCornerY, bool areParamsAtCorner = true) {
+        public void relocateState(int x, int y, bool areParamsAtCorner = true) {
+            /* if the are-params-at-corner parameter is false,
+             * means that the x and y parameters are at the center
+             */
+
             if (areParamsAtCorner)
-                Location = new Point((int) ((float) leftUpCornerX - (Size.Width / 2.0F)),
-                    (int) ((float) leftUpCornerY - (Size.Height / 2.0F)));
+                Location = new Point((int) ((float) x - (Size.Width / 2.0F)),
+                    (int) ((float) y - (Size.Height / 2.0F)));
             else
-                Location = new Point(leftUpCornerX, leftUpCornerY);
+                Location = new Point(x, y);
         }
 
         /* methods */
         /* ==================================================================== */
         /*  events */
 
-        // (mouse) double-click event
+        // click on an instance on scripts, show the info panel of this state-view
+        protected override void OnMouseClick(MouseEventArgs e) {
+            if (mIsInstanceOnScript) {
+                Panel infoContainer = Program.form.panelInfoContainer;
+                StateInfoTableLayoutPanel infoLayout = new StateInfoTableLayoutPanel(this);
+
+                infoContainer.Controls.Clear();
+                infoContainer.Controls.Add(infoLayout);
+            }
+        }
+
+        // to do
         protected override void OnDoubleClick(EventArgs e) {
             if (mIsTextable == false)
                 return;
@@ -115,7 +144,38 @@ namespace SWE_Final_Project.Views.States {
             // TODO: prompt a msg box to let user type the content text
         }
 
-        // mouse-down event
+        // mouse entered, set is-mouse-moving-on to true, and re-draw
+        protected override void OnMouseEnter(EventArgs e) {
+            mIsMouseMovingOn = true;
+
+            // set the current holding-type of state-views
+            if (mIsInstanceOnScript == false) {
+                if (this is StartStateView)
+                    MouseManager.CurrentHoldingType = HoldingType.START;
+                else if (this is EndStateView)
+                    MouseManager.CurrentHoldingType = HoldingType.END;
+                else if (this is GeneralStateView)
+                    MouseManager.CurrentHoldingType = HoldingType.GENERAL;
+                else
+                    MouseManager.CurrentHoldingType = HoldingType.NONE;
+            }
+
+            Invalidate();
+        }
+
+        // set the cursor style into a hand
+        protected override void OnMouseMove(MouseEventArgs e) {
+            if (mIsInstanceOnScript)
+                Cursor = Cursors.Hand;
+        }
+
+        // mouse leaved, set is-mouse-moving-on to false, and re-draw
+        protected override void OnMouseLeave(EventArgs e) {
+            mIsMouseMovingOn = false;
+            Invalidate();
+        }
+
+        // drag a new state-view out
         protected override void OnMouseDown(MouseEventArgs e) {
             if (mIsInstanceOnScript == false) {
                 Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
@@ -126,12 +186,6 @@ namespace SWE_Final_Project.Views.States {
 
                 DoDragDrop(pic, DragDropEffects.Copy);
             }
-        }
-
-        // on-paint event
-        protected override void OnPaint(PaintEventArgs e) {
-            Graphics g = e.Graphics;
-            g.DrawRectangle(Pens.Black, 0, 0, Size.Width - 1, Size.Height - 1);
         }
     }
 }

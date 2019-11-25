@@ -8,3 +8,5 @@ D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug
 D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.csproj.CoreCompileInputs.cache
 D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.exe
 D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.pdb
+D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.Views.SubForms.AlertForm.resources
+D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.Views.SubForms.TypingForm.resources

@@ -7,7 +7,8 @@ using System.Windows.Forms;
 
 namespace SWE_Final_Project.Views {
     class ScriptTabPage: TabPage {
-        public ScriptTabPage(String tabName): base(tabName) {
+        public ScriptTabPage(string tabName): base(tabName) {
+            // add a whole new canvas
             ScriptCanvas scriptCanvas = new ScriptCanvas();
             Controls.Add(scriptCanvas);
         }

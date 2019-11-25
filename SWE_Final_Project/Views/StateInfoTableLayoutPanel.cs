@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SWE_Final_Project.Views.States;
+using SWE_Final_Project.Views.SubForms;
 
 namespace SWE_Final_Project.Views {
     class StateInfoTableLayoutPanel: TableLayoutPanel {
@@ -49,13 +50,13 @@ namespace SWE_Final_Project.Views {
 
             // text-box: content text
             TextBox txtShowText = new TextBox();
-            if (stateView is StartStateView) {
+            if (stateView is StartStateView || stateView is EndStateView) {
                 txtShowText.Text = "";
                 txtShowType.BorderStyle = BorderStyle.None;
                 txtShowText.Enabled = false;
             }
             else {
-                txtShowText.Text = "Good";
+                txtShowText.Text = stateView.StateContent;
             }
             Controls.Add(txtShowText, 1, 1);
 
@@ -94,14 +95,30 @@ namespace SWE_Final_Project.Views {
                         int newY = int.Parse(txtShowLocY.Text.ToString());
 
                         stateView.relocateState(newX, newY, false);
-                    } catch (System.FormatException err) {
-                        // TODO: error
+                    } catch (FormatException) {
+                        // show the alert form to hint user
+                        AlertForm alertForm = new AlertForm("Wrong number format",
+                            "Only integer is allowed.");
+                        alertForm.ShowDialog();
                     }
                 }
             };
 
             txtShowLocX.KeyPress += keyPressLoc;
             txtShowLocY.KeyPress += keyPressLoc;
+
+            // for pressing enter key at txt-show-text
+            KeyPressEventHandler keyPressText = (sender, e) => {
+                // press enter
+                if (e.KeyChar == 13) {
+                    string newStateContent = txtShowText.Text.ToString().Trim();
+                    if (stateView.StateContent != newStateContent)
+                        stateView.setStateContent(newStateContent);
+                }
+            };
+
+            if (txtShowText.Enabled)
+                txtShowText.KeyPress += keyPressText;
         }
     }
 }

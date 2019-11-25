@@ -10,38 +10,22 @@ using SWE_Final_Project.Managers;
 namespace SWE_Final_Project.Views.States {
     class StartStateView: StateView {
         // constructor
-        public StartStateView(int x, int y, string stateContent, bool isInstanceOnScript): base(x, y, stateContent, false, isInstanceOnScript) {
+        public StartStateView(int x, int y, string stateContent, bool isInstanceOnScript)
+            : base(x, y, stateContent, false, isInstanceOnScript) {
             TheTag = "START";
         }
 
-        // on-paint event
+        // re-draw
         protected override void OnPaint(PaintEventArgs e) {
             Graphics g = e.Graphics;
-            g.FillEllipse(new SolidBrush(Color.Black), 0, 0, Size.Width - 1, Size.Height - 1);
-        }
+            Color color;
 
-        // on-mouse-move event, set the cursor style
-        protected override void OnMouseMove(MouseEventArgs e) {
-            if (mIsInstanceOnScript)
-                Cursor = Cursors.Hand;
-        }
+            if (!mIsInstanceOnScript && mIsMouseMovingOn)
+                color = Color.FromArgb(127, 0, 0, 0);
+            else
+                color = Color.Black;
 
-        // on-mouse-down event, set the mouse holding type is START
-        protected override void OnMouseDown(MouseEventArgs e) {
-            base.OnMouseDown(e);
-
-            if (mIsInstanceOnScript == false)
-                MouseManager.CurrentHoldingType = HoldingType.START;
-        }
-
-        protected override void OnMouseClick(MouseEventArgs e) {
-            if (mIsInstanceOnScript) {
-                Panel infoContainer = Program.form.panelInfoContainer;
-                StateInfoTableLayoutPanel infoLayout = new StateInfoTableLayoutPanel(this);
-
-                infoContainer.Controls.Clear();
-                infoContainer.Controls.Add(infoLayout);
-            }
+            g.FillEllipse(new SolidBrush(color), 0, 0, Size.Width - 1, Size.Height - 1);
         }
     }
 }
