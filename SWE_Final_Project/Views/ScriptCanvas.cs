@@ -13,8 +13,10 @@ using SWE_Final_Project.Models;
 
 namespace SWE_Final_Project.Views {
     class ScriptCanvas: PictureBox {
+        private string mScriptNameAtCanvas = "";
+
         // constructor
-        public ScriptCanvas(): base() {
+        public ScriptCanvas(string scriptName) : base() {
             // fill in the father container
             Dock = DockStyle.Fill;
 
@@ -23,6 +25,9 @@ namespace SWE_Final_Project.Views {
 
             // to avoid flashing when invalidating
             DoubleBuffered = true;
+
+            // set this script name
+            mScriptNameAtCanvas = scriptName;
         }
 
         // prompt the typing form to get some texts from user
@@ -65,22 +70,34 @@ namespace SWE_Final_Project.Views {
             Point clientPoint = PointToClient(new Point(e.X, e.Y));
 
             // add the state at the location of client point
+            StateView newStateView = null;
             switch (MouseManager.CurrentHoldingType) {
                 case StateType.START:
-                    Controls.Add(new StartStateView(clientPoint.X, clientPoint.Y, "", true));
+                    newStateView = new StartStateView(clientPoint.X, clientPoint.Y, "", true);
                     break;
 
                 case StateType.END:
-                    Controls.Add(new EndStateView(clientPoint.X, clientPoint.Y, "", true));
+                    newStateView = new EndStateView(clientPoint.X, clientPoint.Y, "", true);
                     break;
 
                 case StateType.GENERAL:
                     // prompt the typing form to get the state content from user
                     string newStateContent = promptTypingFormAndGetTypedText();
+
                     // if the result is null, means that user cancels the addition of state
                     if (!(newStateContent is null))
-                        Controls.Add(new GeneralStateView(clientPoint.X, clientPoint.Y, newStateContent, true));
+                        newStateView = new GeneralStateView(clientPoint.X, clientPoint.Y, newStateContent, true);
+
                     break;
+            }
+            if (!(newStateView is null)) {
+                // add view
+                Controls.Add(newStateView);
+                // add model
+                ModelManager.addNewStateOnCertainScript(
+                    mScriptNameAtCanvas,
+                    new StateModel(newStateView)
+                );
             }
 
             // reset the holding type to NONE

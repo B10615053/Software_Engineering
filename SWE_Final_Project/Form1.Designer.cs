@@ -35,6 +35,7 @@
             this.runThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_main = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayout_mainWithoutCmd = new System.Windows.Forms.TableLayoutPanel();
             this.scriptsTabControl = new System.Windows.Forms.TabControl();
@@ -43,7 +44,6 @@
             this.txtCmdUserInput = new System.Windows.Forms.TextBox();
             this.txtCmdOutput = new System.Windows.Forms.TextBox();
             this.panelInfoContainer = new System.Windows.Forms.Panel();
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -156,6 +156,16 @@
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(80, 23);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
+            // promptTypingFormWhenCreatingGeneralStateToolStripMenuItem
+            // 
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Checked = true;
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckOnClick = true;
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Name = "promptTypingFormWhenCreatingGeneralStateToolStripMenuItem";
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Size = new System.Drawing.Size(419, 26);
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Text = "Prompt typing box when creating general state";
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Click += new System.EventHandler(this.PromptTypingFormWhenCreatingGeneralStateToolStripMenuItem_Click);
+            // 
             // tableLayout_main
             // 
             this.tableLayout_main.ColumnCount = 1;
@@ -256,16 +266,6 @@
             this.panelInfoContainer.Name = "panelInfoContainer";
             this.panelInfoContainer.Size = new System.Drawing.Size(208, 721);
             this.panelInfoContainer.TabIndex = 2;
-            // 
-            // promptTypingFormWhenCreatingGeneralStateToolStripMenuItem
-            // 
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Checked = true;
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckOnClick = true;
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Name = "promptTypingFormWhenCreatingGeneralStateToolStripMenuItem";
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Size = new System.Drawing.Size(419, 26);
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Text = "Prompt typing box when creating general state";
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Click += new System.EventHandler(this.PromptTypingFormWhenCreatingGeneralStateToolStripMenuItem_Click);
             // 
             // Form1
             // 

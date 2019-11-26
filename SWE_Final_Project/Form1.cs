@@ -56,7 +56,11 @@ namespace SWE_Final_Project {
 
         // add the whole new script
         private void NewScriptToolStripMenuItem_Click(object sender, EventArgs e) {
-            ScriptTabPage tabPage = new ScriptTabPage("Untitled*");
+            // add new script to model-manager
+            string adjustedScriptName = ModelManager.addNewScript("Untitled");
+
+            // add new tab-page
+            ScriptTabPage tabPage = new ScriptTabPage(adjustedScriptName);
             scriptsTabControl.TabPages.Add(tabPage);
         }
 
