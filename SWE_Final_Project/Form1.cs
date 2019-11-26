@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SWE_Final_Project.Managers;
 using SWE_Final_Project.Views;
 using SWE_Final_Project.Views.States;
 
@@ -68,6 +69,20 @@ namespace SWE_Final_Project {
         private void ScriptsTabControl_KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
                 saveCertainScript(scriptsTabControl.SelectedIndex);
+        }
+
+        // click on the settings of prompting typing form when creating a new general state
+        // to let user type the content of the new state
+        private void PromptTypingFormWhenCreatingGeneralStateToolStripMenuItem_Click(object sender, EventArgs e) {
+            // switch the current state of checked
+            bool currentState = SettingsManager.PromptTypingFormWhenCreatingNewGeneralState;
+
+            if (currentState)
+                promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckState = CheckState.Unchecked;
+            else
+                promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckState = CheckState.Checked;
+
+            SettingsManager.PromptTypingFormWhenCreatingNewGeneralState = !currentState;
         }
     }
 }

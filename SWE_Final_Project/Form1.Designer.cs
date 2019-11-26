@@ -31,7 +31,10 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stepByStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_main = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayout_mainWithoutCmd = new System.Windows.Forms.TableLayoutPanel();
             this.scriptsTabControl = new System.Windows.Forms.TabControl();
@@ -40,9 +43,7 @@
             this.txtCmdUserInput = new System.Windows.Forms.TextBox();
             this.txtCmdOutput = new System.Windows.Forms.TextBox();
             this.panelInfoContainer = new System.Windows.Forms.Panel();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stepByStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -97,27 +98,27 @@
             // newScriptToolStripMenuItem
             // 
             this.newScriptToolStripMenuItem.Name = "newScriptToolStripMenuItem";
-            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.newScriptToolStripMenuItem.Text = "New Script";
             this.newScriptToolStripMenuItem.Click += new System.EventHandler(this.NewScriptToolStripMenuItem_Click);
             // 
             // openScriptToolStripMenuItem
             // 
             this.openScriptToolStripMenuItem.Name = "openScriptToolStripMenuItem";
-            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.openScriptToolStripMenuItem.Text = "Open Script";
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.saveToolStripMenuItem.Text = "Save Script";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.saveAsToolStripMenuItem.Text = "Save Script as...";
             // 
             // runToolStripMenuItem
@@ -129,11 +130,31 @@
             this.runToolStripMenuItem.Size = new System.Drawing.Size(51, 23);
             this.runToolStripMenuItem.Text = "Run";
             // 
+            // stepByStepToolStripMenuItem
+            // 
+            this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.stepByStepToolStripMenuItem.Text = "Step by step";
+            // 
+            // runThroughToolStripMenuItem
+            // 
+            this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
+            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.runThroughToolStripMenuItem.Text = "Run through";
+            // 
             // screenshotToolStripMenuItem
             // 
             this.screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
             this.screenshotToolStripMenuItem.Size = new System.Drawing.Size(100, 23);
             this.screenshotToolStripMenuItem.Text = "Screenshot";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(80, 23);
+            this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // tableLayout_main
             // 
@@ -236,23 +257,15 @@
             this.panelInfoContainer.Size = new System.Drawing.Size(208, 721);
             this.panelInfoContainer.TabIndex = 2;
             // 
-            // settingsToolStripMenuItem
+            // promptTypingFormWhenCreatingGeneralStateToolStripMenuItem
             // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(80, 23);
-            this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // stepByStepToolStripMenuItem
-            // 
-            this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.stepByStepToolStripMenuItem.Text = "Step by step";
-            // 
-            // runThroughToolStripMenuItem
-            // 
-            this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
-            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.runThroughToolStripMenuItem.Text = "Run through";
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Checked = true;
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckOnClick = true;
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Name = "promptTypingFormWhenCreatingGeneralStateToolStripMenuItem";
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Size = new System.Drawing.Size(419, 26);
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Text = "Prompt typing box when creating general state";
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Click += new System.EventHandler(this.PromptTypingFormWhenCreatingGeneralStateToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -296,6 +309,7 @@
         private System.Windows.Forms.ToolStripMenuItem stepByStepToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runThroughToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem promptTypingFormWhenCreatingGeneralStateToolStripMenuItem;
     }
 }
 

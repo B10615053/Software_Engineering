@@ -28,8 +28,9 @@ namespace SWE_Final_Project.Views.States {
 
         /* ================================================= */
 
-        // for calculating the state size
-        private static readonly int ENLARGING_RATIO = 7;
+        // for calculating the state size, H and V stand for horizontal and vertical respectively
+        private static readonly int ENLARGING_RATIO_H = 7;
+        private static readonly int ENLARGING_RATIO_V = ENLARGING_RATIO_H * 4;
 
         // size of START & END
         public static readonly Size UNTEXTABLE_STATE_SIZE = new Size(25, 25);
@@ -82,8 +83,8 @@ namespace SWE_Final_Project.Views.States {
             mStateContent = newStateContent.Trim();
 
             // calculate the state size
-            int stateWidth = mStateContent.Length * ENLARGING_RATIO;
-            int stateHeight = mStateContent.Split('\n').Length * 3 * ENLARGING_RATIO;
+            int stateWidth = mStateContent.Length * ENLARGING_RATIO_H;
+            int stateHeight = mStateContent.Split('\n').Length * ENLARGING_RATIO_V;
 
             if (stateWidth < SMALLEST_GENERAL_STATE_SIZE.Width)
                 stateWidth = SMALLEST_GENERAL_STATE_SIZE.Width;

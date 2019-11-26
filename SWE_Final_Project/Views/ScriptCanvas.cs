@@ -24,7 +24,12 @@ namespace SWE_Final_Project.Views {
             DoubleBuffered = true;
         }
 
+        // prompt the typing form to get some texts from user
         private string promptTypingFormAndGetTypedText() {
+            // don't prompt the typing form up, return empty string (not null) directly
+            if (SettingsManager.PromptTypingFormWhenCreatingNewGeneralState == false)
+                return "";
+
             // prompt new typing-form
             TypingForm stateContentForm = new TypingForm("New State", "Please enter the content of the new state", true);
             // show and get the dialog-result
