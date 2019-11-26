@@ -9,6 +9,7 @@ using System.Drawing;
 using SWE_Final_Project.Managers;
 using SWE_Final_Project.Views.States;
 using SWE_Final_Project.Views.SubForms;
+using SWE_Final_Project.Models;
 
 namespace SWE_Final_Project.Views {
     class ScriptCanvas: PictureBox {
@@ -65,15 +66,15 @@ namespace SWE_Final_Project.Views {
 
             // add the state at the location of client point
             switch (MouseManager.CurrentHoldingType) {
-                case HoldingType.START:
+                case StateType.START:
                     Controls.Add(new StartStateView(clientPoint.X, clientPoint.Y, "", true));
                     break;
 
-                case HoldingType.END:
+                case StateType.END:
                     Controls.Add(new EndStateView(clientPoint.X, clientPoint.Y, "", true));
                     break;
 
-                case HoldingType.GENERAL:
+                case StateType.GENERAL:
                     // prompt the typing form to get the state content from user
                     string newStateContent = promptTypingFormAndGetTypedText();
                     // if the result is null, means that user cancels the addition of state
@@ -83,7 +84,7 @@ namespace SWE_Final_Project.Views {
             }
 
             // reset the holding type to NONE
-            MouseManager.CurrentHoldingType = HoldingType.NONE;
+            MouseManager.CurrentHoldingType = StateType.NONE;
 
             // paint on the picture-box
             //Invalidate();

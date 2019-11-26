@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using SWE_Final_Project.Managers;
+using SWE_Final_Project.Models;
 
 namespace SWE_Final_Project.Views.States {
     abstract class StateView: PictureBox {
@@ -152,13 +153,13 @@ namespace SWE_Final_Project.Views.States {
             // set the current holding-type of state-views
             if (mIsInstanceOnScript == false) {
                 if (this is StartStateView)
-                    MouseManager.CurrentHoldingType = HoldingType.START;
+                    MouseManager.CurrentHoldingType = StateType.START;
                 else if (this is EndStateView)
-                    MouseManager.CurrentHoldingType = HoldingType.END;
+                    MouseManager.CurrentHoldingType = StateType.END;
                 else if (this is GeneralStateView)
-                    MouseManager.CurrentHoldingType = HoldingType.GENERAL;
+                    MouseManager.CurrentHoldingType = StateType.GENERAL;
                 else
-                    MouseManager.CurrentHoldingType = HoldingType.NONE;
+                    MouseManager.CurrentHoldingType = StateType.NONE;
             }
 
             Invalidate();

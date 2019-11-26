@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SWE_Final_Project.Models;
 
 namespace SWE_Final_Project.Managers {
-    // the mouse can hold the 3 types of states: START, END, and GENERAL
-    enum HoldingType {
-        START, END, GENERAL, NONE
-    }
-
     // for managing the status of the mouse
     class MouseManager {
 
-        static private HoldingType mCurrentHoldingType = HoldingType.NONE;
-        internal static HoldingType CurrentHoldingType { get => mCurrentHoldingType; set => mCurrentHoldingType = value; }
+        static private StateType mCurrentHoldingType = StateType.NONE;
+        internal static StateType CurrentHoldingType { get => mCurrentHoldingType; set => mCurrentHoldingType = value; }
     }
 
     /*
