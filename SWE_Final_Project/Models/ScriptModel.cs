@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWE_Final_Project.Views.States;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace SWE_Final_Project.Models {
         // script's name
         private string mScriptName = "Untitled";
         public string Name { get => mScriptName; set => mScriptName = value; }
+
+        // script's saved file path
+        private string mSavedFilePath = null;
+        public string SavedFilePath { get => mSavedFilePath; set => mSavedFilePath = value; }
 
         // existed states
         private List<StateModel> mExistedStateList = new List<StateModel>();
@@ -46,6 +51,14 @@ namespace SWE_Final_Project.Models {
             mExistedStateList.Add(newStateModel);
         }
 
+        // modify a existed state
+        public void modifyState(StateView stateView) {
+            StateModel toBeModifiedState = mExistedStateList.Find(it => it.Id == stateView.Id);
+            if (toBeModifiedState is null)
+                return;
+            toBeModifiedState.setDataByStateView(stateView);
+        }
+
         /* ========================================= */
 
         public override bool Equals(object obj) {
@@ -53,11 +66,27 @@ namespace SWE_Final_Project.Models {
             if (other == null)
                 return false;
 
-            return mScriptName == other.mScriptName;
+            if (!(mSavedFilePath is null) && other.mSavedFilePath is null)
+                return false;
+            if (mSavedFilePath is null && !(other.mSavedFilePath is null))
+                return false;
+            if (mSavedFilePath is null && other.mSavedFilePath is null)
+                return mScriptName == other.mScriptName;
+            return mScriptName == other.mScriptName && mSavedFilePath == other.mSavedFilePath;
         }
 
         public override int GetHashCode() {
-            return mScriptName.GetHashCode();
+            if (mSavedFilePath is null)
+                return mScriptName.GetHashCode();
+            return mScriptName.GetHashCode() ^ mSavedFilePath.GetHashCode();
+        }
+
+        public override string ToString() {
+            string ret = mScriptName + "\r\n";
+            mExistedStateList.ForEach(it => {
+                ret += "\t" + it.ToString() + "\r\n";
+            });
+            return ret;
         }
     }
 }

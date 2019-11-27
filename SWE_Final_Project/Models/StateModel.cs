@@ -16,6 +16,13 @@ namespace SWE_Final_Project.Models {
     // a model of a state
     [Serializable]
     class StateModel {
+        // for instance counting
+        private static long idCounter = 0L;
+
+        // unique id of every state-model
+        private long mId;
+        public long Id { get => mId; }
+
         // type of state
         private StateType mStateType = StateType.NONE;
         public StateType StateType { get => mStateType; }
@@ -46,10 +53,20 @@ namespace SWE_Final_Project.Models {
             mLocOnScript = newLoc;
             mSizeOnScript = newSize;
             mContentText = newContent;
+
+            mId = idCounter++;
         }
 
         // constructor
-        public StateModel(StateView stateView) {
+        public StateModel(ref StateView stateView) {
+            setDataByStateView(stateView);
+
+            mId = idCounter++;
+            stateView.Id = mId;
+        }
+
+        // set the state-model data by a state-view
+        public void setDataByStateView(StateView stateView) {
             if (stateView is StartStateView)
                 mStateType = StateType.START;
             else if (stateView is EndStateView)
@@ -68,18 +85,23 @@ namespace SWE_Final_Project.Models {
             var other = obj as StateModel;
             if (other == null)
                 return false;
-
-            return mStateType == other.mStateType
-                && mLocOnScript.X == other.mLocOnScript.X && mLocOnScript.Y == other.mLocOnScript.Y
-                && mSizeOnScript.Width == other.mSizeOnScript.Width && mSizeOnScript.Height == other.mSizeOnScript.Height
-                && mContentText == other.mContentText;
+            return mId == other.mId;
         }
 
         public override int GetHashCode() {
-            return mStateType.GetHashCode()
-                ^ mLocOnScript.GetHashCode()
-                ^ mSizeOnScript.GetHashCode()
-                ^ mContentText.GetHashCode();
+            return mId.GetHashCode();
+        }
+
+        public override string ToString() {
+            string ret = "";
+            if (mStateType == StateType.START)
+                ret += "START";
+            else if (mStateType == StateType.END)
+                ret += " END ";
+            else if (mStateType == StateType.GENERAL)
+                ret += "GNRAL";
+            ret += "|" + mContentText + "|" + mLocOnScript.ToString();
+            return ret;
         }
     }
 }

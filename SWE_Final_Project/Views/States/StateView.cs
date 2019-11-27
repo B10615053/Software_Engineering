@@ -10,6 +10,10 @@ using SWE_Final_Project.Models;
 
 namespace SWE_Final_Project.Views.States {
     abstract class StateView: PictureBox {
+        // the same as corresponding state-model
+        private long mId = -2L;
+        public long Id { get => mId; set => mId = value; }
+
         // is the state textable, START & END are not, but general state is textable
         protected readonly bool mIsTextable;
 
@@ -97,6 +101,9 @@ namespace SWE_Final_Project.Views.States {
 
             Console.WriteLine("W: {0}, H: {1}", stateWidth, stateHeight);
 
+            // changes at data model
+            ModelManager.modifyStateOnCertainScript(this);
+
             // re-draw
             Invalidate();
         }
@@ -105,6 +112,9 @@ namespace SWE_Final_Project.Views.States {
         protected void resizeStateBySize(Size newSize) {
             // set the size
             Size = newSize;
+
+            // changes at data model
+            ModelManager.modifyStateOnCertainScript(this);
 
             // re-draw
             Invalidate();
@@ -121,6 +131,9 @@ namespace SWE_Final_Project.Views.States {
                     (int) ((float) y - (Size.Height / 2.0F)));
             else
                 Location = new Point(x, y);
+
+            // changes at data model
+            ModelManager.modifyStateOnCertainScript(this);
         }
 
         /* methods */

@@ -208,6 +208,7 @@
             this.scriptsTabControl.SelectedIndex = 0;
             this.scriptsTabControl.Size = new System.Drawing.Size(1207, 512);
             this.scriptsTabControl.TabIndex = 0;
+            this.scriptsTabControl.SelectedIndexChanged += new System.EventHandler(this.ScriptsTabControl_SelectedIndexChanged);
             this.scriptsTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptsTabControl_KeyDown);
             // 
             // statesListPanel

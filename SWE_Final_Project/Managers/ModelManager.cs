@@ -1,4 +1,5 @@
 ﻿using SWE_Final_Project.Models;
+using SWE_Final_Project.Views.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace SWE_Final_Project.Managers {
     class ModelManager {
+        public static int CurrentSelectedScriptIndex = -1;
+
         // store all opened scripts
         private static List<ScriptModel> openedScriptList = new List<ScriptModel>();
 
@@ -27,8 +30,27 @@ namespace SWE_Final_Project.Managers {
         }
 
         // add new state on a certain script
-        public static void addNewStateOnCertainScript(string scriptName, StateModel newStateModel) {
-            openedScriptList.Find(it => it.Name == scriptName).addNewState(newStateModel);
+        public static void addNewStateOnCertainScript(StateModel newStateModel) {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+            openedScriptList[CurrentSelectedScriptIndex].addNewState(newStateModel);
+            debugPrint();
+        }
+
+        // modify a certain state on a certain script
+        public static void modifyStateOnCertainScript(StateView stateView) {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+            openedScriptList[CurrentSelectedScriptIndex].modifyState(stateView);
+            debugPrint();
+        }
+
+        public static void debugPrint() {
+            openedScriptList.ForEach(it => {
+                Console.WriteLine(it.ToString());
+                Console.WriteLine("========");
+            });
+            Console.WriteLine("********************");
         }
     }
 }

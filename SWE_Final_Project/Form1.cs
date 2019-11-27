@@ -62,6 +62,9 @@ namespace SWE_Final_Project {
             // add new tab-page
             ScriptTabPage tabPage = new ScriptTabPage(adjustedScriptName);
             scriptsTabControl.TabPages.Add(tabPage);
+
+            // set the selected script index
+            ModelManager.CurrentSelectedScriptIndex = scriptsTabControl.SelectedIndex;
         }
 
         // click the save-script button
@@ -87,6 +90,11 @@ namespace SWE_Final_Project {
                 promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckState = CheckState.Checked;
 
             SettingsManager.PromptTypingFormWhenCreatingNewGeneralState = !currentState;
+        }
+
+        // switch between scripts
+        private void ScriptsTabControl_SelectedIndexChanged(object sender, EventArgs e) {
+            ModelManager.CurrentSelectedScriptIndex = scriptsTabControl.SelectedIndex;
         }
     }
 }

@@ -94,10 +94,7 @@ namespace SWE_Final_Project.Views {
                 // add view
                 Controls.Add(newStateView);
                 // add model
-                ModelManager.addNewStateOnCertainScript(
-                    mScriptNameAtCanvas,
-                    new StateModel(newStateView)
-                );
+                ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView));
             }
 
             // reset the holding type to NONE
