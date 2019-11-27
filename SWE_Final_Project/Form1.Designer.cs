@@ -158,9 +158,7 @@
             // 
             // promptTypingFormWhenCreatingGeneralStateToolStripMenuItem
             // 
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Checked = true;
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckOnClick = true;
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Name = "promptTypingFormWhenCreatingGeneralStateToolStripMenuItem";
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Size = new System.Drawing.Size(419, 26);
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Text = "Prompt typing box when creating general state";

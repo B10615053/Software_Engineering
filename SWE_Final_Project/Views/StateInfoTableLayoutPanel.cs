@@ -50,6 +50,7 @@ namespace SWE_Final_Project.Views {
 
             // text-box: content text
             TextBox txtShowText = new TextBox();
+            txtShowText.Name = "txtShowText";
             if (stateView is StartStateView || stateView is EndStateView) {
                 txtShowText.Text = "";
                 txtShowType.BorderStyle = BorderStyle.None;

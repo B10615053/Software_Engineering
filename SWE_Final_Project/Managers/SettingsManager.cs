@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace SWE_Final_Project.Managers {
     class SettingsManager {
-        public static bool PromptTypingFormWhenCreatingNewGeneralState = true;
+        public static bool PromptTypingFormWhenCreatingNewGeneralState = false;
     }
 }

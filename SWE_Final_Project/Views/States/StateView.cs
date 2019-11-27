@@ -142,21 +142,8 @@ namespace SWE_Final_Project.Views.States {
 
         // click on an instance on scripts, show the info panel of this state-view
         protected override void OnMouseClick(MouseEventArgs e) {
-            if (mIsInstanceOnScript) {
-                Panel infoContainer = Program.form.panelInfoContainer;
-                StateInfoTableLayoutPanel infoLayout = new StateInfoTableLayoutPanel(this);
-
-                infoContainer.Controls.Clear();
-                infoContainer.Controls.Add(infoLayout);
-            }
-        }
-
-        // to do
-        protected override void OnDoubleClick(EventArgs e) {
-            if (mIsTextable == false)
-                return;
-
-            // TODO: prompt a msg box to let user type the content text
+            if (mIsInstanceOnScript)
+                ModelManager.showInfoPanel(this);
         }
 
         // mouse entered, set is-mouse-moving-on to true, and re-draw

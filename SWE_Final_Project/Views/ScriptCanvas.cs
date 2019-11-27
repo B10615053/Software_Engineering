@@ -95,6 +95,9 @@ namespace SWE_Final_Project.Views {
                 Controls.Add(newStateView);
                 // add model
                 ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView));
+
+                // show info panel
+                ModelManager.showInfoPanel(newStateView);
             }
 
             // reset the holding type to NONE
