@@ -25,7 +25,9 @@
         private void InitializeComponent() {
             this.txtShowAlertMessage = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel_baseAtAlertForm = new System.Windows.Forms.TableLayoutPanel();
-            this.btnConfirmAtAlertForm = new System.Windows.Forms.Button();
+            this.btnNoAtAlertForm = new System.Windows.Forms.Button();
+            this.btnCancelAtAlertForm = new System.Windows.Forms.Button();
+            this.btnYesAtAlertForm = new System.Windows.Forms.Button();
             this.tableLayoutPanel_baseAtAlertForm.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -33,6 +35,7 @@
             // 
             this.txtShowAlertMessage.BackColor = System.Drawing.SystemColors.Control;
             this.txtShowAlertMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tableLayoutPanel_baseAtAlertForm.SetColumnSpan(this.txtShowAlertMessage, 3);
             this.txtShowAlertMessage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtShowAlertMessage.Font = new System.Drawing.Font("Consolas", 12F);
             this.txtShowAlertMessage.Location = new System.Drawing.Point(13, 13);
@@ -46,10 +49,14 @@
             // 
             // tableLayoutPanel_baseAtAlertForm
             // 
-            this.tableLayoutPanel_baseAtAlertForm.ColumnCount = 1;
-            this.tableLayoutPanel_baseAtAlertForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel_baseAtAlertForm.ColumnCount = 3;
+            this.tableLayoutPanel_baseAtAlertForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel_baseAtAlertForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel_baseAtAlertForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel_baseAtAlertForm.Controls.Add(this.btnNoAtAlertForm, 0, 1);
+            this.tableLayoutPanel_baseAtAlertForm.Controls.Add(this.btnCancelAtAlertForm, 0, 1);
             this.tableLayoutPanel_baseAtAlertForm.Controls.Add(this.txtShowAlertMessage, 0, 0);
-            this.tableLayoutPanel_baseAtAlertForm.Controls.Add(this.btnConfirmAtAlertForm, 0, 1);
+            this.tableLayoutPanel_baseAtAlertForm.Controls.Add(this.btnYesAtAlertForm, 2, 1);
             this.tableLayoutPanel_baseAtAlertForm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel_baseAtAlertForm.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel_baseAtAlertForm.Name = "tableLayoutPanel_baseAtAlertForm";
@@ -59,18 +66,41 @@
             this.tableLayoutPanel_baseAtAlertForm.Size = new System.Drawing.Size(538, 205);
             this.tableLayoutPanel_baseAtAlertForm.TabIndex = 1;
             // 
-            // btnConfirmAtAlertForm
+            // btnNoAtAlertForm
             // 
-            this.btnConfirmAtAlertForm.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnConfirmAtAlertForm.Font = new System.Drawing.Font("Consolas", 12F);
-            this.btnConfirmAtAlertForm.Location = new System.Drawing.Point(377, 148);
-            this.btnConfirmAtAlertForm.Margin = new System.Windows.Forms.Padding(13);
-            this.btnConfirmAtAlertForm.Name = "btnConfirmAtAlertForm";
-            this.btnConfirmAtAlertForm.Size = new System.Drawing.Size(148, 44);
-            this.btnConfirmAtAlertForm.TabIndex = 0;
-            this.btnConfirmAtAlertForm.Text = "OK";
-            this.btnConfirmAtAlertForm.UseVisualStyleBackColor = true;
-            this.btnConfirmAtAlertForm.Click += new System.EventHandler(this.BtnConfirmAtAlertForm_Click);
+            this.btnNoAtAlertForm.Font = new System.Drawing.Font("Consolas", 12F);
+            this.btnNoAtAlertForm.Location = new System.Drawing.Point(192, 148);
+            this.btnNoAtAlertForm.Margin = new System.Windows.Forms.Padding(13);
+            this.btnNoAtAlertForm.Name = "btnNoAtAlertForm";
+            this.btnNoAtAlertForm.Size = new System.Drawing.Size(148, 44);
+            this.btnNoAtAlertForm.TabIndex = 3;
+            this.btnNoAtAlertForm.Text = "No";
+            this.btnNoAtAlertForm.UseVisualStyleBackColor = true;
+            this.btnNoAtAlertForm.Click += new System.EventHandler(this.BtnNoAtAlertForm_Click);
+            // 
+            // btnCancelAtAlertForm
+            // 
+            this.btnCancelAtAlertForm.Font = new System.Drawing.Font("Consolas", 12F);
+            this.btnCancelAtAlertForm.Location = new System.Drawing.Point(13, 148);
+            this.btnCancelAtAlertForm.Margin = new System.Windows.Forms.Padding(13);
+            this.btnCancelAtAlertForm.Name = "btnCancelAtAlertForm";
+            this.btnCancelAtAlertForm.Size = new System.Drawing.Size(148, 44);
+            this.btnCancelAtAlertForm.TabIndex = 2;
+            this.btnCancelAtAlertForm.Text = "Cancel";
+            this.btnCancelAtAlertForm.UseVisualStyleBackColor = true;
+            this.btnCancelAtAlertForm.Click += new System.EventHandler(this.BtnCancelAtAlertForm_Click);
+            // 
+            // btnYesAtAlertForm
+            // 
+            this.btnYesAtAlertForm.Font = new System.Drawing.Font("Consolas", 12F);
+            this.btnYesAtAlertForm.Location = new System.Drawing.Point(371, 148);
+            this.btnYesAtAlertForm.Margin = new System.Windows.Forms.Padding(13);
+            this.btnYesAtAlertForm.Name = "btnYesAtAlertForm";
+            this.btnYesAtAlertForm.Size = new System.Drawing.Size(148, 44);
+            this.btnYesAtAlertForm.TabIndex = 0;
+            this.btnYesAtAlertForm.Text = "Yes";
+            this.btnYesAtAlertForm.UseVisualStyleBackColor = true;
+            this.btnYesAtAlertForm.Click += new System.EventHandler(this.BtnConfirmAtAlertForm_Click);
             // 
             // AlertForm
             // 
@@ -94,6 +124,8 @@
 
         private System.Windows.Forms.TextBox txtShowAlertMessage;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_baseAtAlertForm;
-        private System.Windows.Forms.Button btnConfirmAtAlertForm;
+        private System.Windows.Forms.Button btnYesAtAlertForm;
+        private System.Windows.Forms.Button btnNoAtAlertForm;
+        private System.Windows.Forms.Button btnCancelAtAlertForm;
     }
 }

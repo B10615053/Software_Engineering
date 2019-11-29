@@ -98,6 +98,8 @@ namespace SWE_Final_Project.Views {
 
                 // show info panel
                 ModelManager.showInfoPanel(newStateView);
+
+
             }
 
             // reset the holding type to NONE

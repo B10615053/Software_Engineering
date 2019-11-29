@@ -59,6 +59,11 @@ namespace SWE_Final_Project.Models {
             toBeModifiedState.setDataByStateView(stateView);
         }
 
+        // check if this script has been saved at least one time or not
+        public bool hasBeenSavedAtLeastOneTime() {
+            return !(mSavedFilePath is null);
+        }
+
         /* ========================================= */
 
         public override bool Equals(object obj) {

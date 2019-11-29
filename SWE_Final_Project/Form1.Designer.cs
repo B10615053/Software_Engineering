@@ -208,6 +208,7 @@
             this.scriptsTabControl.TabIndex = 0;
             this.scriptsTabControl.SelectedIndexChanged += new System.EventHandler(this.ScriptsTabControl_SelectedIndexChanged);
             this.scriptsTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptsTabControl_KeyDown);
+            this.scriptsTabControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ScriptsTabControl_MouseUp);
             // 
             // statesListPanel
             // 

@@ -63,6 +63,9 @@
     <Compile Include="Views\ScriptCanvas.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Views\ScriptLabelContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Views\ScriptTabPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -111,6 +114,7 @@
     <EmbeddedResource Include="Views\SubForms\TypingForm.resx">
       <DependentUpon>TypingForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

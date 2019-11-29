@@ -50,12 +50,37 @@ namespace SWE_Final_Project.Managers {
             return newScriptName;
         }
 
+        // close the current working-on script
+        public static void closeScript() {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+
+            // remove the script-model from the list,
+            mOpenedScriptList.RemoveAt(CurrentSelectedScriptIndex);
+
+            // and re-adjust the current-selected-script-index
+            if (CurrentSelectedScriptIndex >= mOpenedScriptList.Count)
+                CurrentSelectedScriptIndex = mOpenedScriptList.Count - 1;
+        }
+
         // add new state on a certain script
         public static void addNewStateOnCertainScript(StateModel newStateModel) {
             if (CurrentSelectedScriptIndex < 0)
                 return;
             mOpenedScriptList[CurrentSelectedScriptIndex].addNewState(newStateModel);
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+            Program.form.MarkUnsavedScript();
             debugPrint();
+        }
+
+        // rename the current working-on script
+        public static void renameScript(string newScriptName, bool isSaving) {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+            mOpenedScriptList[CurrentSelectedScriptIndex].Name = newScriptName;
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = !isSaving;
+            if (!isSaving)
+                Program.form.MarkUnsavedScript();
         }
 
         // modify a certain state on a certain script
@@ -63,6 +88,8 @@ namespace SWE_Final_Project.Managers {
             if (CurrentSelectedScriptIndex < 0)
                 return;
             mOpenedScriptList[CurrentSelectedScriptIndex].modifyState(stateView);
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+            Program.form.MarkUnsavedScript();
             debugPrint();
         }
 
