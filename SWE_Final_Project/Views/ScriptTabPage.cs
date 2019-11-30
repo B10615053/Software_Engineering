@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace SWE_Final_Project.Views {
     class ScriptTabPage: TabPage {
-        public ScriptTabPage(string tabName): base(tabName) {
+        public ScriptTabPage(string tabName, List<StateModel> stateModelList = null): base(tabName) {
             // add a whole new canvas
-            ScriptCanvas scriptCanvas = new ScriptCanvas(tabName);
+            ScriptCanvas scriptCanvas = new ScriptCanvas(tabName, stateModelList);
             Controls.Add(scriptCanvas);
         }
     }

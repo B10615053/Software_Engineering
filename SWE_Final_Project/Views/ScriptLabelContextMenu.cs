@@ -57,6 +57,7 @@ namespace SWE_Final_Project.Views {
         private void closeScript() {
             // has unsaved changes in the current working-on script
             if (ModelManager.getScriptModelByIndex(mTabControl.SelectedIndex).HaveUnsavedChanges) {
+                Console.WriteLine(mTabControl.SelectedIndex.ToString());
                 AlertForm alertForm = new AlertForm("Alert", "The script has been modified and it's unsaved. Do you want to save it?", true, true, true);
                 DialogResult result = alertForm.ShowDialog();
 

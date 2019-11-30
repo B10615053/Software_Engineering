@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SWE_Final_Project.Managers;
 using SWE_Final_Project.Views.States;
 using SWE_Final_Project.Views.SubForms;
 
 namespace SWE_Final_Project.Views {
     class StateInfoTableLayoutPanel: TableLayoutPanel {
+        // constructor
         public StateInfoTableLayoutPanel(StateView stateView) {
             // set dock style
             Dock = DockStyle.Fill;
@@ -25,6 +27,8 @@ namespace SWE_Final_Project.Views {
             // init the components
             initializeComponents(stateView);
         }
+
+        /* ============================================================= */
 
         private void initializeComponents(StateView stateView) {
             // label: type
@@ -120,6 +124,17 @@ namespace SWE_Final_Project.Views {
 
             if (txtShowText.Enabled)
                 txtShowText.KeyPress += keyPressText;
+
+            /* ============================= */
+
+            txtShowText.KeyDown += TxtShowText_KeyDown; ;
+        }
+
+        // key down event at txt-show-text, for the convenience of saving the script
+        private void TxtShowText_KeyDown(object sender, KeyEventArgs e) {
+            // Ctrl + S
+            if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
+                Program.form.saveCertainScript(ModelManager.CurrentSelectedScriptIndex);
         }
     }
 }

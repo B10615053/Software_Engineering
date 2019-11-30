@@ -11,8 +11,8 @@ using SWE_Final_Project.Models;
 namespace SWE_Final_Project.Views.States {
     abstract class StateView: PictureBox {
         // the same as corresponding state-model
-        private long mId = -2L;
-        public long Id { get => mId; set => mId = value; }
+        private string mId = "";
+        public string Id { get => mId; set => mId = value; }
 
         // is the state textable, START & END are not, but general state is textable
         protected readonly bool mIsTextable;
@@ -69,6 +69,8 @@ namespace SWE_Final_Project.Views.States {
             Invalidate();
         }
 
+        /* ================================================= */
+
         // set the state content string
         public void setStateContent(string newStateContent) {
             // un-textable, return directly
@@ -99,7 +101,7 @@ namespace SWE_Final_Project.Views.States {
             // set the size
             Size = new Size(stateWidth, stateHeight);
 
-            Console.WriteLine("W: {0}, H: {1}", stateWidth, stateHeight);
+            // Console.WriteLine("W: {0}, H: {1}", stateWidth, stateHeight);
 
             // changes at data model
             ModelManager.modifyStateOnCertainScript(this);

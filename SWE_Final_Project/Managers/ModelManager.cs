@@ -12,6 +12,8 @@ using System.Windows.Forms;
 
 namespace SWE_Final_Project.Managers {
     class ModelManager {
+        private static StateInfoTableLayoutPanel mInfoPanel = null;
+
         // the index of current working-on script of all opened scripts
         public static int CurrentSelectedScriptIndex = -1;
 
@@ -35,7 +37,7 @@ namespace SWE_Final_Project.Managers {
         }
 
         // add new script, and return the re-adjusted script name
-        public static string addNewScript(string newScriptName, List<StateModel> stateModels = null) {
+        public static ScriptModel addNewScript(string newScriptName, List<StateModel> stateModels = null) {
             // deal w/ duplicated script names
             string origNewScriptName = newScriptName;
             int cnt = 2;
@@ -47,7 +49,26 @@ namespace SWE_Final_Project.Managers {
             ScriptModel newScriptModel = new ScriptModel(newScriptName, stateModels);
             mOpenedScriptList.Add(newScriptModel);
 
-            return newScriptName;
+            return newScriptModel;
+        }
+
+        // open the saved script
+        /// <summary>
+        /// return true if added successfully
+        /// </summary>
+        /// <param name="scriptModel"></param>
+        /// <returns></returns>
+        public static bool openScript(ScriptModel scriptModel) {
+            ScriptModel scriptModelInList = mOpenedScriptList.Find(it => it.Equals(scriptModel));
+
+            // not in the opened script list, open it
+            if (scriptModelInList is null) {
+                mOpenedScriptList.Add(scriptModel);
+                return true;
+            }
+            // already in the opened script list
+            else
+                return false;
         }
 
         // close the current working-on script
@@ -70,7 +91,7 @@ namespace SWE_Final_Project.Managers {
             mOpenedScriptList[CurrentSelectedScriptIndex].addNewState(newStateModel);
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
             Program.form.MarkUnsavedScript();
-            debugPrint();
+            // debugPrint();
         }
 
         // rename the current working-on script
@@ -90,7 +111,7 @@ namespace SWE_Final_Project.Managers {
             mOpenedScriptList[CurrentSelectedScriptIndex].modifyState(stateView);
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
             Program.form.MarkUnsavedScript();
-            debugPrint();
+            // debugPrint();
         }
 
         // show the info-panel at the right-side of the form
@@ -98,16 +119,29 @@ namespace SWE_Final_Project.Managers {
             // get the panel as the container
             Panel infoContainer = Program.form.panelInfoContainer;
             // create a new info-apnel
-            StateInfoTableLayoutPanel infoLayout = new StateInfoTableLayoutPanel(stateView);
+            mInfoPanel = new StateInfoTableLayoutPanel(stateView);
 
             // remove the existed one and add the new one
             infoContainer.Controls.Clear();
-            infoContainer.Controls.Add(infoLayout);
+            infoContainer.Controls.Add(mInfoPanel);
 
             // focus on the txt-show-text
-            Control[] controls = infoLayout.Controls.Find("txtShowText", false);
+            Control[] controls = mInfoPanel.Controls.Find("txtShowText", false);
             if (controls.Length == 1)
                 controls[0].Select();
+        }
+
+        // remove the info-panel
+        public static void removeInfoPanel() {
+            if (mInfoPanel is null)
+                return;
+
+            // get the panel as the container
+            Panel infoContainer = Program.form.panelInfoContainer;
+
+            // remove
+            infoContainer.Controls.Clear();
+            mInfoPanel = null;
         }
 
         // for debugging

@@ -33,6 +33,10 @@ namespace SWE_Final_Project.Managers {
             BinaryFormatter bf = new BinaryFormatter();
 
             ret = (T) bf.Deserialize(fs);
+
+            fs.Close();
+            fs.Dispose();
+
             return ret;
         }
     }

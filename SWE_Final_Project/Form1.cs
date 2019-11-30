@@ -55,7 +55,6 @@ namespace SWE_Final_Project {
             if (scriptModel.hasBeenSavedAtLeastOneTime()) {
                 // have unsaved changes
                 if (scriptModel.HaveUnsavedChanges) {
-
                     // build the new path, including path, file name, and extension
                     int lastIdxOfSeperator = scriptModel.SavedFilePath.LastIndexOf('\\');
                     string newPath;
@@ -64,7 +63,9 @@ namespace SWE_Final_Project {
                     else
                         newPath = currentTabTextWithoutAsterisk + ".sms";
 
-                    Console.WriteLine("new path: \'" + newPath + "\'");
+                    // store the file path to the script-model
+                    scriptModel.SavedFilePath = newPath;
+                    scriptModel.HaveUnsavedChanges = false;
 
                     // serialize
                     SerializationManager.serialize(scriptModel, newPath);
@@ -72,15 +73,11 @@ namespace SWE_Final_Project {
                     // trim the asterisk at the end
                     scriptsTabControl.SelectedTab.Text = scriptsTabControl.SelectedTab.Text.TrimEnd('*');
 
-                    // store the file path to the script-model
-                    scriptModel.SavedFilePath = newPath;
-
                     return true;
                 }
 
                 return false;
             }
-
 
 
 
@@ -100,8 +97,15 @@ namespace SWE_Final_Project {
                 if (!fileNameWithPath.EndsWith(".sms"))
                     fileNameWithPath += ".sms";
 
+                // the pre-saving file path, possible as null
+                string origPathOrNull = scriptModel.SavedFilePath;
+
                 // do serialization for saving the file
                 try {
+                    // store the file path to the script-model
+                    scriptModel.SavedFilePath = fileNameWithPath;
+                    scriptModel.HaveUnsavedChanges = false;
+
                     // serialize
                     SerializationManager.serialize(scriptModel, fileNameWithPath);
 
@@ -113,11 +117,10 @@ namespace SWE_Final_Project {
                     // rename the script
                     ModelManager.renameScript(fileNameWithoutPathAndExt, true);
                     scriptsTabControl.SelectedTab.Text = fileNameWithoutPathAndExt;
-
-                    // store the file path to the script-model
-                    scriptModel.SavedFilePath = fileNameWithPath;
                 } catch (Exception) {
                     new AlertForm("Error happened", "Unfortunately, errors happened when saving the file. Operation failed.").ShowDialog();
+                    scriptModel.SavedFilePath = origPathOrNull;
+                    return false;
                 }
 
                 return true;
@@ -127,43 +130,91 @@ namespace SWE_Final_Project {
             return false;
         }
 
+        // show 
+        private bool showDialogAndOpenScriptFromDisk() {
+            // create a open-file-dialog
+            OpenFileDialog openScriptDialog = new OpenFileDialog();
+
+            openScriptDialog.Filter = "sms files (*.sms)|*.sms";
+            openScriptDialog.RestoreDirectory = true;
+
+            // show the dialog and result a designated-by-user file
+            if (openScriptDialog.ShowDialog() == DialogResult.OK) {
+                try {
+                    // get the script-model by de-serializing
+                    ScriptModel scriptModel = SerializationManager.Deserialize<ScriptModel>(openScriptDialog.FileName);
+
+                    Console.WriteLine(scriptModel.HaveUnsavedChanges.ToString());
+
+                    // open the designated script-model
+                    // if the script is already in the opened script list
+                    if (ModelManager.openScript(scriptModel) == false) {
+                        new AlertForm("Alert", "The designated script is already in the opened script list.").ShowDialog();
+                        return false;
+                    }
+
+                    // add new tab-page for this script
+                    addNewTabPage(scriptModel, false);
+                } catch (Exception) {
+                    new AlertForm("Error happened", "Unfortunately, errors happened when loading the file. Operation failed.").ShowDialog();
+                    return false;
+                }
+
+                return true;
+            }
+
+            // no opening
+            return false;
+        }
+
         // mark the current working-on script as unsaved
         public void MarkUnsavedScript() {
+            // add the prefix '*' to the text of the current selected tab
             if (scriptsTabControl.SelectedTab.Text.EndsWith("*") == false)
                 scriptsTabControl.SelectedTab.Text += "*";
         }
 
-        // ==============================================================
-        // user events
-
-        // add the whole new script
-        private void NewScriptToolStripMenuItem_Click(object sender, EventArgs e) {
-            // add new script to model-manager
-            string adjustedScriptName = ModelManager.addNewScript("Untitled");
-
-            // add new tab-page
-            ScriptTabPage tabPage = new ScriptTabPage(adjustedScriptName);
+        // add new tab-page of a script
+        private void addNewTabPage(ScriptModel scriptModel, bool shouldMarkAsUnsaved) {
+            // create a new tab-page
+            ScriptTabPage tabPage = new ScriptTabPage(scriptModel.Name, scriptModel.getCopiedStateList());
             scriptsTabControl.TabPages.Add(tabPage);
-            // mark as unsaved
-            scriptsTabControl.TabPages[scriptsTabControl.TabPages.Count - 1].Text += "*";
+
+            // select the new script
+            scriptsTabControl.SelectedIndex = scriptsTabControl.TabPages.Count - 1;
+
+            // mark as unsaved if needs
+            if (shouldMarkAsUnsaved)
+                MarkUnsavedScript();
 
             // set the selected script index
             ModelManager.CurrentSelectedScriptIndex = scriptsTabControl.SelectedIndex;
         }
 
-        // click the save-script button
+        /* ============================================================== */
+        /* user events */
+
+        // add the whole new script by clicking the new button at tool-strip
+        private void NewScriptToolStripMenuItem_Click(object sender, EventArgs e) {
+            // add new script to model-manager
+            ScriptModel adjustedScriptModel = ModelManager.addNewScript("Untitled");
+
+            // add new tab-page
+            addNewTabPage(adjustedScriptModel, true);
+        }
+
+        // save the script by clicking the save button at tool-strip
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e) {
             saveCertainScript(scriptsTabControl.SelectedIndex);
         }
 
-        // Ctrl + S at a certain script
-        private void ScriptsTabControl_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
-                saveCertainScript(scriptsTabControl.SelectedIndex);
+        // open the script which is saved to the disk by clicking the open button at tool-strip
+        private void OpenScriptToolStripMenuItem_Click(object sender, EventArgs e) {
+            showDialogAndOpenScriptFromDisk();
         }
 
         // click on the settings of prompting typing form when creating a new general state
-        // to let user type the content of the new state
+        // to let user type the content texts of the new state
         private void PromptTypingFormWhenCreatingGeneralStateToolStripMenuItem_Click(object sender, EventArgs e) {
             // switch the current state of checked
             bool currentState = SettingsManager.PromptTypingFormWhenCreatingNewGeneralState;
@@ -176,9 +227,20 @@ namespace SWE_Final_Project {
             SettingsManager.PromptTypingFormWhenCreatingNewGeneralState = !currentState;
         }
 
+        // Ctrl + S at a certain script
+        private void ScriptsTabControl_KeyDown(object sender, KeyEventArgs e) {
+            // Ctrl + S
+            if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
+                saveCertainScript(scriptsTabControl.SelectedIndex);
+        }
+
         // switch between scripts
         private void ScriptsTabControl_SelectedIndexChanged(object sender, EventArgs e) {
+            // set the index of current selected script
             ModelManager.CurrentSelectedScriptIndex = scriptsTabControl.SelectedIndex;
+
+            // remove the info-panel if existed
+            ModelManager.removeInfoPanel();
         }
 
         // mouse-up event on the tab-control

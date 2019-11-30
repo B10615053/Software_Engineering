@@ -16,7 +16,7 @@ namespace SWE_Final_Project.Views {
         private string mScriptNameAtCanvas = "";
 
         // constructor
-        public ScriptCanvas(string scriptName) : base() {
+        public ScriptCanvas(string scriptName, List<StateModel> stateModelList = null) : base() {
             // fill in the father container
             Dock = DockStyle.Fill;
 
@@ -28,6 +28,21 @@ namespace SWE_Final_Project.Views {
 
             // set this script name
             mScriptNameAtCanvas = scriptName;
+
+            // render the state-models if existed
+            if (!(stateModelList is null)) {
+                stateModelList.ForEach(it => {
+                    StateView stateView;
+                    if (it.StateType == StateType.START)
+                        stateView = new StartStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
+                    else if (it.StateType == StateType.END)
+                        stateView = new EndStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
+                    else
+                        stateView = new GeneralStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
+
+                    Controls.Add(stateView);
+                });
+            }
         }
 
         // prompt the typing form to get some texts from user
@@ -98,8 +113,6 @@ namespace SWE_Final_Project.Views {
 
                 // show info panel
                 ModelManager.showInfoPanel(newStateView);
-
-
             }
 
             // reset the holding type to NONE
@@ -111,6 +124,15 @@ namespace SWE_Final_Project.Views {
 
         // deprecated
         protected override void OnMouseDoubleClick(MouseEventArgs e) {
+        }
+
+        // click, then focus on the canvas and remove the info-panel if existed
+        protected override void OnMouseClick(MouseEventArgs e) {
+            // focus on the current working-on canvas
+            Select();
+
+            // remove the info-panel
+            ModelManager.removeInfoPanel();
         }
 
         // re-draw

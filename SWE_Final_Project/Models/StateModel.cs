@@ -16,12 +16,9 @@ namespace SWE_Final_Project.Models {
     // a model of a state
     [Serializable]
     class StateModel {
-        // for instance counting
-        private static long idCounter = 0L;
-
         // unique id of every state-model
-        private long mId;
-        public long Id { get => mId; }
+        private string mId;
+        public string Id { get => mId; }
 
         // type of state
         private StateType mStateType = StateType.NONE;
@@ -54,14 +51,17 @@ namespace SWE_Final_Project.Models {
             mSizeOnScript = newSize;
             mContentText = newContent;
 
-            mId = idCounter++;
+            // generate unique id
+            mId = Guid.NewGuid().ToString("N");
         }
 
         // constructor
         public StateModel(ref StateView stateView) {
             setDataByStateView(stateView);
 
-            mId = idCounter++;
+            // generate unique id
+            mId = Guid.NewGuid().ToString("N");
+            // assign to the state-view
             stateView.Id = mId;
         }
 
