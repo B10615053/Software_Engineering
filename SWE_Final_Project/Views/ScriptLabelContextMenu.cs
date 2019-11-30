@@ -18,6 +18,7 @@ namespace SWE_Final_Project.Views {
         public ScriptLabelContextMenu(TabControl tabControl) {
             // add the functionalities
             MenuItems.Add("Rename");
+            MenuItems.Add("Save");
             MenuItems.Add("Close");
 
             // delegate all menu-items events
@@ -39,6 +40,10 @@ namespace SWE_Final_Project.Views {
             if (item.Text == "Rename")
                 renameScript();
 
+            // save
+            else if (item.Text == "Save")
+                saveScript();
+
             // close
             else if (item.Text == "Close")
                 closeScript();
@@ -51,6 +56,11 @@ namespace SWE_Final_Project.Views {
                 ModelManager.renameScript(TypingForm.userTypedResultText, false);
                 mTabControl.SelectedTab.Text = TypingForm.userTypedResultText + "*";
             }
+        }
+
+        // do saving the script
+        private void saveScript() {
+            Program.form.saveCertainScript(mTabControl.SelectedIndex);
         }
 
         // do closing the script
