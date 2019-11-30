@@ -115,7 +115,7 @@ namespace SWE_Final_Project.Views {
                 ModelManager.showInfoPanel(newStateView);
             }
 
-            // reset the holding type to NONE
+            // reset both the holding type and dragging to NONE
             MouseManager.CurrentHoldingType = StateType.NONE;
 
             // paint on the picture-box

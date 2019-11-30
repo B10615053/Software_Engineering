@@ -167,10 +167,20 @@ namespace SWE_Final_Project.Views.States {
             Invalidate();
         }
 
-        // set the cursor style into a hand
+        // dragging a certain state-view if mouse is down
         protected override void OnMouseMove(MouseEventArgs e) {
-            if (mIsInstanceOnScript)
+            if (mIsInstanceOnScript) {
                 Cursor = Cursors.Hand;
+
+                // relocate the dragged state-view
+                if (MouseManager.isDraggingExistedStateView) {
+                    Console.WriteLine(e.X.ToString() + ", " + e.Y.ToString());
+                    relocateState(
+                        Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
+                        Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
+                    );
+                }
+            }
         }
 
         // mouse leaved, set is-mouse-moving-on to false, and re-draw
@@ -181,6 +191,7 @@ namespace SWE_Final_Project.Views.States {
 
         // drag a new state-view out
         protected override void OnMouseDown(MouseEventArgs e) {
+            // dragging new state-view
             if (mIsInstanceOnScript == false) {
                 Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
                 DrawToBitmap(pic, Bounds);
@@ -190,6 +201,18 @@ namespace SWE_Final_Project.Views.States {
 
                 DoDragDrop(pic, DragDropEffects.Copy);
             }
+            // dragging existed state-view
+            else {
+                MouseManager.isDraggingExistedStateView = true;
+                MouseManager.posOnStateViewX = e.X;
+                MouseManager.posOnStateViewY = e.Y;
+                MouseManager.origPt = new Point(Location.X, Location.Y);
+            }
+        }
+
+        // dropped (not dragging)
+        protected override void OnMouseUp(MouseEventArgs e) {
+            MouseManager.isDraggingExistedStateView = false;
         }
     }
 }

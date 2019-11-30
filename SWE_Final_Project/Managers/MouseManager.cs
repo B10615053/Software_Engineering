@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace SWE_Final_Project.Managers {
 
         static private StateType mCurrentHoldingType = StateType.NONE;
         internal static StateType CurrentHoldingType { get => mCurrentHoldingType; set => mCurrentHoldingType = value; }
+
+        internal static bool isDraggingExistedStateView = false;
+        internal static int posOnStateViewX = 0;
+        internal static int posOnStateViewY = 0;
+        internal static Point origPt;
     }
 
     /*
