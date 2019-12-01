@@ -80,9 +80,8 @@ namespace SWE_Final_Project.Views {
         protected override void OnMouseUp(MouseEventArgs e) {
         }
 
-        // mouse entered (not dragging), change the cursor style into a cross
+        // mouse entered (not dragging)
         protected override void OnMouseEnter(EventArgs e) {
-            Cursor = Cursors.Cross;
         }
 
         // drag-entered

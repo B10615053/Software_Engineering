@@ -40,16 +40,24 @@ namespace SWE_Final_Project.Views.States {
         protected GraphicsPath mInnerGphPath = new GraphicsPath();
         internal GraphicsPath InnerGphPath { get => mInnerGphPath; }
 
+        // positions of 4 types of ports
+        private Dictionary<PortType, Point> mPortPosDict = new Dictionary<PortType, Point>();
+
         /* ================================================= */
 
         // for calculating the state size, H and V stand for horizontal and vertical respectively
         private static readonly int ENLARGING_RATIO_H = 7;
         private static readonly int ENLARGING_RATIO_V = ENLARGING_RATIO_H * 4;
 
-        // size of START & END
-        public static readonly Size UNTEXTABLE_STATE_SIZE = new Size(25, 25);
+        // the size of START & END
+        public static readonly Size UNTEXTABLE_STATE_SIZE = new Size(30, 30);
 
+        // the smallest size of GENERAL
         private static readonly Size SMALLEST_GENERAL_STATE_SIZE = new Size(75, 50);
+
+        // the radius of the circle to hint the user he/she can add arrow (link)
+        private static readonly int ADDING_ARROW_HINT_RADIUS = 14;
+        private static readonly int SQD_HINT_RADIUS = ADDING_ARROW_HINT_RADIUS * ADDING_ARROW_HINT_RADIUS;
 
         /* ================================================= */
 
@@ -110,6 +118,9 @@ namespace SWE_Final_Project.Views.States {
             // set the size
             Size = new Size(stateWidth, stateHeight);
 
+            // set the ports positions
+            resetPortPositions();
+
             // Console.WriteLine("W: {0}, H: {1}", stateWidth, stateHeight);
 
             // changes at data model
@@ -124,11 +135,41 @@ namespace SWE_Final_Project.Views.States {
             // set the size
             Size = newSize;
 
+            // set the ports positions
+            resetPortPositions();
+
             // changes at data model
             ModelManager.modifyStateOnCertainScript(this);
 
             // re-draw
             Invalidate();
+        }
+
+        // re-set the positions of 4 types of ports
+        protected void resetPortPositions() {
+            // up port
+            if (mPortPosDict.ContainsKey(PortType.UP))
+                mPortPosDict[PortType.UP] = new Point(Size.Width / 2, 0);
+            else
+                mPortPosDict.Add(PortType.UP, new Point(Size.Width / 2, 0));
+
+            // right port
+            if (mPortPosDict.ContainsKey(PortType.RIGHT))
+                mPortPosDict[PortType.RIGHT] = new Point(Size.Width, Size.Height / 2);
+            else
+                mPortPosDict.Add(PortType.RIGHT, new Point(Size.Width, Size.Height / 2));
+
+            // down port
+            if (mPortPosDict.ContainsKey(PortType.DOWN))
+                mPortPosDict[PortType.DOWN] = new Point(Size.Width / 2, Size.Height);
+            else
+                mPortPosDict.Add(PortType.DOWN, new Point(Size.Width / 2, Size.Height));
+
+            // left port
+            if (mPortPosDict.ContainsKey(PortType.LEFT))
+                mPortPosDict[PortType.LEFT] = new Point(0, Size.Height / 2);
+            else
+                mPortPosDict.Add(PortType.LEFT, new Point(0, Size.Height / 2));
         }
 
         // re-locate the state
@@ -149,6 +190,11 @@ namespace SWE_Final_Project.Views.States {
 
         // draw on the designated graphics-path
         abstract protected void addToGraphicsPath();
+
+        // calculate the squared distance between 2 points
+        private static int calcSquaredDistance(Point a, Point b) {
+            return ((a.X - b.X) * (a.X - b.X)) + ((a.Y - b.Y) * (a.Y - b.Y));
+        }
 
         /* methods */
         /* ==================================================================== */
@@ -193,21 +239,49 @@ namespace SWE_Final_Project.Views.States {
                 // ZA HANDO
                 Cursor = Cursors.Hand;
 
-                // mouse is on the outline of this state-view
-                // -> do linking (adding arrow)
+                // no use now
                 if (mOutlineGphPath.IsOutlineVisible(canvasX, canvasY, Pens.Black)) {
-                    // TODO: link between states
+                    
                 }
 
-                // mouse is at the inner stuff of this state-view
-                // -> do moving
                 else if (mOutlineGphPath.IsVisible(canvasX, canvasY)) {
-                    // relocate the dragged state-view
+                    // mouse is at the inner stuff of this state-view
+                    // -> do moving (relocating the dragged state-view)
                     if (MouseManager.isDraggingExistedStateView) {
                         relocateState(
                             Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
                             Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
                         );
+                    }
+
+                    // mouse is on the outline of this state-view
+                    // -> do linking (adding arrow)
+                    else {
+                        // TODO: link between states
+
+                        Cursor = Cursors.Cross;
+
+                        // calculate squared distances among 4 ports
+                        int upSqdDis = calcSquaredDistance(e.Location, mPortPosDict[PortType.UP]);
+                        int rightSqdDis = calcSquaredDistance(e.Location, mPortPosDict[PortType.RIGHT]);
+                        int downSqdDis = calcSquaredDistance(e.Location, mPortPosDict[PortType.DOWN]);
+                        int leftSqdDis = calcSquaredDistance(e.Location, mPortPosDict[PortType.LEFT]);
+
+                        if (upSqdDis < SQD_HINT_RADIUS)
+                            MouseManager.coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(this, PortType.UP);
+                        else if (rightSqdDis < SQD_HINT_RADIUS)
+                            MouseManager.coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(this, PortType.RIGHT);
+                        else if (downSqdDis < SQD_HINT_RADIUS)
+                            MouseManager.coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(this, PortType.DOWN);
+                        else if (leftSqdDis < SQD_HINT_RADIUS)
+                            MouseManager.coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(this, PortType.LEFT);
+                        else {
+                            MouseManager.coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(this, PortType.NONE);
+                            Cursor = Cursors.Hand;
+                        }
+
+                        // re-draw
+                        Invalidate();
                     }
                 }
 
@@ -234,9 +308,11 @@ namespace SWE_Final_Project.Views.States {
             }
             // dragging existed state-view
             else {
-                MouseManager.isDraggingExistedStateView = true;
-                MouseManager.posOnStateViewX = e.X;
-                MouseManager.posOnStateViewY = e.Y;
+                if (MouseManager.coveringStateViewAndPort.Value == PortType.NONE) {
+                    MouseManager.isDraggingExistedStateView = true;
+                    MouseManager.posOnStateViewX = e.X;
+                    MouseManager.posOnStateViewY = e.Y;
+                }
             }
         }
 
@@ -247,6 +323,53 @@ namespace SWE_Final_Project.Views.States {
         }
 
         protected override void OnPaint(PaintEventArgs e) {
+            SolidBrush portHintBrush = new SolidBrush(Color.FromArgb(127, 255, 14, 29));
+
+            // draw link-adding hint
+            if (mIsInstanceOnScript && mIsMouseMovingOn) {
+                switch (MouseManager.coveringStateViewAndPort.Value) {
+                    case PortType.UP:
+                        e.Graphics.FillEllipse(
+                            portHintBrush,
+                            mPortPosDict[PortType.UP].X - ADDING_ARROW_HINT_RADIUS / 2,
+                            mPortPosDict[PortType.UP].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                            ADDING_ARROW_HINT_RADIUS,
+                            ADDING_ARROW_HINT_RADIUS
+                        );
+                        break;
+
+                    case PortType.RIGHT:
+                        e.Graphics.FillEllipse(
+                            portHintBrush,
+                            mPortPosDict[PortType.RIGHT].X - ADDING_ARROW_HINT_RADIUS / 2,
+                            mPortPosDict[PortType.RIGHT].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                            ADDING_ARROW_HINT_RADIUS,
+                            ADDING_ARROW_HINT_RADIUS
+                        );
+                        break;
+
+                    case PortType.DOWN:
+                        e.Graphics.FillEllipse(
+                            portHintBrush,
+                            mPortPosDict[PortType.DOWN].X - ADDING_ARROW_HINT_RADIUS / 2,
+                            mPortPosDict[PortType.DOWN].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                            ADDING_ARROW_HINT_RADIUS,
+                            ADDING_ARROW_HINT_RADIUS
+                        );
+                        break;
+
+                    case PortType.LEFT:
+                        e.Graphics.FillEllipse(
+                            portHintBrush,
+                            mPortPosDict[PortType.LEFT].X - ADDING_ARROW_HINT_RADIUS / 2,
+                            mPortPosDict[PortType.LEFT].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                            ADDING_ARROW_HINT_RADIUS,
+                            ADDING_ARROW_HINT_RADIUS
+                        );
+                        break;
+                }
+            }
+
             addToGraphicsPath();
         }
     }

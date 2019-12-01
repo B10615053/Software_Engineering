@@ -18,6 +18,9 @@ namespace SWE_Final_Project.Managers {
         internal static int posOnStateViewX = 0;
         internal static int posOnStateViewY = 0;
 
+        // current mouse-covering state-view and which port is covered
+        internal static KeyValuePair<StateView, PortType> coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(null, PortType.NONE);
+
         // TODO: incomplete feature
         internal static StateView selectedStateView = null;
     }
