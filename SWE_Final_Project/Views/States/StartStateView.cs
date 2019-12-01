@@ -19,6 +19,16 @@ namespace SWE_Final_Project.Views.States {
 
         // draw on the designated graphics-path
         protected override void addToGraphicsPath() {
+            // no need for visualization,
+            // but still draw the outline since the mouse-outline detection will need it
+            mOutlineGphPath.Reset();
+            mOutlineGphPath.AddEllipse(
+                Location.X,
+                Location.Y,
+                Size.Width - 1,
+                Size.Height - 1
+            );
+
             mInnerGphPath.Reset();
             mInnerGphPath.AddEllipse(
                 Location.X,

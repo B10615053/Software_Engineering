@@ -71,8 +71,10 @@ namespace SWE_Final_Project.Views {
         /* ==================================================================== */
         /*  events */
 
+        // re-draw when mouse moving and is dragging existed state-views
         protected override void OnMouseMove(MouseEventArgs e) {
-            Invalidate();
+            if (MouseManager.isDraggingExistedStateView)
+                Invalidate();
         }
 
         protected override void OnMouseUp(MouseEventArgs e) {

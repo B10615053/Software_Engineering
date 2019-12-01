@@ -156,8 +156,10 @@ namespace SWE_Final_Project.Views.States {
 
         // click on an instance on scripts, show the info panel of this state-view
         protected override void OnMouseClick(MouseEventArgs e) {
-            if (mIsInstanceOnScript)
+            if (mIsInstanceOnScript) {
                 ModelManager.showInfoPanel(this);
+                MouseManager.selectedStateView = this;
+            }
         }
 
         // mouse entered, set is-mouse-moving-on to true, and re-draw
@@ -181,16 +183,34 @@ namespace SWE_Final_Project.Views.States {
 
         // dragging a certain state-view if mouse is down
         protected override void OnMouseMove(MouseEventArgs e) {
+            // e.X and e.Y is the mouse position of state-view
+            // need to calc the mouse position of the whole canvas (script)
+            int canvasX = Location.X + e.X;
+            int canvasY = Location.Y + e.Y;
+
+            // if it's an instance on the script (not the state-view on the left-bar)
             if (mIsInstanceOnScript) {
+                // ZA HANDO
                 Cursor = Cursors.Hand;
 
-                // relocate the dragged state-view
-                if (MouseManager.isDraggingExistedStateView) {
-                    relocateState(
-                        Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
-                        Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
-                    );
+                // mouse is on the outline of this state-view
+                // -> do linking (adding arrow)
+                if (mOutlineGphPath.IsOutlineVisible(canvasX, canvasY, Pens.Black)) {
+                    // TODO: link between states
                 }
+
+                // mouse is at the inner stuff of this state-view
+                // -> do moving
+                else if (mOutlineGphPath.IsVisible(canvasX, canvasY)) {
+                    // relocate the dragged state-view
+                    if (MouseManager.isDraggingExistedStateView) {
+                        relocateState(
+                            Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
+                            Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
+                        );
+                    }
+                }
+
             }
         }
 

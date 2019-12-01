@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWE_Final_Project.Models;
+using SWE_Final_Project.Views.States;
 
 namespace SWE_Final_Project.Managers {
     // for managing the status of the mouse
@@ -16,6 +17,9 @@ namespace SWE_Final_Project.Managers {
         internal static bool isDraggingExistedStateView = false;
         internal static int posOnStateViewX = 0;
         internal static int posOnStateViewY = 0;
+
+        // TODO: incomplete feature
+        internal static StateView selectedStateView = null;
     }
 
     /*
