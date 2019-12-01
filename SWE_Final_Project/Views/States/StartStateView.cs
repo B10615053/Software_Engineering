@@ -14,6 +14,18 @@ namespace SWE_Final_Project.Views.States {
         public StartStateView(int x, int y, string stateContent, bool isInstanceOnScript)
             : base(x, y, stateContent, false, isInstanceOnScript) {
             TheTag = "START";
+            addToGraphicsPath();
+        }
+
+        // draw on the designated graphics-path
+        protected override void addToGraphicsPath() {
+            mInnerGphPath.Reset();
+            mInnerGphPath.AddEllipse(
+                Location.X,
+                Location.Y,
+                Size.Width - 1,
+                Size.Height - 1
+            );
         }
 
         // re-draw
@@ -28,8 +40,6 @@ namespace SWE_Final_Project.Views.States {
             else
                 color = Color.Black;
 
-            //mGphPath.AddEllipse(0, 0, Size.Width - 1, Size.Height - 1);
-            //g.FillPath(new SolidBrush(Color.Black), mGphPath);
             g.FillEllipse(new SolidBrush(color), 0, 0, Size.Width - 1, Size.Height - 1);
         }
     }

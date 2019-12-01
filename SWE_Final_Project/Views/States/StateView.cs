@@ -32,8 +32,13 @@ namespace SWE_Final_Project.Views.States {
         private string mStateContent = "";
         internal string StateContent { get => mStateContent; }
 
-        // for drawing on the canvas (script)
-        protected GraphicsPath mGphPath = new GraphicsPath();
+        // the outline of state-view for drawing on the canvas (script)
+        protected GraphicsPath mOutlineGphPath = new GraphicsPath();
+        internal GraphicsPath OutlineGphPath { get => mOutlineGphPath; }
+
+        // the inner stuff of state-view for drawing on the canvas (script)
+        protected GraphicsPath mInnerGphPath = new GraphicsPath();
+        internal GraphicsPath InnerGphPath { get => mInnerGphPath; }
 
         /* ================================================= */
 
@@ -142,6 +147,9 @@ namespace SWE_Final_Project.Views.States {
             ModelManager.modifyStateOnCertainScript(this);
         }
 
+        // draw on the designated graphics-path
+        abstract protected void addToGraphicsPath();
+
         /* methods */
         /* ==================================================================== */
         /*  events */
@@ -178,7 +186,6 @@ namespace SWE_Final_Project.Views.States {
 
                 // relocate the dragged state-view
                 if (MouseManager.isDraggingExistedStateView) {
-                    Console.WriteLine(e.X.ToString() + ", " + e.Y.ToString());
                     relocateState(
                         Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
                         Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
@@ -210,17 +217,17 @@ namespace SWE_Final_Project.Views.States {
                 MouseManager.isDraggingExistedStateView = true;
                 MouseManager.posOnStateViewX = e.X;
                 MouseManager.posOnStateViewY = e.Y;
-                MouseManager.origPt = new Point(Location.X, Location.Y);
             }
         }
 
         // dropped (not dragging)
         protected override void OnMouseUp(MouseEventArgs e) {
+            addToGraphicsPath();
             MouseManager.isDraggingExistedStateView = false;
         }
 
         protected override void OnPaint(PaintEventArgs e) {
-            Graphics g = e.Graphics;
+            addToGraphicsPath();
         }
     }
 }

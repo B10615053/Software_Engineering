@@ -74,7 +74,10 @@ namespace SWE_Final_Project.Models {
             else
                 mStateType = StateType.GENERAL;
 
-            mLocOnScript = new Point(stateView.Location.X, stateView.Location.Y);
+            mLocOnScript = new Point(
+                stateView.Location.X + (stateView.Size.Width / 2) + 1,
+                stateView.Location.Y + (stateView.Size.Height / 2) + 1
+            );
             mSizeOnScript = new Size(stateView.Size.Width, stateView.Size.Height);
             mContentText = stateView.StateContent;
         }

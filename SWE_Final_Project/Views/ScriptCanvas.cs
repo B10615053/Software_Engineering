@@ -10,10 +10,15 @@ using SWE_Final_Project.Managers;
 using SWE_Final_Project.Views.States;
 using SWE_Final_Project.Views.SubForms;
 using SWE_Final_Project.Models;
+using System.Drawing.Drawing2D;
 
 namespace SWE_Final_Project.Views {
     class ScriptCanvas: PictureBox {
+        // the script name
         private string mScriptNameAtCanvas = "";
+
+        // the list of existed (dragged out by user) state-views
+        private List<StateView> mExistedStateViewList = new List<StateView>();
 
         // constructor
         public ScriptCanvas(string scriptName, List<StateModel> stateModelList = null) : base() {
@@ -66,6 +71,13 @@ namespace SWE_Final_Project.Views {
         /* ==================================================================== */
         /*  events */
 
+        protected override void OnMouseMove(MouseEventArgs e) {
+            Invalidate();
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e) {
+        }
+
         // mouse entered (not dragging), change the cursor style into a cross
         protected override void OnMouseEnter(EventArgs e) {
             Cursor = Cursors.Cross;
@@ -106,10 +118,12 @@ namespace SWE_Final_Project.Views {
                     break;
             }
             if (!(newStateView is null)) {
-                // add view
-                Controls.Add(newStateView);
                 // add model
                 ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView));
+
+                // add view
+                Controls.Add(newStateView);
+                mExistedStateViewList.Add(newStateView);
 
                 // show info panel
                 ModelManager.showInfoPanel(newStateView);
@@ -119,7 +133,7 @@ namespace SWE_Final_Project.Views {
             MouseManager.CurrentHoldingType = StateType.NONE;
 
             // paint on the picture-box
-            //Invalidate();
+            Invalidate();
         }
 
         // deprecated
@@ -137,9 +151,15 @@ namespace SWE_Final_Project.Views {
 
         // re-draw
         protected override void OnPaint(PaintEventArgs e) {
-            Graphics g = e.Graphics;
-            //g.DrawLine(Pens.Black, 0, 0, 10, 10);
+            if (MouseManager.isDraggingExistedStateView == false) {
+                Graphics g = e.Graphics;
 
+                foreach (StateView stateView in mExistedStateViewList) {
+                    //if (stateView is EndStateView)
+                    g.DrawPath(Pens.Black, stateView.OutlineGphPath);
+                    g.FillPath(Brushes.Black, stateView.InnerGphPath);
+                }
+            }
         }
     }
 }
