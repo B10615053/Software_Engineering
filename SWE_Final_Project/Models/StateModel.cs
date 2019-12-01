@@ -13,6 +13,12 @@ namespace SWE_Final_Project.Models {
         START, END, GENERAL, NONE
     }
 
+    // 4 types of ports
+    [Serializable]
+    enum PortType {
+        UP, LEFT, DOWN, RIGHT
+    }
+
     // a model of a state
     [Serializable]
     class StateModel {
@@ -41,6 +47,9 @@ namespace SWE_Final_Project.Models {
                     mContentText = value;
             }
         }
+
+        // 4 ports (up, left, down, right) for ingoing links and outgoing links
+        private Dictionary<PortType, PortModel> mPortDict = new Dictionary<PortType, PortModel>();
 
         /* ========================================= */
 
