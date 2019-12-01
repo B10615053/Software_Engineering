@@ -38,6 +38,32 @@ namespace SWE_Final_Project {
             statesListPanel.Controls.Add(generalStateView);
         }
 
+        // add a new script
+        private void addNewScript() {
+            // add new script to model-manager
+            ScriptModel adjustedScriptModel = ModelManager.addNewScript("Untitled");
+
+            // add new tab-page
+            addNewTabPage(adjustedScriptModel, true);
+        }
+
+        // add new tab-page of a script
+        private void addNewTabPage(ScriptModel scriptModel, bool shouldMarkAsUnsaved) {
+            // create a new tab-page
+            ScriptTabPage tabPage = new ScriptTabPage(scriptModel.Name, scriptModel.getCopiedStateList());
+            scriptsTabControl.TabPages.Add(tabPage);
+
+            // select the new script
+            scriptsTabControl.SelectedIndex = scriptsTabControl.TabPages.Count - 1;
+
+            // mark as unsaved if needs
+            if (shouldMarkAsUnsaved)
+                MarkUnsavedScript();
+
+            // set the selected script index
+            ModelManager.CurrentSelectedScriptIndex = scriptsTabControl.SelectedIndex;
+        }
+
         // save the script at the current tab
         public bool saveCertainScript(int scriptTabIdx) {
             if (scriptTabIdx < 0)
@@ -174,33 +200,12 @@ namespace SWE_Final_Project {
                 scriptsTabControl.SelectedTab.Text += "*";
         }
 
-        // add new tab-page of a script
-        private void addNewTabPage(ScriptModel scriptModel, bool shouldMarkAsUnsaved) {
-            // create a new tab-page
-            ScriptTabPage tabPage = new ScriptTabPage(scriptModel.Name, scriptModel.getCopiedStateList());
-            scriptsTabControl.TabPages.Add(tabPage);
-
-            // select the new script
-            scriptsTabControl.SelectedIndex = scriptsTabControl.TabPages.Count - 1;
-
-            // mark as unsaved if needs
-            if (shouldMarkAsUnsaved)
-                MarkUnsavedScript();
-
-            // set the selected script index
-            ModelManager.CurrentSelectedScriptIndex = scriptsTabControl.SelectedIndex;
-        }
-
         /* ============================================================== */
         /* user events */
 
         // add the whole new script by clicking the new button at tool-strip
         private void NewScriptToolStripMenuItem_Click(object sender, EventArgs e) {
-            // add new script to model-manager
-            ScriptModel adjustedScriptModel = ModelManager.addNewScript("Untitled");
-
-            // add new tab-page
-            addNewTabPage(adjustedScriptModel, true);
+            addNewScript();
         }
 
         // save the script by clicking the save button at tool-strip
@@ -227,11 +232,21 @@ namespace SWE_Final_Project {
             SettingsManager.PromptTypingFormWhenCreatingNewGeneralState = !currentState;
         }
 
-        // Ctrl + S at a certain script
+        // keyboard events at a certain script
         private void ScriptsTabControl_KeyDown(object sender, KeyEventArgs e) {
-            // Ctrl + S
-            if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
-                saveCertainScript(scriptsTabControl.SelectedIndex);
+            if (e.Modifiers == Keys.Control) {
+                // Ctrl + N: new script
+                if (e.KeyCode == Keys.N)
+                    addNewScript();
+
+                // Ctrl + S: save script
+                if (e.KeyCode == Keys.S)
+                    saveCertainScript(scriptsTabControl.SelectedIndex);
+
+                // Ctrl + O: open script
+                else if (e.KeyCode == Keys.O)
+                    showDialogAndOpenScriptFromDisk();
+            }
         }
 
         // switch between scripts

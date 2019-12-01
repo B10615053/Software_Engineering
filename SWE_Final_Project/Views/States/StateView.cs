@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using SWE_Final_Project.Managers;
 using SWE_Final_Project.Models;
+using System.Drawing.Drawing2D;
 
 namespace SWE_Final_Project.Views.States {
     abstract class StateView: PictureBox {
@@ -30,6 +31,9 @@ namespace SWE_Final_Project.Views.States {
         // state content text
         private string mStateContent = "";
         internal string StateContent { get => mStateContent; }
+
+        // for drawing on the canvas (script)
+        protected GraphicsPath mGphPath = new GraphicsPath();
 
         /* ================================================= */
 
@@ -213,6 +217,10 @@ namespace SWE_Final_Project.Views.States {
         // dropped (not dragging)
         protected override void OnMouseUp(MouseEventArgs e) {
             MouseManager.isDraggingExistedStateView = false;
+        }
+
+        protected override void OnPaint(PaintEventArgs e) {
+            Graphics g = e.Graphics;
         }
     }
 }

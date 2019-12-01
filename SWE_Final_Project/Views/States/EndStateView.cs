@@ -17,6 +17,8 @@ namespace SWE_Final_Project.Views.States {
 
         // re-draw
         protected override void OnPaint(PaintEventArgs e) {
+            base.OnPaint(e);
+
             Graphics g = e.Graphics;
             Color color;
 
