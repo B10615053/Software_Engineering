@@ -30,10 +30,18 @@ namespace SWE_Final_Project.Managers {
             }
         }
 
+        // get the designated script-model by index
         public static ScriptModel getScriptModelByIndex(int idx) {
             if (idx >= 0 && idx < mOpenedScriptList.Count)
                 return mOpenedScriptList[idx];
             return null;
+        }
+
+        // get the designated state-model by id
+        public static StateModel getStateModelByIdAtCurrentScript(string id) {
+            if (CurrentSelectedScriptIndex < 0)
+                return null;
+            return mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(id);
         }
 
         // add new script, and return the re-adjusted script name

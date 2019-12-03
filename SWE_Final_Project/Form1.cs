@@ -232,8 +232,9 @@ namespace SWE_Final_Project {
             SettingsManager.PromptTypingFormWhenCreatingNewGeneralState = !currentState;
         }
 
-        // keyboard events at a certain script
+        // user keyboard actions at a certain script
         private void ScriptsTabControl_KeyDown(object sender, KeyEventArgs e) {
+            // Ctrl pressed
             if (e.Modifiers == Keys.Control) {
                 // Ctrl + N: new script
                 if (e.KeyCode == Keys.N)

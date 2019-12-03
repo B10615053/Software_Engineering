@@ -13,6 +13,12 @@ namespace SWE_Final_Project.Models {
         START, END, GENERAL, NONE
     }
 
+    // 4 types of ports
+    [Serializable]
+    enum PortType {
+        UP, RIGHT, DOWN, LEFT, NONE
+    }
+
     // a model of a state
     [Serializable]
     class StateModel {
@@ -24,7 +30,7 @@ namespace SWE_Final_Project.Models {
         private StateType mStateType = StateType.NONE;
         public StateType StateType { get => mStateType; }
 
-        // location on the script (anchor is left-up corner)
+        // location on the script (anchor is center)
         private Point mLocOnScript = new Point();
         public Point LocOnScript { get => mLocOnScript; set => mLocOnScript = value; }
 
@@ -41,6 +47,9 @@ namespace SWE_Final_Project.Models {
                     mContentText = value;
             }
         }
+
+        // 4 types of ports (up, right, down, left) of ingoing links and outgoing links
+        private Dictionary<PortType, PortModel> mPortDict = new Dictionary<PortType, PortModel>();
 
         /* ========================================= */
 
@@ -74,7 +83,10 @@ namespace SWE_Final_Project.Models {
             else
                 mStateType = StateType.GENERAL;
 
-            mLocOnScript = new Point(stateView.Location.X, stateView.Location.Y);
+            mLocOnScript = new Point(
+                stateView.Location.X + (stateView.Size.Width / 2) + 1,
+                stateView.Location.Y + (stateView.Size.Height / 2) + 1
+            );
             mSizeOnScript = new Size(stateView.Size.Width, stateView.Size.Height);
             mContentText = stateView.StateContent;
         }

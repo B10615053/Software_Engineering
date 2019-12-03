@@ -10,10 +10,17 @@ using SWE_Final_Project.Managers;
 using SWE_Final_Project.Views.States;
 using SWE_Final_Project.Views.SubForms;
 using SWE_Final_Project.Models;
+using System.Drawing.Drawing2D;
 
 namespace SWE_Final_Project.Views {
     class ScriptCanvas: PictureBox {
+        // the script name
         private string mScriptNameAtCanvas = "";
+
+        // the list of existed (dragged out by user) state-views
+        private List<StateView> mExistedStateViewList = new List<StateView>();
+
+        /* ==================================================================== */
 
         // constructor
         public ScriptCanvas(string scriptName, List<StateModel> stateModelList = null) : base() {
@@ -66,9 +73,29 @@ namespace SWE_Final_Project.Views {
         /* ==================================================================== */
         /*  events */
 
-        // mouse entered (not dragging), change the cursor style into a cross
+        // re-draw when mouse moving and is dragging existed state-views
+        protected override void OnMouseMove(MouseEventArgs e) {
+            // when the mouse is dragging an existed state-view
+            // if (MouseManager.isDraggingExistedStateView)
+            if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW)
+                Invalidate();
+
+            // when the mouse is adding a new link (arrow)
+            else if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
+                MouseManager.AddingLinkView.adjustLinesByChangingEndLocOnScript(e.Location);
+                //Console.WriteLine(
+                //    MouseManager.AddingLinkView.Model.StartLocOnScript.ToString() + ", " +
+                //    MouseManager.AddingLinkView.Model.EndLocOnScript.ToString()
+                //);
+                Invalidate();
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e) {
+        }
+
+        // mouse entered (not dragging)
         protected override void OnMouseEnter(EventArgs e) {
-            Cursor = Cursors.Cross;
         }
 
         // drag-entered
@@ -106,10 +133,12 @@ namespace SWE_Final_Project.Views {
                     break;
             }
             if (!(newStateView is null)) {
-                // add view
-                Controls.Add(newStateView);
                 // add model
                 ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView));
+
+                // add view
+                Controls.Add(newStateView);
+                mExistedStateViewList.Add(newStateView);
 
                 // show info panel
                 ModelManager.showInfoPanel(newStateView);
@@ -119,7 +148,7 @@ namespace SWE_Final_Project.Views {
             MouseManager.CurrentHoldingType = StateType.NONE;
 
             // paint on the picture-box
-            //Invalidate();
+            Invalidate();
         }
 
         // deprecated
@@ -138,8 +167,19 @@ namespace SWE_Final_Project.Views {
         // re-draw
         protected override void OnPaint(PaintEventArgs e) {
             Graphics g = e.Graphics;
-            //g.DrawLine(Pens.Black, 0, 0, 10, 10);
 
+            // if (MouseManager.isDraggingExistedStateView == false) {
+            if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
+                foreach (StateView stateView in mExistedStateViewList) {
+                    g.DrawPath(Pens.Black, stateView.OutlineGphPath);
+                    g.FillPath(Brushes.Black, stateView.InnerGphPath);
+                }
+            }
+
+            // currently, the user is creating a new link (arrow)
+            if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
+                g.DrawPath(Pens.DarkGray, MouseManager.AddingLinkView.LinesGphPath);
+            }
         }
     }
 }
