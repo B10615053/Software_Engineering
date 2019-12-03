@@ -50,13 +50,13 @@ namespace SWE_Final_Project.Views.States {
         private static readonly int ENLARGING_RATIO_V = ENLARGING_RATIO_H * 4;
 
         // the size of START & END
-        public static readonly Size UNTEXTABLE_STATE_SIZE = new Size(30, 30);
+        public static readonly Size UNTEXTABLE_STATE_SIZE = new Size(40, 40);
 
         // the smallest size of GENERAL
-        private static readonly Size SMALLEST_GENERAL_STATE_SIZE = new Size(75, 50);
+        private static readonly Size SMALLEST_GENERAL_STATE_SIZE = new Size(100, 75);
 
         // the radius of the circle to hint the user he/she can add arrow (link)
-        private static readonly int ADDING_ARROW_HINT_RADIUS = 14;
+        private static readonly int ADDING_ARROW_HINT_RADIUS = 12;
         private static readonly int SQD_HINT_RADIUS = ADDING_ARROW_HINT_RADIUS * ADDING_ARROW_HINT_RADIUS;
 
         /* ================================================= */
@@ -239,7 +239,7 @@ namespace SWE_Final_Project.Views.States {
                 // ZA HANDO
                 Cursor = Cursors.Hand;
 
-                // no use now
+                // no use for now
                 if (mOutlineGphPath.IsOutlineVisible(canvasX, canvasY, Pens.Black)) {
                     
                 }
@@ -247,8 +247,9 @@ namespace SWE_Final_Project.Views.States {
                 else if (mOutlineGphPath.IsVisible(canvasX, canvasY)) {
                     // mouse is at the inner stuff of this state-view
                     // -> do moving (relocating the dragged state-view)
-                    if (MouseManager.isDraggingExistedStateView) {
-                        relocateState(
+                    // if (MouseManager.isDraggingExistedStateView) {
+                    if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW) {
+                            relocateState(
                             Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
                             Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
                         );
@@ -306,12 +307,24 @@ namespace SWE_Final_Project.Views.States {
 
                 DoDragDrop(pic, DragDropEffects.Copy);
             }
-            // dragging existed state-view
+            // dragging existed state-view, or adding link
             else {
+                // dragging existed state-view
                 if (MouseManager.coveringStateViewAndPort.Value == PortType.NONE) {
-                    MouseManager.isDraggingExistedStateView = true;
+                    // MouseManager.isDraggingExistedStateView = true;
+                    MouseManager.CurrentMouseAction = MouseAction.DRAGGING_EXISTED_STATE_VIEW;
                     MouseManager.posOnStateViewX = e.X;
                     MouseManager.posOnStateViewY = e.Y;
+                }
+                // adding link
+                else {
+                    StateModel stateModel = ModelManager.getStateModelByIdAtCurrentScript(mId);
+                    if (!(stateModel is null)) {
+                        LinkModel newLinkModel = new LinkModel(stateModel);
+                        LinkView newLinkView = new LinkView(newLinkModel);
+
+
+                    }
                 }
             }
         }
@@ -319,14 +332,15 @@ namespace SWE_Final_Project.Views.States {
         // dropped (not dragging)
         protected override void OnMouseUp(MouseEventArgs e) {
             addToGraphicsPath();
-            MouseManager.isDraggingExistedStateView = false;
+            MouseManager.CurrentMouseAction = MouseAction.LOUNGE;
+            // MouseManager.isDraggingExistedStateView = false;
         }
 
         protected override void OnPaint(PaintEventArgs e) {
-            SolidBrush portHintBrush = new SolidBrush(Color.FromArgb(127, 255, 14, 29));
-
             // draw link-adding hint
             if (mIsInstanceOnScript && mIsMouseMovingOn) {
+                SolidBrush portHintBrush = new SolidBrush(Color.FromArgb(255, 255, 14, 29));
+
                 switch (MouseManager.coveringStateViewAndPort.Value) {
                     case PortType.UP:
                         e.Graphics.FillEllipse(

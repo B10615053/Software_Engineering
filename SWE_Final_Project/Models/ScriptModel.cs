@@ -46,6 +46,11 @@ namespace SWE_Final_Project.Models {
             }
         }
 
+        // get a certain state-model designated by id
+        public StateModel getStateModelById(string id) {
+            return mExistedStateList.Find(it => it.Id == id);
+        }
+
         // add a new state
         public void addNewState(StateModel newStateModel) {
             mExistedStateList.Add(newStateModel);

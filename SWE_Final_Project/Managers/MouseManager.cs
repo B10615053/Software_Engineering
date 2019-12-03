@@ -8,13 +8,22 @@ using SWE_Final_Project.Models;
 using SWE_Final_Project.Views.States;
 
 namespace SWE_Final_Project.Managers {
+    enum MouseAction {
+        DRAGGING_EXISTED_STATE_VIEW,
+        CREATING_LINK,
+        LOUNGE
+    }
+
     // for managing the status of the mouse
     class MouseManager {
 
         static private StateType mCurrentHoldingType = StateType.NONE;
         internal static StateType CurrentHoldingType { get => mCurrentHoldingType; set => mCurrentHoldingType = value; }
 
-        internal static bool isDraggingExistedStateView = false;
+        static private MouseAction mCurrentMouseAction = MouseAction.LOUNGE;
+        internal static MouseAction CurrentMouseAction { get => mCurrentMouseAction; set => mCurrentMouseAction = value; }
+
+        // internal static bool isDraggingExistedStateView = false;
         internal static int posOnStateViewX = 0;
         internal static int posOnStateViewY = 0;
 
@@ -23,6 +32,8 @@ namespace SWE_Final_Project.Managers {
 
         // TODO: incomplete feature
         internal static StateView selectedStateView = null;
+
+        internal static bool isCreatingLink = false;
     }
 
     /*

@@ -73,7 +73,8 @@ namespace SWE_Final_Project.Views {
 
         // re-draw when mouse moving and is dragging existed state-views
         protected override void OnMouseMove(MouseEventArgs e) {
-            if (MouseManager.isDraggingExistedStateView)
+            // if (MouseManager.isDraggingExistedStateView)
+            if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW)
                 Invalidate();
         }
 
@@ -152,7 +153,8 @@ namespace SWE_Final_Project.Views {
 
         // re-draw
         protected override void OnPaint(PaintEventArgs e) {
-            if (MouseManager.isDraggingExistedStateView == false) {
+            // if (MouseManager.isDraggingExistedStateView == false) {
+            if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
                 Graphics g = e.Graphics;
 
                 foreach (StateView stateView in mExistedStateViewList) {
