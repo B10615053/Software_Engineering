@@ -30,7 +30,7 @@ namespace SWE_Final_Project.Models {
         private StateType mStateType = StateType.NONE;
         public StateType StateType { get => mStateType; }
 
-        // location on the script (anchor is left-up corner)
+        // location on the script (anchor is center)
         private Point mLocOnScript = new Point();
         public Point LocOnScript { get => mLocOnScript; set => mLocOnScript = value; }
 

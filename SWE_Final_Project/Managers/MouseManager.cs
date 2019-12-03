@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWE_Final_Project.Models;
+using SWE_Final_Project.Views;
 using SWE_Final_Project.Views.States;
 
 namespace SWE_Final_Project.Managers {
@@ -17,10 +18,10 @@ namespace SWE_Final_Project.Managers {
     // for managing the status of the mouse
     class MouseManager {
 
-        static private StateType mCurrentHoldingType = StateType.NONE;
+        private static StateType mCurrentHoldingType = StateType.NONE;
         internal static StateType CurrentHoldingType { get => mCurrentHoldingType; set => mCurrentHoldingType = value; }
 
-        static private MouseAction mCurrentMouseAction = MouseAction.LOUNGE;
+        private static MouseAction mCurrentMouseAction = MouseAction.LOUNGE;
         internal static MouseAction CurrentMouseAction { get => mCurrentMouseAction; set => mCurrentMouseAction = value; }
 
         // internal static bool isDraggingExistedStateView = false;
@@ -33,7 +34,9 @@ namespace SWE_Final_Project.Managers {
         // TODO: incomplete feature
         internal static StateView selectedStateView = null;
 
-        internal static bool isCreatingLink = false;
+        // when adding a new link (not complete)
+        private static LinkView mAddingLinkView = null;
+        internal static LinkView AddingLinkView { get => mAddingLinkView; set => mAddingLinkView = value; }
     }
 
     /*

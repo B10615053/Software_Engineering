@@ -20,6 +20,8 @@ namespace SWE_Final_Project.Views {
         // the list of existed (dragged out by user) state-views
         private List<StateView> mExistedStateViewList = new List<StateView>();
 
+        /* ==================================================================== */
+
         // constructor
         public ScriptCanvas(string scriptName, List<StateModel> stateModelList = null) : base() {
             // fill in the father container
@@ -73,9 +75,20 @@ namespace SWE_Final_Project.Views {
 
         // re-draw when mouse moving and is dragging existed state-views
         protected override void OnMouseMove(MouseEventArgs e) {
+            // when the mouse is dragging an existed state-view
             // if (MouseManager.isDraggingExistedStateView)
             if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW)
                 Invalidate();
+
+            // when the mouse is adding a new link (arrow)
+            else if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
+                MouseManager.AddingLinkView.adjustLinesByChangingEndLocOnScript(e.Location);
+                //Console.WriteLine(
+                //    MouseManager.AddingLinkView.Model.StartLocOnScript.ToString() + ", " +
+                //    MouseManager.AddingLinkView.Model.EndLocOnScript.ToString()
+                //);
+                Invalidate();
+            }
         }
 
         protected override void OnMouseUp(MouseEventArgs e) {
@@ -153,15 +166,19 @@ namespace SWE_Final_Project.Views {
 
         // re-draw
         protected override void OnPaint(PaintEventArgs e) {
+            Graphics g = e.Graphics;
+
             // if (MouseManager.isDraggingExistedStateView == false) {
             if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
-                Graphics g = e.Graphics;
-
                 foreach (StateView stateView in mExistedStateViewList) {
-                    //if (stateView is EndStateView)
                     g.DrawPath(Pens.Black, stateView.OutlineGphPath);
                     g.FillPath(Brushes.Black, stateView.InnerGphPath);
                 }
+            }
+
+            // currently, the user is creating a new link (arrow)
+            if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
+                g.DrawPath(Pens.DarkGray, MouseManager.AddingLinkView.LinesGphPath);
             }
         }
     }

@@ -258,8 +258,6 @@ namespace SWE_Final_Project.Views.States {
                     // mouse is on the outline of this state-view
                     // -> do linking (adding arrow)
                     else {
-                        // TODO: link between states
-
                         Cursor = Cursors.Cross;
 
                         // calculate squared distances among 4 ports
@@ -320,10 +318,17 @@ namespace SWE_Final_Project.Views.States {
                 else {
                     StateModel stateModel = ModelManager.getStateModelByIdAtCurrentScript(mId);
                     if (!(stateModel is null)) {
-                        LinkModel newLinkModel = new LinkModel(stateModel);
+                        LinkModel newLinkModel = new LinkModel(
+                            stateModel,
+                            null,
+                            MouseManager.coveringStateViewAndPort.Value,
+                            MouseManager.coveringStateViewAndPort.Value,
+                            new Point(Location.X + e.X, Location.Y + e.Y)
+                        );
                         LinkView newLinkView = new LinkView(newLinkModel);
 
-
+                        MouseManager.CurrentMouseAction = MouseAction.CREATING_LINK;
+                        MouseManager.AddingLinkView = newLinkView;
                     }
                 }
             }
@@ -332,7 +337,8 @@ namespace SWE_Final_Project.Views.States {
         // dropped (not dragging)
         protected override void OnMouseUp(MouseEventArgs e) {
             addToGraphicsPath();
-            MouseManager.CurrentMouseAction = MouseAction.LOUNGE;
+            if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW)
+                MouseManager.CurrentMouseAction = MouseAction.LOUNGE;
             // MouseManager.isDraggingExistedStateView = false;
         }
 
