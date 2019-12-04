@@ -91,6 +91,39 @@ namespace SWE_Final_Project.Models {
             mContentText = stateView.StateContent;
         }
 
+        // get the certain port's location on script
+        public Point getLocationOfCertainPortOnScript(PortType portType) {
+            Point ret;
+
+            // the start & end locations on the script
+            if (portType == PortType.UP) {
+                ret = new Point(
+                    LocOnScript.X,
+                    LocOnScript.Y - SizeOnScript.Height / 2
+                );
+            }
+            else if (portType == PortType.RIGHT) {
+                ret = new Point(
+                    LocOnScript.X + SizeOnScript.Width / 2,
+                    LocOnScript.Y
+                );
+            }
+            else if (portType == PortType.DOWN) {
+                ret = new Point(
+                    LocOnScript.X,
+                    LocOnScript.Y + SizeOnScript.Height / 2
+                );
+            }
+            else /* if (srcPortType == PortType.LEFT1) */ {
+                ret = new Point(
+                    LocOnScript.X - SizeOnScript.Width / 2,
+                    LocOnScript.Y
+                );
+            }
+
+            return ret;
+        }
+
         /* ========================================= */
 
         public override bool Equals(object obj) {

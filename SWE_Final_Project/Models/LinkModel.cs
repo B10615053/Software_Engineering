@@ -51,7 +51,7 @@ namespace SWE_Final_Project.Models {
         /* ========================================= */
 
         // constructor
-        public LinkModel(StateModel src, StateModel dst, PortType srcPortType, PortType dstPortType, Point pressedLocOnScript, int cornerRadius = 5) {
+        public LinkModel(StateModel src, StateModel dst, PortType srcPortType, PortType dstPortType, int cornerRadius = 5) {
             // give a unique id
             mId = Guid.NewGuid().ToString("N");
 
@@ -69,46 +69,8 @@ namespace SWE_Final_Project.Models {
             mDstPortType = dstPortType;
 
             // the start & end locations on the script
-            if (srcPortType == PortType.UP) {
-                mStartLocOnScript = new Point(
-                    src.LocOnScript.X,
-                    src.LocOnScript.Y - src.SizeOnScript.Height / 2
-                );
-                mEndLocOnScript = new Point(
-                    src.LocOnScript.X,
-                    src.LocOnScript.Y - src.SizeOnScript.Height / 2
-                );
-            }
-            else if (srcPortType == PortType.RIGHT) {
-                mStartLocOnScript = new Point(
-                    src.LocOnScript.X + src.SizeOnScript.Width / 2,
-                    src.LocOnScript.Y
-                );
-                mEndLocOnScript = new Point(
-                    src.LocOnScript.X + src.SizeOnScript.Width / 2,
-                    src.LocOnScript.Y
-                );
-            }
-            else if (srcPortType == PortType.DOWN) {
-                mStartLocOnScript = new Point(
-                    src.LocOnScript.X,
-                    src.LocOnScript.Y + src.SizeOnScript.Height / 2
-                );
-                mEndLocOnScript = new Point(
-                    src.LocOnScript.X,
-                    src.LocOnScript.Y + src.SizeOnScript.Height / 2
-                );
-            }
-            else /* if (srcPortType == PortType.LEFT1) */ {
-                mStartLocOnScript = new Point(
-                    src.LocOnScript.X - src.SizeOnScript.Width / 2,
-                    src.LocOnScript.Y
-                );
-                mEndLocOnScript = new Point(
-                    src.LocOnScript.X - src.SizeOnScript.Width / 2,
-                    src.LocOnScript.Y
-                );
-            }
+            mStartLocOnScript = src.getLocationOfCertainPortOnScript(srcPortType);
+            mEndLocOnScript = src.getLocationOfCertainPortOnScript(srcPortType);
 
             // there could be many sections within a single link
             mSectionList = new List<LineModel>();

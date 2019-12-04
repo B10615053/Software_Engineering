@@ -36,7 +36,14 @@ namespace SWE_Final_Project.Managers {
 
         // when adding a new link (not complete)
         private static LinkView mAddingLinkView = null;
-        internal static LinkView AddingLinkView { get => mAddingLinkView; set => mAddingLinkView = value; }
+        internal static LinkView AddingLinkView {
+            get => mAddingLinkView;
+            set {
+                mAddingLinkView = value;
+                if (mAddingLinkView is null)
+                    CurrentMouseAction = MouseAction.LOUNGE;
+            }
+        }
     }
 
     /*

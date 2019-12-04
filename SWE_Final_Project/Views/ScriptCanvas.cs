@@ -83,10 +83,6 @@ namespace SWE_Final_Project.Views {
             // when the mouse is adding a new link (arrow)
             else if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
                 MouseManager.AddingLinkView.adjustLinesByChangingEndLocOnScript(e.Location);
-                //Console.WriteLine(
-                //    MouseManager.AddingLinkView.Model.StartLocOnScript.ToString() + ", " +
-                //    MouseManager.AddingLinkView.Model.EndLocOnScript.ToString()
-                //);
                 Invalidate();
             }
         }
@@ -162,6 +158,12 @@ namespace SWE_Final_Project.Views {
 
             // remove the info-panel
             ModelManager.removeInfoPanel();
+
+            // cancel the link adding
+            if (e.Button == MouseButtons.Right) {
+                MouseManager.AddingLinkView = null;
+                Invalidate();
+            }
         }
 
         // re-draw

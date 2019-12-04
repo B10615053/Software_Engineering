@@ -243,19 +243,19 @@ namespace SWE_Final_Project.Views.States {
                 if (mOutlineGphPath.IsOutlineVisible(canvasX, canvasY, Pens.Black)) {
                     
                 }
-
+                // the mouse in the inner stuff
                 else if (mOutlineGphPath.IsVisible(canvasX, canvasY)) {
                     // mouse is at the inner stuff of this state-view
                     // -> do moving (relocating the dragged state-view)
                     // if (MouseManager.isDraggingExistedStateView) {
                     if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW) {
-                            relocateState(
+                        relocateState(
                             Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
                             Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
                         );
                     }
 
-                    // mouse is on the outline of this state-view
+                    // mouse is on the 4 borders of this state-view
                     // -> do linking (adding arrow)
                     else {
                         Cursor = Cursors.Cross;
@@ -284,6 +284,12 @@ namespace SWE_Final_Project.Views.States {
                     }
                 }
 
+                // if it's creating a link
+                if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
+                    MouseManager.AddingLinkView.adjustLinesByChangingEndLocOnScript(
+                        new Point(Location.X + e.X, Location.Y + e.Y)
+                    );
+                }
             }
         }
 
@@ -295,42 +301,69 @@ namespace SWE_Final_Project.Views.States {
 
         // drag a new state-view out
         protected override void OnMouseDown(MouseEventArgs e) {
-            // dragging new state-view
-            if (mIsInstanceOnScript == false) {
-                Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
-                DrawToBitmap(pic, Bounds);
+            // left click
+            if (e.Button == MouseButtons.Left) {
+                // dragging new state-view
+                if (mIsInstanceOnScript == false) {
+                    Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
+                    DrawToBitmap(pic, Bounds);
 
-                if (pic == null)
-                    return;
+                    if (pic == null)
+                        return;
 
-                DoDragDrop(pic, DragDropEffects.Copy);
-            }
-            // dragging existed state-view, or adding link
-            else {
-                // dragging existed state-view
-                if (MouseManager.coveringStateViewAndPort.Value == PortType.NONE) {
-                    // MouseManager.isDraggingExistedStateView = true;
-                    MouseManager.CurrentMouseAction = MouseAction.DRAGGING_EXISTED_STATE_VIEW;
-                    MouseManager.posOnStateViewX = e.X;
-                    MouseManager.posOnStateViewY = e.Y;
+                    DoDragDrop(pic, DragDropEffects.Copy);
                 }
-                // adding link
+                // dragging existed state-view, or adding link
                 else {
-                    StateModel stateModel = ModelManager.getStateModelByIdAtCurrentScript(mId);
-                    if (!(stateModel is null)) {
-                        LinkModel newLinkModel = new LinkModel(
-                            stateModel,
-                            null,
-                            MouseManager.coveringStateViewAndPort.Value,
-                            MouseManager.coveringStateViewAndPort.Value,
-                            new Point(Location.X + e.X, Location.Y + e.Y)
-                        );
-                        LinkView newLinkView = new LinkView(newLinkModel);
+                    // dragging existed state-view
+                    if (MouseManager.coveringStateViewAndPort.Value == PortType.NONE) {
+                        if (MouseManager.CurrentMouseAction != MouseAction.CREATING_LINK) {
+                            // MouseManager.isDraggingExistedStateView = true;
+                            MouseManager.CurrentMouseAction = MouseAction.DRAGGING_EXISTED_STATE_VIEW;
+                            MouseManager.posOnStateViewX = e.X;
+                            MouseManager.posOnStateViewY = e.Y;
+                        }
+                    }
+                    // adding link
+                    else {
+                        // create the link
+                        if (MouseManager.CurrentMouseAction != MouseAction.CREATING_LINK) {
+                            StateModel stateModel = ModelManager.getStateModelByIdAtCurrentScript(mId);
+                            if (!(stateModel is null)) {
+                                LinkModel newLinkModel = new LinkModel(
+                                    stateModel,
+                                    null,
+                                    MouseManager.coveringStateViewAndPort.Value,
+                                    MouseManager.coveringStateViewAndPort.Value
+                                );
+                                LinkView newLinkView = new LinkView(newLinkModel);
 
-                        MouseManager.CurrentMouseAction = MouseAction.CREATING_LINK;
-                        MouseManager.AddingLinkView = newLinkView;
+                                MouseManager.CurrentMouseAction = MouseAction.CREATING_LINK;
+                                MouseManager.AddingLinkView = newLinkView;
+                            }
+                        }
+                        // settle the link
+                        else {
+                            // set the destination state-view
+                            MouseManager.AddingLinkView.setDestination();
+
+                            // create the settled link-view
+                            LinkView settledLinkView = new LinkView(MouseManager.AddingLinkView.Model);
+
+                            // remove the adding-link-view (and set the mouse-action back to LOUNGE)
+                            MouseManager.AddingLinkView = null;
+
+                            // TODO
+
+                        }
                     }
                 }
+            }
+
+            // right click
+            else if (e.Button == MouseButtons.Right) {
+                MouseManager.AddingLinkView = null;
+                Invalidate();
             }
         }
 

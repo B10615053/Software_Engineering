@@ -10,3 +10,15 @@ D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug
 D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.pdb
 D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.Views.SubForms.AlertForm.resources
 D:\projects\visual studio projects\SWE_Final_Project\SWE_Final_Project\obj\Debug\SWE_Final_Project.Views.SubForms.TypingForm.resources
+D:\projects\visual studio projects\SWE\SWE_Final_Project\bin\Debug\SWE_Final_Project.exe.config
+D:\projects\visual studio projects\SWE\SWE_Final_Project\bin\Debug\SWE_Final_Project.exe
+D:\projects\visual studio projects\SWE\SWE_Final_Project\bin\Debug\SWE_Final_Project.pdb
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.csprojAssemblyReference.cache
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.Form1.resources
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.Properties.Resources.resources
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.Views.SubForms.AlertForm.resources
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.Views.SubForms.TypingForm.resources
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.csproj.GenerateResource.cache
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.csproj.CoreCompileInputs.cache
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.exe
+D:\projects\visual studio projects\SWE\SWE_Final_Project\obj\Debug\SWE_Final_Project.pdb

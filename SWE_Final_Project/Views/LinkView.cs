@@ -1,4 +1,5 @@
-﻿using SWE_Final_Project.Models;
+﻿using SWE_Final_Project.Managers;
+using SWE_Final_Project.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -118,6 +119,22 @@ namespace SWE_Final_Project.Views {
 
             // mModel.SectionList.Add(new LineModel(mModel.StartLocOnScript, mModel.EndLocOnScript));
             addToGraphicsPath();
+        }
+
+        // after clicked on an another state-view, set the destination of this link
+        public void setDestination() {
+            if (MouseManager.coveringStateViewAndPort.Key == null
+                    || MouseManager.coveringStateViewAndPort.Value == PortType.NONE)
+                return;
+
+            // set the destination state-model
+            mModel.DstStateModel = ModelManager.getStateModelByIdAtCurrentScript(MouseManager.coveringStateViewAndPort.Key.Id);
+
+            // set the port-type of the destination state-model
+            mModel.DstPortType = MouseManager.coveringStateViewAndPort.Value;
+
+            // set the end location on script
+            mModel.EndLocOnScript = mModel.DstStateModel.getLocationOfCertainPortOnScript(mModel.DstPortType);
         }
 
         // draw on the designated graphics-path
