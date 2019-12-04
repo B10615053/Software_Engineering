@@ -49,19 +49,28 @@ namespace SWE_Final_Project.Models {
         }
 
         // 4 types of ports (up, right, down, left) of ingoing links and outgoing links
-        private Dictionary<PortType, PortModel> mPortDict = new Dictionary<PortType, PortModel>();
+        private Dictionary<PortType, PortModel> mPortDict = new Dictionary<PortType, PortModel> {
+            { PortType.UP, new PortModel() },
+            { PortType.RIGHT, new PortModel() },
+            { PortType.DOWN, new PortModel() },
+            { PortType.LEFT, new PortModel() }
+        };
 
         /* ========================================= */
 
         // constructor
-        public StateModel(StateType newStateType, Point newLoc, Size newSize, string newContent = "") {
+        public StateModel(StateType newStateType, Point newLoc, Size newSize, string newContent = "", string id = null) {
             mStateType = newStateType;
             mLocOnScript = newLoc;
             mSizeOnScript = newSize;
             mContentText = newContent;
 
             // generate unique id
-            mId = Guid.NewGuid().ToString("N");
+            if (id == null)
+                mId = Guid.NewGuid().ToString("N");
+            // or set to the designated one
+            else
+                mId = id;
         }
 
         // constructor
@@ -124,6 +133,21 @@ namespace SWE_Final_Project.Models {
             return ret;
         }
 
+        // add a link-model at certain port of this state-model
+        public void addLinkAtCertainPort(LinkModel newLinkModel, PortType atPortType, bool isOutgoing) {
+            // is an outgoing link from this state
+            if (isOutgoing)
+                mPortDict[atPortType].addOutgoingLink(newLinkModel);
+            // is an ingoing link to this state
+            //else
+            //    mPortDict[atPortType].addIngoingLink(newLinkModel);
+        }
+
+        // get a certain (up, right, down, left) port-model
+        public PortModel getCertainPortModel(PortType portType) {
+            return mPortDict[portType];
+        }
+
         /* ========================================= */
 
         public override bool Equals(object obj) {
@@ -146,7 +170,21 @@ namespace SWE_Final_Project.Models {
             else if (mStateType == StateType.GENERAL)
                 ret += "GNRAL";
             ret += "|" + mContentText + "|" + mLocOnScript.ToString();
-            return ret;
+
+            mPortDict[PortType.UP].getCopiedLinks(true).ForEach(it => {
+                ret += "\nfrom UP to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            });
+            mPortDict[PortType.RIGHT].getCopiedLinks(true).ForEach(it => {
+                ret += "\nfrom RIGHT to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            });
+            mPortDict[PortType.DOWN].getCopiedLinks(true).ForEach(it => {
+                ret += "\nfrom DOWN to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            });
+            mPortDict[PortType.LEFT].getCopiedLinks(true).ForEach(it => {
+                ret += "\nfrom LEFT to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            });
+
+            return ret + "\n";
         }
     }
 }

@@ -132,9 +132,6 @@ namespace SWE_Final_Project {
                     scriptModel.SavedFilePath = fileNameWithPath;
                     scriptModel.HaveUnsavedChanges = false;
 
-                    // serialize
-                    SerializationManager.serialize(scriptModel, fileNameWithPath);
-
                     // get the file name w/o path and extension
                     int lastIdxOfDot = fileNameWithPath.LastIndexOf('.');
                     int lastIdxOfSeperator = fileNameWithPath.LastIndexOf('\\');
@@ -143,6 +140,9 @@ namespace SWE_Final_Project {
                     // rename the script
                     ModelManager.renameScript(fileNameWithoutPathAndExt, true);
                     scriptsTabControl.SelectedTab.Text = fileNameWithoutPathAndExt;
+
+                    // serialize
+                    SerializationManager.serialize(scriptModel, fileNameWithPath);
                 } catch (Exception) {
                     new AlertForm("Error happened", "Unfortunately, errors happened when saving the file. Operation failed.").ShowDialog();
                     scriptModel.SavedFilePath = origPathOrNull;
@@ -170,9 +170,7 @@ namespace SWE_Final_Project {
                     // get the script-model by de-serializing
                     ScriptModel scriptModel = SerializationManager.Deserialize<ScriptModel>(openScriptDialog.FileName);
 
-                    Console.WriteLine(scriptModel.HaveUnsavedChanges.ToString());
-
-                    // open the designated script-model
+                    // open the designated script-model,
                     // if the script is already in the opened script list
                     if (ModelManager.openScript(scriptModel) == false) {
                         new AlertForm("Alert", "The designated script is already in the opened script list.").ShowDialog();

@@ -20,6 +20,9 @@ namespace SWE_Final_Project.Views {
         // the list of existed (dragged out by user) state-views
         private List<StateView> mExistedStateViewList = new List<StateView>();
 
+        // the list of existed link-views
+        private List<LinkView> mExistedLinks = new List<LinkView>();
+
         /* ==================================================================== */
 
         // constructor
@@ -39,6 +42,7 @@ namespace SWE_Final_Project.Views {
             // render the state-models if existed
             if (!(stateModelList is null)) {
                 stateModelList.ForEach(it => {
+                    // build state-view
                     StateView stateView;
                     if (it.StateType == StateType.START)
                         stateView = new StartStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
@@ -47,8 +51,29 @@ namespace SWE_Final_Project.Views {
                     else
                         stateView = new GeneralStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
 
+                    // add link-views
+                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.UP).getCopiedLinks(true)) {
+                        LinkView newLinkView = new LinkView(itLinkModel);
+                        mExistedLinks.Add(newLinkView);
+                    }
+                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.RIGHT).getCopiedLinks(true)) {
+                        LinkView newLinkView = new LinkView(itLinkModel);
+                        mExistedLinks.Add(newLinkView);
+                    }
+                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.DOWN).getCopiedLinks(true)) {
+                        LinkView newLinkView = new LinkView(itLinkModel);
+                        mExistedLinks.Add(newLinkView);
+                    }
+                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.LEFT).getCopiedLinks(true)) {
+                        LinkView newLinkView = new LinkView(itLinkModel);
+                        mExistedLinks.Add(newLinkView);
+                    }
+
+                    // add state-view
                     Controls.Add(stateView);
                 });
+
+                Invalidate();
             }
         }
 
@@ -182,6 +207,11 @@ namespace SWE_Final_Project.Views {
             if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
                 g.DrawPath(Pens.DarkGray, MouseManager.AddingLinkView.LinesGphPath);
             }
+
+            // render links
+            mExistedLinks.ForEach(it => {
+                g.DrawPath(Pens.Black, it.LinesGphPath);
+            });
         }
     }
 }

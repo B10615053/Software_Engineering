@@ -51,9 +51,12 @@ namespace SWE_Final_Project.Models {
         /* ========================================= */
 
         // constructor
-        public LinkModel(StateModel src, StateModel dst, PortType srcPortType, PortType dstPortType, int cornerRadius = 5) {
+        public LinkModel(StateModel src, StateModel dst, PortType srcPortType, PortType dstPortType, int cornerRadius = 5, string id = null) {
             // give a unique id
-            mId = Guid.NewGuid().ToString("N");
+            if (id == null)
+                mId = Guid.NewGuid().ToString("N");
+            else
+                mId = id;
 
             // the radius of arrow's corners
             mCornerRadius = cornerRadius;
@@ -74,6 +77,12 @@ namespace SWE_Final_Project.Models {
 
             // there could be many sections within a single link
             mSectionList = new List<LineModel>();
+        }
+
+        /* ========================================= */
+
+        public override string ToString() {
+            return "[" + SrcStateModel.ContentText + " -> " + DstStateModel.ContentText + "]";
         }
     }
 }

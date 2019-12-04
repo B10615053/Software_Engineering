@@ -122,6 +122,18 @@ namespace SWE_Final_Project.Managers {
             // debugPrint();
         }
 
+        // add a new link between two states
+        public static void addLinkBetween2StatesOnCertainScript(StateModel from, PortType fromPortType, StateModel to, PortType toPortType, LinkModel linkModel) {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(from.Id).addLinkAtCertainPort(linkModel, fromPortType, true);
+            //mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(to.Id).addLinkAtCertainPort(linkModel, toPortType, false);
+
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+            Program.form.MarkUnsavedScript();
+        }
+
         // show the info-panel at the right-side of the form
         public static void showInfoPanel(StateView stateView) {
             // get the panel as the container

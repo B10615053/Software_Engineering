@@ -79,6 +79,9 @@ namespace SWE_Final_Project.Views.States {
             // set the location
             relocateState(x, y);
 
+            // set the ports positions
+            resetPortPositions();
+
             // set the background color to transparent
             BackColor = Color.Transparent;
 
@@ -347,14 +350,23 @@ namespace SWE_Final_Project.Views.States {
                             // set the destination state-view
                             MouseManager.AddingLinkView.setDestination();
 
-                            // create the settled link-view
-                            LinkView settledLinkView = new LinkView(MouseManager.AddingLinkView.Model);
+                            Console.WriteLine(MouseManager.AddingLinkView.Model.ToString());
+
+                            // add link into model
+                            ModelManager.addLinkBetween2StatesOnCertainScript(
+                                MouseManager.AddingLinkView.Model.SrcStateModel,
+                                MouseManager.AddingLinkView.Model.SrcPortType,
+                                MouseManager.AddingLinkView.Model.DstStateModel,
+                                MouseManager.AddingLinkView.Model.DstPortType,
+                                MouseManager.AddingLinkView.Model
+                            );
 
                             // remove the adding-link-view (and set the mouse-action back to LOUNGE)
                             MouseManager.AddingLinkView = null;
 
-                            // TODO
-
+                            foreach (ScriptModel scriptModel in ModelManager.getCopiedScriptList()) {
+                                Console.WriteLine(scriptModel.ToString());
+                            }
                         }
                     }
                 }

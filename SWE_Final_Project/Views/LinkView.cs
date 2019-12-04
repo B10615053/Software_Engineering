@@ -35,6 +35,8 @@ namespace SWE_Final_Project.Views {
             mModel = linkModel;
             Location = new Point(mModel.StartLocOnScript.X, mModel.StartLocOnScript.Y);
 
+            adjustLinesByChangingEndLocOnScript(new Point(mModel.EndLocOnScript.X, mModel.EndLocOnScript.Y));
+
             Invalidate();
         }
 
@@ -149,5 +151,9 @@ namespace SWE_Final_Project.Views {
         protected override void OnPaint(PaintEventArgs e) {
             addToGraphicsPath();
         }
+
+        /* ================ */
+
+
     }
 }
