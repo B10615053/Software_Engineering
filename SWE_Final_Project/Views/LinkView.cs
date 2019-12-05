@@ -79,6 +79,20 @@ namespace SWE_Final_Project.Views {
             foreach (LineModel line in mModel.SectionList) {
                 mLinesGphPath.AddLine(line.SrcLocOnScript, line.DstLocOnScript);
             }
+
+            mTextGphPath.Reset();
+            using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
+                Rectangle rect = new Rectangle(Location.X, Location.Y, Size.Width, Size.Height);
+
+                // for aligning the text to center
+                StringFormat stringFormat = new StringFormat();
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
+
+                if (mModel.LinkText != null) {
+                    //mTextGphPath.AddString(mModel.LinkText, new FontFamily("Consolas"), (int) FontStyle.Regular, 14.0F, rect, stringFormat);
+                }
+            }
         }
 
         // re-draw

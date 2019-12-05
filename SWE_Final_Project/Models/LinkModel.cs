@@ -148,6 +148,28 @@ namespace SWE_Final_Project.Models {
             }
         }
 
+        // get the position at the left-up corner
+        public Point getLeftUpCornerPositionOnScript() {
+            int x = mStartLocOnScript.X < mEndLocOnScript.X ? mStartLocOnScript.X : mEndLocOnScript.X;
+            int y = mStartLocOnScript.Y < mEndLocOnScript.Y ? mStartLocOnScript.Y : mEndLocOnScript.Y;
+            return new Point(x, y);
+        }
+
+        // get the size of this link
+        public Size getGroundSize() {
+            int w = Math.Abs(mStartLocOnScript.X - mEndLocOnScript.X);
+            int h = Math.Abs(mStartLocOnScript.Y - mEndLocOnScript.Y);
+            return new Size(w, h);
+        }
+
+        // get the position at the left-up corner and the size of this link
+        public KeyValuePair<Point, Size> getLeftUpCornerPositionOnScriptAndGroundSize() {
+            return new KeyValuePair<Point, Size>(
+                getLeftUpCornerPositionOnScript(),
+                getGroundSize()
+            );
+        }
+
         /* ========================================= */
 
         public override bool Equals(object obj) {

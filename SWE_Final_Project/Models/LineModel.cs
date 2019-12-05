@@ -13,14 +13,14 @@ namespace SWE_Final_Project.Models {
         TO_DOWN,
         TO_LEFT,
         SLASHED,
-        LITERALLY_SAME_POINT
+        LITERALLY_THE_SAME_POINT
     }
 
     // the line-model
     [Serializable]
     public class LineModel {
         // the direction-type of this line
-        private DirectionType mDirectionType = DirectionType.LITERALLY_SAME_POINT;
+        private DirectionType mDirectionType = DirectionType.LITERALLY_THE_SAME_POINT;
         public DirectionType Direction { get => mDirectionType; }
 
         // src location on script
@@ -56,7 +56,7 @@ namespace SWE_Final_Project.Models {
 
             // they're the same point
             if (sptX == eptX && sptY == eptY)
-                mDirectionType = DirectionType.LITERALLY_SAME_POINT;
+                mDirectionType = DirectionType.LITERALLY_THE_SAME_POINT;
             // it's a vertical line
             else if (sptX == eptX) {
                 if (sptY < eptY)

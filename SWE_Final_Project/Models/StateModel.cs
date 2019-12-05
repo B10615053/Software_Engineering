@@ -128,7 +128,6 @@ namespace SWE_Final_Project.Models {
                         stateView.Location.X + stateView.getPortPosition(entry.Key).X,
                         stateView.Location.Y + stateView.getPortPosition(entry.Key).Y
                     );
-                    Console.WriteLine(ingoingLink.EndLocOnScript.ToString());
                     Program.form.adjustLinkViewAtCurrentScript(ingoingLink, false);
                 });
             }

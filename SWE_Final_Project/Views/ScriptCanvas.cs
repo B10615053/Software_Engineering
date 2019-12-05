@@ -229,6 +229,25 @@ namespace SWE_Final_Project.Views {
             // render links
             mExistedOutgoingLinks.ForEach(it => {
                 g.DrawPath(Pens.Black, it.LinesGphPath);
+                g.FillPath(Brushes.Black, it.TextGphPath);
+
+                // draw the string of state content
+                using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
+                    var pair = it.Model.getLeftUpCornerPositionOnScriptAndGroundSize();
+                    Rectangle rect = new Rectangle(
+                        pair.Key.X,
+                        pair.Key.Y,
+                        pair.Value.Width,
+                        pair.Value.Height
+                    );
+
+                    // for aligning the text to center
+                    StringFormat stringFormat = new StringFormat();
+                    stringFormat.Alignment = StringAlignment.Center;
+                    stringFormat.LineAlignment = StringAlignment.Center;
+
+                    g.DrawString(it.Model.LinkText, font, Brushes.Black, rect, stringFormat);
+                }
             });
         }
     }

@@ -8,6 +8,7 @@ using System.Drawing;
 using SWE_Final_Project.Managers;
 using SWE_Final_Project.Models;
 using System.Drawing.Drawing2D;
+using SWE_Final_Project.Views.SubForms;
 
 namespace SWE_Final_Project.Views.States {
     public abstract class StateView: PictureBox {
@@ -123,8 +124,6 @@ namespace SWE_Final_Project.Views.States {
 
             // set the ports positions
             resetPortPositions();
-
-            // Console.WriteLine("W: {0}, H: {1}", stateWidth, stateHeight);
 
             // changes at data model
             ModelManager.modifyStateOnCertainScript(this);
@@ -334,7 +333,7 @@ namespace SWE_Final_Project.Views.States {
                     }
                     // adding link
                     else {
-                        // create the link
+                        // create the link (not settled)
                         if (MouseManager.CurrentMouseAction != MouseAction.CREATING_LINK) {
                             StateModel stateModel = ModelManager.getStateModelByIdAtCurrentScript(mId);
                             if (!(stateModel is null)) {
@@ -350,28 +349,32 @@ namespace SWE_Final_Project.Views.States {
                                 MouseManager.AddingLinkView = newLinkView;
                             }
                         }
-                        // settle the link
+
+                        // settle the link down
                         else {
-                            // set the destination state-view
-                            MouseManager.AddingLinkView.setDestination();
+                            // prompt the typing-form to let user type the link texts
+                            DialogResult dialogResult = new TypingForm("New link", "Please enter the text of this link.", false).ShowDialog();
 
-                            Console.WriteLine(MouseManager.AddingLinkView.Model.ToString());
+                            // confirmed that the user certainly wanna add this link
+                            if (dialogResult == DialogResult.OK) {
+                                // set the destination state-view
+                                MouseManager.AddingLinkView.setDestination();
 
-                            // add link into model
-                            ModelManager.addLinkBetween2StatesOnCertainScript(
-                                MouseManager.AddingLinkView.Model.SrcStateModel,
-                                MouseManager.AddingLinkView.Model.SrcPortType,
-                                MouseManager.AddingLinkView.Model.DstStateModel,
-                                MouseManager.AddingLinkView.Model.DstPortType,
-                                MouseManager.AddingLinkView.Model
-                            );
+                                // set the link-text
+                                MouseManager.AddingLinkView.Model.LinkText = TypingForm.userTypedResultText;
 
-                            // remove the adding-link-view (and set the mouse-action back to LOUNGE)
-                            Program.form.AddLinkViewAtCurrentScript(MouseManager.AddingLinkView);
-                            MouseManager.AddingLinkView = null;
+                                // add link into model
+                                ModelManager.addLinkBetween2StatesOnCertainScript(
+                                    MouseManager.AddingLinkView.Model.SrcStateModel,
+                                    MouseManager.AddingLinkView.Model.SrcPortType,
+                                    MouseManager.AddingLinkView.Model.DstStateModel,
+                                    MouseManager.AddingLinkView.Model.DstPortType,
+                                    MouseManager.AddingLinkView.Model
+                                );
 
-                            foreach (ScriptModel scriptModel in ModelManager.getCopiedScriptList()) {
-                                Console.WriteLine(scriptModel.ToString());
+                                // remove the adding-link-view (and set the mouse-action back to LOUNGE)
+                                Program.form.AddLinkViewAtCurrentScript(MouseManager.AddingLinkView);
+                                MouseManager.AddingLinkView = null;
                             }
                         }
                     }
