@@ -10,7 +10,7 @@ using SWE_Final_Project.Views.States;
 using SWE_Final_Project.Views.SubForms;
 
 namespace SWE_Final_Project.Views {
-    class StateInfoTableLayoutPanel: TableLayoutPanel {
+    public class StateInfoTableLayoutPanel: TableLayoutPanel {
         // constructor
         public StateInfoTableLayoutPanel(StateView stateView) {
             // set dock style

@@ -10,7 +10,7 @@ using SWE_Final_Project.Models;
 using System.Drawing.Drawing2D;
 
 namespace SWE_Final_Project.Views.States {
-    abstract class StateView: PictureBox {
+    public abstract class StateView: PictureBox {
         // the same as corresponding state-model
         private string mId = "";
         public string Id { get => mId; set => mId = value; }
@@ -191,6 +191,11 @@ namespace SWE_Final_Project.Views.States {
             ModelManager.modifyStateOnCertainScript(this);
         }
 
+        // get the position of a certain port
+        public Point getPortPosition(PortType portType) {
+            return mPortPosDict[portType];
+        }
+
         // draw on the designated graphics-path
         abstract protected void addToGraphicsPath();
 
@@ -362,6 +367,7 @@ namespace SWE_Final_Project.Views.States {
                             );
 
                             // remove the adding-link-view (and set the mouse-action back to LOUNGE)
+                            Program.form.AddLinkViewAtCurrentScript(MouseManager.AddingLinkView);
                             MouseManager.AddingLinkView = null;
 
                             foreach (ScriptModel scriptModel in ModelManager.getCopiedScriptList()) {

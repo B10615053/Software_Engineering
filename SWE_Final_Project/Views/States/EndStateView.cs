@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SWE_Final_Project.Views.States {
-    class EndStateView: StateView {
+    public class EndStateView: StateView {
 
         // the gap between inner circle and outer circle
         private const int INNER_CIRCLE_GAP_THICKNESS = 2;

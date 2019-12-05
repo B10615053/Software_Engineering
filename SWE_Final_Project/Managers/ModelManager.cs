@@ -128,7 +128,7 @@ namespace SWE_Final_Project.Managers {
                 return;
 
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(from.Id).addLinkAtCertainPort(linkModel, fromPortType, true);
-            //mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(to.Id).addLinkAtCertainPort(linkModel, toPortType, false);
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(to.Id).addLinkAtCertainPort(linkModel, toPortType, false);
 
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
             Program.form.MarkUnsavedScript();

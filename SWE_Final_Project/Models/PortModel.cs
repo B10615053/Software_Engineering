@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SWE_Final_Project.Models {
     [Serializable]
-    class PortModel {
+    public class PortModel {
         // outgoing links
         private List<LinkModel> mOutgoingLinks;
 
@@ -29,19 +29,20 @@ namespace SWE_Final_Project.Models {
 
         // add ingoing link
         public void addIngoingLink(LinkModel newIngoingLinkModel) {
-            mOutgoingLinks.Add(newIngoingLinkModel);
+            mIngoingLinks.Add(newIngoingLinkModel);
         }
 
-        // get (deep-) copied links
-        public List<LinkModel> getCopiedLinks(bool isOutgoing) {
-            //return isOutgoing ? mOutgoingLinks : mIngoingLinks;
-            return mOutgoingLinks;
-            //using (var ms = new MemoryStream()) {
-            //    var formatter = new BinaryFormatter();
-            //    formatter.Serialize(ms, isOutgoing ? mOutgoingLinks : mIngoingLinks);
-            //    ms.Position = 0;
-            //    return (List<LinkModel>) formatter.Deserialize(ms);
-            //}
+        // add outgoing or ingoing link
+        public void addLink(LinkModel newLinkModel, bool isOutgoing) {
+            if (isOutgoing)
+                addOutgoingLink(newLinkModel);
+            else
+                addIngoingLink(newLinkModel);
+        }
+
+        // get links
+        public List<LinkModel> getLinks(bool isOutgoing) {
+            return isOutgoing ? mOutgoingLinks : mIngoingLinks;
         }
     }
 }

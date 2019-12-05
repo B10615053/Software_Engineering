@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 namespace SWE_Final_Project.Models {
     // 3 kinds of state
     [Serializable]
-    enum StateType {
+    public enum StateType {
         START, END, GENERAL, NONE
     }
 
     // 4 types of ports
     [Serializable]
-    enum PortType {
+    public enum PortType {
         UP, RIGHT, DOWN, LEFT, NONE
     }
 
     // a model of a state
     [Serializable]
-    class StateModel {
+    public class StateModel {
         // unique id of every state-model
         private string mId;
         public string Id { get => mId; }
@@ -49,12 +49,10 @@ namespace SWE_Final_Project.Models {
         }
 
         // 4 types of ports (up, right, down, left) of ingoing links and outgoing links
-        private Dictionary<PortType, PortModel> mPortDict = new Dictionary<PortType, PortModel> {
-            { PortType.UP, new PortModel() },
-            { PortType.RIGHT, new PortModel() },
-            { PortType.DOWN, new PortModel() },
-            { PortType.LEFT, new PortModel() }
-        };
+        private PortModel mUpPortModel = new PortModel();
+        private PortModel mRightPortModel = new PortModel();
+        private PortModel mDownPortModel = new PortModel();
+        private PortModel mLeftPortModel = new PortModel();
 
         /* ========================================= */
 
@@ -85,6 +83,7 @@ namespace SWE_Final_Project.Models {
 
         // set the state-model data by a state-view
         public void setDataByStateView(StateView stateView) {
+            // set the state-type
             if (stateView is StartStateView)
                 mStateType = StateType.START;
             else if (stateView is EndStateView)
@@ -92,12 +91,47 @@ namespace SWE_Final_Project.Models {
             else
                 mStateType = StateType.GENERAL;
 
+            // set the location on the script
             mLocOnScript = new Point(
                 stateView.Location.X + (stateView.Size.Width / 2) + 1,
                 stateView.Location.Y + (stateView.Size.Height / 2) + 1
             );
+
+            // set the size on the script
             mSizeOnScript = new Size(stateView.Size.Width, stateView.Size.Height);
+
+            // set the content text
             mContentText = stateView.StateContent;
+
+            // set proper positions of links on the script
+            var portDict = new Dictionary<PortType, PortModel> {
+                { PortType.UP, mUpPortModel },
+                { PortType.RIGHT, mRightPortModel },
+                { PortType.DOWN, mDownPortModel },
+                { PortType.LEFT, mLeftPortModel }
+            };
+            foreach (KeyValuePair<PortType, PortModel> entry in portDict) {
+                List<LinkModel> outgoingLinks = entry.Value.getLinks(true);
+                List<LinkModel> ingoingLinks = entry.Value.getLinks(false);
+
+                // set positions of outgoing links on the script
+                outgoingLinks.ForEach(outgoingLink => {
+                    outgoingLink.StartLocOnScript = new Point(
+                        stateView.Location.X + stateView.getPortPosition(entry.Key).X,
+                        stateView.Location.Y + stateView.getPortPosition(entry.Key).Y
+                    );
+                    Program.form.adjustLinkViewAtCurrentScript(outgoingLink, true);
+                });
+                // set positions ingoing links on the script
+                ingoingLinks.ForEach(ingoingLink => {
+                    ingoingLink.EndLocOnScript = new Point(
+                        stateView.Location.X + stateView.getPortPosition(entry.Key).X,
+                        stateView.Location.Y + stateView.getPortPosition(entry.Key).Y
+                    );
+                    Console.WriteLine(ingoingLink.EndLocOnScript.ToString());
+                    Program.form.adjustLinkViewAtCurrentScript(ingoingLink, false);
+                });
+            }
         }
 
         // get the certain port's location on script
@@ -135,17 +169,32 @@ namespace SWE_Final_Project.Models {
 
         // add a link-model at certain port of this state-model
         public void addLinkAtCertainPort(LinkModel newLinkModel, PortType atPortType, bool isOutgoing) {
-            // is an outgoing link from this state
-            if (isOutgoing)
-                mPortDict[atPortType].addOutgoingLink(newLinkModel);
-            // is an ingoing link to this state
-            //else
-            //    mPortDict[atPortType].addIngoingLink(newLinkModel);
+            switch (atPortType) {
+                case PortType.UP:
+                    mUpPortModel.addLink(newLinkModel, isOutgoing); break;
+                case PortType.RIGHT:
+                    mRightPortModel.addLink(newLinkModel, isOutgoing); break;
+                case PortType.DOWN:
+                    mDownPortModel.addLink(newLinkModel, isOutgoing); break;
+                case PortType.LEFT:
+                    mLeftPortModel.addLink(newLinkModel, isOutgoing); break;
+            }
         }
 
         // get a certain (up, right, down, left) port-model
         public PortModel getCertainPortModel(PortType portType) {
-            return mPortDict[portType];
+            switch (portType) {
+                case PortType.UP:
+                    return mUpPortModel;
+                case PortType.RIGHT:
+                    return mRightPortModel;
+                case PortType.DOWN:
+                    return mDownPortModel;
+                case PortType.LEFT:
+                    return mLeftPortModel;
+                default:
+                    return mUpPortModel;
+            }
         }
 
         /* ========================================= */
@@ -171,17 +220,17 @@ namespace SWE_Final_Project.Models {
                 ret += "GNRAL";
             ret += "|" + mContentText + "|" + mLocOnScript.ToString();
 
-            mPortDict[PortType.UP].getCopiedLinks(true).ForEach(it => {
-                ret += "\nfrom UP to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            mUpPortModel.getLinks(true).ForEach(it => {
+                ret += "\nfrom UP to " + it.DstStateModel.ContentText + ":" + it.DstPortType;
             });
-            mPortDict[PortType.RIGHT].getCopiedLinks(true).ForEach(it => {
-                ret += "\nfrom RIGHT to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            mRightPortModel.getLinks(true).ForEach(it => {
+                ret += "\nfrom RIGHT to " + it.DstStateModel.ContentText + ":" + it.DstPortType;
             });
-            mPortDict[PortType.DOWN].getCopiedLinks(true).ForEach(it => {
-                ret += "\nfrom DOWN to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            mDownPortModel.getLinks(true).ForEach(it => {
+                ret += "\nfrom DOWN to " + it.DstStateModel.ContentText + ":" + it.DstPortType;
             });
-            mPortDict[PortType.LEFT].getCopiedLinks(true).ForEach(it => {
-                ret += "\nfrom LEFT to " + it.DstStateModel.ContentText + "/" + it.DstPortType;
+            mLeftPortModel.getLinks(true).ForEach(it => {
+                ret += "\nfrom LEFT to " + it.DstStateModel.ContentText + ":" + it.DstPortType;
             });
 
             return ret + "\n";

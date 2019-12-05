@@ -156,7 +156,7 @@ namespace SWE_Final_Project {
             return false;
         }
 
-        // show 
+        // show dialog and open the script
         private bool showDialogAndOpenScriptFromDisk() {
             // create a open-file-dialog
             OpenFileDialog openScriptDialog = new OpenFileDialog();
@@ -196,6 +196,20 @@ namespace SWE_Final_Project {
             // add the prefix '*' to the text of the current selected tab
             if (scriptsTabControl.SelectedTab.Text.EndsWith("*") == false)
                 scriptsTabControl.SelectedTab.Text += "*";
+        }
+
+        public void AddLinkViewAtCurrentScript(LinkView newLinkView) {
+            ScriptTabPage tabPage = (ScriptTabPage) scriptsTabControl.SelectedTab;
+            ScriptCanvas scriptCanvas = tabPage.TheScriptCanvas;
+
+            scriptCanvas.AddLinkView(newLinkView);
+        }
+
+        public void adjustLinkViewAtCurrentScript(LinkModel linkModel, bool isOutgoingLink) {
+            ScriptTabPage tabPage = (ScriptTabPage) scriptsTabControl.SelectedTab;
+            ScriptCanvas scriptCanvas = tabPage.TheScriptCanvas;
+
+            scriptCanvas.setDataByLinkModel(linkModel, isOutgoingLink);
         }
 
         /* ============================================================== */

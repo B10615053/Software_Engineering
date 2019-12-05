@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace SWE_Final_Project.Models {
     // a mode of a script
     [Serializable]
-    class ScriptModel {
+    public class ScriptModel {
         // script's name
         private string mScriptName = "Untitled";
         public string Name { get => mScriptName; set => mScriptName = value; }

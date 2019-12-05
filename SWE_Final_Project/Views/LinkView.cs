@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SWE_Final_Project.Views {
-    class LinkView: PictureBox {
+    public class LinkView: PictureBox {
         // the corresponding link-model
         protected LinkModel mModel;
         internal LinkModel Model { get => mModel; }
@@ -22,11 +22,6 @@ namespace SWE_Final_Project.Views {
         // the gp for drawing text
         protected GraphicsPath mTextGphPath = new GraphicsPath();
         internal GraphicsPath TextGphPath { get => mTextGphPath; }
-
-        /* ============================== */
-
-        private static readonly int ARROW_SIGN_OFFSET_PARALEL = 12;
-        private static readonly int ARROW_SIGN_OFFSET_CHUIZHI = 6;
 
         /* ============================== */
 
@@ -58,68 +53,7 @@ namespace SWE_Final_Project.Views {
 
         // according to the src & dst locations, generate the lines and add them to section-list
         public void generateLinesAndAddToSectionList() {
-            mModel.SectionList.Clear();
-
-            // start point XY
-            int sptX = mModel.StartLocOnScript.X;
-            int sptY = mModel.StartLocOnScript.Y;
-            // end point XY
-            int eptX = mModel.EndLocOnScript.X;
-            int eptY = mModel.EndLocOnScript.Y;
-
-            // vertical distance
-            int disVert = Math.Abs(sptY - eptY);
-            // horizontal distance
-            int disHori = Math.Abs(sptX - eptX);
-
-            // start & end are the same point, no need for lines
-            if (sptX == eptX && sptY == eptY)
-                return;
-            // need a single vertical or horizontal line
-            else if (sptX == eptX || sptY == eptY)
-                mModel.SectionList.Add(new LineModel(sptX, sptY, eptX, eptY));
-            // need 3 lines
-            else {
-                // vertical distance > horizontal distance
-                if (disVert > disHori) {
-                    int midPtY = (sptY + eptY) / 2;
-                    mModel.SectionList.Add(new LineModel(sptX, sptY, sptX, midPtY));
-                    mModel.SectionList.Add(new LineModel(sptX, midPtY, eptX, midPtY));
-                    mModel.SectionList.Add(new LineModel(eptX, midPtY, eptX, eptY));
-                }
-                // vertical distance < horizontal distance
-                else {
-                    int midPtX = (sptX + eptX) / 2;
-                    mModel.SectionList.Add(new LineModel(sptX, sptY, midPtX, sptY));
-                    mModel.SectionList.Add(new LineModel(midPtX, sptY, midPtX, eptY));
-                    mModel.SectionList.Add(new LineModel(midPtX, eptY, eptX, eptY));
-                }
-            }
-
-            // add 2 more short lines as an arrow sign
-            LineModel lastLine = mModel.SectionList.Last();
-            // to up
-            if (lastLine.Direction == DirectionType.TO_UP) {
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_CHUIZHI, eptY + ARROW_SIGN_OFFSET_PARALEL));
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_CHUIZHI, eptY + ARROW_SIGN_OFFSET_PARALEL));
-            }
-            // to right
-            else if (lastLine.Direction == DirectionType.TO_RIGHT) {
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_PARALEL, eptY - ARROW_SIGN_OFFSET_CHUIZHI));
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_PARALEL, eptY + ARROW_SIGN_OFFSET_CHUIZHI));
-            }
-            // to down
-            else if (lastLine.Direction == DirectionType.TO_DOWN) {
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_CHUIZHI, eptY - ARROW_SIGN_OFFSET_PARALEL));
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_CHUIZHI, eptY - ARROW_SIGN_OFFSET_PARALEL));
-            }
-            // to left
-            else if (lastLine.Direction == DirectionType.TO_LEFT) {
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_PARALEL, eptY - ARROW_SIGN_OFFSET_CHUIZHI));
-                mModel.SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_PARALEL, eptY + ARROW_SIGN_OFFSET_CHUIZHI));
-            }
-
-            // mModel.SectionList.Add(new LineModel(mModel.StartLocOnScript, mModel.EndLocOnScript));
+            mModel.adjustLines();
             addToGraphicsPath();
         }
 

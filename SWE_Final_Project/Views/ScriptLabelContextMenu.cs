@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SWE_Final_Project.Views {
-    class ScriptLabelContextMenu: ContextMenu {
+    public class ScriptLabelContextMenu: ContextMenu {
         // the view of tab-control
         private TabControl mTabControl;
 

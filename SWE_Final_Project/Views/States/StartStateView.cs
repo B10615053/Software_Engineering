@@ -9,7 +9,7 @@ using SWE_Final_Project.Managers;
 using System.Drawing.Drawing2D;
 
 namespace SWE_Final_Project.Views.States {
-    class StartStateView: StateView {
+    public class StartStateView: StateView {
         // constructor
         public StartStateView(int x, int y, string stateContent, bool isInstanceOnScript)
             : base(x, y, stateContent, false, isInstanceOnScript) {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SWE_Final_Project.Models {
     [Serializable]
-    enum DirectionType {
+    public enum DirectionType {
         TO_UP,
         TO_RIGHT,
         TO_DOWN,
@@ -18,7 +18,7 @@ namespace SWE_Final_Project.Models {
 
     // the line-model
     [Serializable]
-    class LineModel {
+    public class LineModel {
         // the direction-type of this line
         private DirectionType mDirectionType = DirectionType.LITERALLY_SAME_POINT;
         public DirectionType Direction { get => mDirectionType; }

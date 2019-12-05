@@ -13,15 +13,18 @@ using SWE_Final_Project.Models;
 using System.Drawing.Drawing2D;
 
 namespace SWE_Final_Project.Views {
-    class ScriptCanvas: PictureBox {
+    public class ScriptCanvas: PictureBox {
         // the script name
         private string mScriptNameAtCanvas = "";
 
         // the list of existed (dragged out by user) state-views
         private List<StateView> mExistedStateViewList = new List<StateView>();
 
-        // the list of existed link-views
-        private List<LinkView> mExistedLinks = new List<LinkView>();
+        // the list of existed outgoing link-views
+        private List<LinkView> mExistedOutgoingLinks = new List<LinkView>();
+
+        // the list of existed ingoing link-views
+        private List<LinkView> mExistedIngoingLinks = new List<LinkView>();
 
         /* ==================================================================== */
 
@@ -52,21 +55,14 @@ namespace SWE_Final_Project.Views {
                         stateView = new GeneralStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
 
                     // add link-views
-                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.UP).getCopiedLinks(true)) {
-                        LinkView newLinkView = new LinkView(itLinkModel);
-                        mExistedLinks.Add(newLinkView);
-                    }
-                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.RIGHT).getCopiedLinks(true)) {
-                        LinkView newLinkView = new LinkView(itLinkModel);
-                        mExistedLinks.Add(newLinkView);
-                    }
-                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.DOWN).getCopiedLinks(true)) {
-                        LinkView newLinkView = new LinkView(itLinkModel);
-                        mExistedLinks.Add(newLinkView);
-                    }
-                    foreach (LinkModel itLinkModel in it.getCertainPortModel(PortType.LEFT).getCopiedLinks(true)) {
-                        LinkView newLinkView = new LinkView(itLinkModel);
-                        mExistedLinks.Add(newLinkView);
+                    var allPortTypes = Enum.GetValues(typeof(PortType));
+                    foreach (PortType portType in allPortTypes) {
+                        // add outgoing links
+                        foreach (LinkModel linkModel in it.getCertainPortModel(portType).getLinks(true))
+                            mExistedOutgoingLinks.Add(new LinkView(linkModel));
+                        // add ingoing links
+                        foreach (LinkModel linkModel in it.getCertainPortModel(portType).getLinks(false))
+                            mExistedIngoingLinks.Add(new LinkView(linkModel));
                     }
 
                     // add state-view
@@ -92,6 +88,28 @@ namespace SWE_Final_Project.Views {
                 return null;
             else
                 return TypingForm.userTypedResultText;
+        }
+
+        // add a new link-view
+        public void AddLinkView(LinkView newLinkView) {
+            mExistedOutgoingLinks.Add(newLinkView);
+            mExistedIngoingLinks.Add(newLinkView);
+            Invalidate();
+        }
+
+        public void setDataByLinkModel(LinkModel linkModel, bool isOutgoing) {
+            LinkView linkView;
+
+            if (isOutgoing)
+                linkView = mExistedOutgoingLinks.Find(it => it.Model.Equals(linkModel));
+            else
+                linkView = mExistedIngoingLinks.Find(it => it.Model.Equals(linkModel));
+
+            if (linkView is null)
+                return;
+
+            linkView.generateLinesAndAddToSectionList();
+            Invalidate();
         }
 
         /* methods */
@@ -209,7 +227,7 @@ namespace SWE_Final_Project.Views {
             }
 
             // render links
-            mExistedLinks.ForEach(it => {
+            mExistedOutgoingLinks.ForEach(it => {
                 g.DrawPath(Pens.Black, it.LinesGphPath);
             });
         }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SWE_Final_Project.Views.States {
-    class GeneralStateView: StateView {
+    public class GeneralStateView: StateView {
         // constructor
         public GeneralStateView(int x, int y, string stateContent, bool isInstanceOnScript)
             : base(x, y, stateContent, true, isInstanceOnScript) {

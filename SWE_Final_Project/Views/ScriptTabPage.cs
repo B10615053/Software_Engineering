@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SWE_Final_Project.Views {
-    class ScriptTabPage: TabPage {
+    public class ScriptTabPage: TabPage {
+        private ScriptCanvas mScriptCanvas;
+        public ScriptCanvas TheScriptCanvas { get => mScriptCanvas; }
+
         public ScriptTabPage(string tabName, List<StateModel> stateModelList = null): base(tabName) {
             // add a whole new canvas
-            ScriptCanvas scriptCanvas = new ScriptCanvas(tabName, stateModelList);
-            Controls.Add(scriptCanvas);
+            mScriptCanvas = new ScriptCanvas(tabName, stateModelList);
+            Controls.Add(mScriptCanvas);
         }
     }
 }

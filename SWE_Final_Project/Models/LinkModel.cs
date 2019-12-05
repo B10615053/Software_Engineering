@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SWE_Final_Project.Models {
     [Serializable]
-    class LinkModel {
+    public class LinkModel {
         // unique id of every arrow-model
         private string mId;
         public string Id { get => mId; }
@@ -48,6 +48,11 @@ namespace SWE_Final_Project.Models {
         private Point mEndLocOnScript = new Point();
         public Point EndLocOnScript { get => mEndLocOnScript; set => mEndLocOnScript = value; }
 
+        /* ============================== */
+
+        private static readonly int ARROW_SIGN_OFFSET_PARALEL = 12;
+        private static readonly int ARROW_SIGN_OFFSET_CHUIZHI = 6;
+
         /* ========================================= */
 
         // constructor
@@ -79,7 +84,82 @@ namespace SWE_Final_Project.Models {
             mSectionList = new List<LineModel>();
         }
 
+        // adjust the locations of lines that comprised the link
+        public void adjustLines() {
+            SectionList.Clear();
+
+            // start point XY
+            int sptX = StartLocOnScript.X;
+            int sptY = StartLocOnScript.Y;
+            // end point XY
+            int eptX = EndLocOnScript.X;
+            int eptY = EndLocOnScript.Y;
+
+            // vertical distance
+            int disVert = Math.Abs(sptY - eptY);
+            // horizontal distance
+            int disHori = Math.Abs(sptX - eptX);
+
+            // start & end are the same point, no need for lines
+            if (sptX == eptX && sptY == eptY)
+                return;
+            // need a single vertical or horizontal line
+            else if (sptX == eptX || sptY == eptY)
+                SectionList.Add(new LineModel(sptX, sptY, eptX, eptY));
+            // need 3 lines
+            else {
+                // vertical distance > horizontal distance
+                if (disVert > disHori) {
+                    int midPtY = (sptY + eptY) / 2;
+                    SectionList.Add(new LineModel(sptX, sptY, sptX, midPtY));
+                    SectionList.Add(new LineModel(sptX, midPtY, eptX, midPtY));
+                    SectionList.Add(new LineModel(eptX, midPtY, eptX, eptY));
+                }
+                // vertical distance < horizontal distance
+                else {
+                    int midPtX = (sptX + eptX) / 2;
+                    SectionList.Add(new LineModel(sptX, sptY, midPtX, sptY));
+                    SectionList.Add(new LineModel(midPtX, sptY, midPtX, eptY));
+                    SectionList.Add(new LineModel(midPtX, eptY, eptX, eptY));
+                }
+            }
+
+            // add 2 more short lines as an arrow sign
+            LineModel lastLine = SectionList.Last();
+            // to up
+            if (lastLine.Direction == DirectionType.TO_UP) {
+                SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_CHUIZHI, eptY + ARROW_SIGN_OFFSET_PARALEL));
+                SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_CHUIZHI, eptY + ARROW_SIGN_OFFSET_PARALEL));
+            }
+            // to right
+            else if (lastLine.Direction == DirectionType.TO_RIGHT) {
+                SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_PARALEL, eptY - ARROW_SIGN_OFFSET_CHUIZHI));
+                SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_PARALEL, eptY + ARROW_SIGN_OFFSET_CHUIZHI));
+            }
+            // to down
+            else if (lastLine.Direction == DirectionType.TO_DOWN) {
+                SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_CHUIZHI, eptY - ARROW_SIGN_OFFSET_PARALEL));
+                SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_CHUIZHI, eptY - ARROW_SIGN_OFFSET_PARALEL));
+            }
+            // to left
+            else if (lastLine.Direction == DirectionType.TO_LEFT) {
+                SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_PARALEL, eptY - ARROW_SIGN_OFFSET_CHUIZHI));
+                SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_PARALEL, eptY + ARROW_SIGN_OFFSET_CHUIZHI));
+            }
+        }
+
         /* ========================================= */
+
+        public override bool Equals(object obj) {
+            var other = obj as LinkModel;
+            if (other == null)
+                return false;
+            return mId == other.mId;
+        }
+
+        public override int GetHashCode() {
+            return mId.GetHashCode();
+        }
 
         public override string ToString() {
             return "[" + SrcStateModel.ContentText + " -> " + DstStateModel.ContentText + "]";
