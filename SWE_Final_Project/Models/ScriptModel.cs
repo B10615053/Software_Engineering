@@ -140,5 +140,19 @@ namespace SWE_Final_Project.Models {
             });
             return ret;
         }
+
+        public bool removeState(string id)
+        {
+            foreach (var s in mExistedStateList)
+            {
+                if (s.Id == id)
+                {
+                    mExistedStateList.Remove(s);
+
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

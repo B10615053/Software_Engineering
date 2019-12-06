@@ -186,5 +186,8 @@ namespace SWE_Final_Project.Managers {
             });
             Console.WriteLine("********************");
         }
+
+        public static bool removeStateModelByIDAtCurrentScript(string id) => mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
+
     }
 }

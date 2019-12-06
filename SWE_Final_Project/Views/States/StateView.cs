@@ -210,7 +210,25 @@ namespace SWE_Final_Project.Views.States {
         // click on an instance on scripts, show the info panel of this state-view
         protected override void OnMouseClick(MouseEventArgs e) {
             if (mIsInstanceOnScript)
+            {
                 ModelManager.showInfoPanel(this);
+                Focus();
+            }
+        }
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            e.Handled = true;
+            if (e.KeyData.Equals(Keys.Delete))
+            {
+
+                if (ModelManager.removeStateModelByIDAtCurrentScript(Id))
+                {
+                    MessageBox.Show("Delete Success");
+                    Invalidate();
+                }
+
+            }
         }
 
         // mouse entered, set is-mouse-moving-on to true, and re-draw
