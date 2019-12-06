@@ -145,11 +145,15 @@ namespace SWE_Final_Project.Managers {
         }
 
         // show the info-panel at the right-side of the form
-        public static void showInfoPanel(StateView stateView) {
+        public static void showInfoPanel(PictureBox view) {
             // get the panel as the container
             Panel infoContainer = Program.form.panelInfoContainer;
+
             // create a new info-apnel
-            mInfoPanel = new StateInfoTableLayoutPanel(stateView);
+            if (view is StateView)
+                mInfoPanel = new StateInfoTableLayoutPanel(view as StateView);
+            else if (view is LinkView)
+                mInfoPanel = new StateInfoTableLayoutPanel(view as LinkView);
 
             // remove the existed one and add the new one
             infoContainer.Controls.Clear();

@@ -31,8 +31,8 @@ namespace SWE_Final_Project.Managers {
         // current mouse-covering state-view and which port is covered
         internal static KeyValuePair<StateView, PortType> coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(null, PortType.NONE);
 
-        // TODO: incomplete feature
-        internal static StateView selectedStateView = null;
+        // current mouse-covering link-view
+        internal static LinkView coveringLinkView = null;
 
         // when adding a new link (not complete)
         private static LinkView mAddingLinkView = null;
@@ -45,41 +45,4 @@ namespace SWE_Final_Project.Managers {
             }
         }
     }
-
-    /*
-    class MouseManager {
-        // the enum for checking the mouse is holding something or not
-        public enum MouseHolding {
-            HOLDING_NEW_STATE,
-            HOLDING_EXISTED_STATE,
-            // LOUNGING means holding nothing
-            LOUNGING
-        }
-
-        // the current mouse-holding
-        static private MouseHolding mCurrentMouseHolding = MouseHolding.LOUNGING;
-        static public MouseHolding CurrentMouseHolding {
-            get { return mCurrentMouseHolding; }
-        }
-
-        // the current x-axis of mouse location
-        static private int mMouseX = 0;
-        static public int MouseX {
-            get { return mMouseX; }
-        }
-
-        // the current y-axis of mouse location
-        static private int mMouseY = 0;
-        static public int MouseY {
-            get { return mMouseY; }
-        }
-
-        // public method for setting the current mouse status w/ holding something or not and the location
-        static public void setMouseStatus(MouseHolding mouseHolding, int x = 0, int y = 0) {
-            mCurrentMouseHolding = mouseHolding;
-            mMouseX = x;
-            mMouseY = y;
-        }
-    }
-    */
 }

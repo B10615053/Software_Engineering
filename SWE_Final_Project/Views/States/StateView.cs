@@ -209,10 +209,8 @@ namespace SWE_Final_Project.Views.States {
 
         // click on an instance on scripts, show the info panel of this state-view
         protected override void OnMouseClick(MouseEventArgs e) {
-            if (mIsInstanceOnScript) {
+            if (mIsInstanceOnScript)
                 ModelManager.showInfoPanel(this);
-                MouseManager.selectedStateView = this;
-            }
         }
 
         // mouse entered, set is-mouse-moving-on to true, and re-draw

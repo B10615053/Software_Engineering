@@ -128,6 +128,23 @@ namespace SWE_Final_Project.Views {
                 MouseManager.AddingLinkView.adjustLinesByChangingEndLocOnScript(e.Location);
                 Invalidate();
             }
+
+            // lounging
+            else if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
+                Cursor = Cursors.Default;
+                MouseManager.coveringLinkView = null;
+
+                // check if the mouse is currently on a certain link
+                foreach (LinkView linkView in mExistedOutgoingLinks) {
+                    if (linkView.LinesGphPath.IsVisible(e.Location)) {
+                        // ZA HANDO
+                        Cursor = Cursors.Hand;
+                        // set the current-covering link-view
+                        MouseManager.coveringLinkView = linkView;
+                        break;
+                    }
+                }
+            }
         }
 
         protected override void OnMouseUp(MouseEventArgs e) {
@@ -205,8 +222,16 @@ namespace SWE_Final_Project.Views {
             // remove the info-panel
             ModelManager.removeInfoPanel();
 
+            // left-click
+            if (e.Button == MouseButtons.Left) {
+                // on a certain link-view
+                if (!(MouseManager.coveringLinkView is null)) {
+                    ModelManager.showInfoPanel(MouseManager.coveringLinkView);
+                }
+            }
+
             // cancel the link adding
-            if (e.Button == MouseButtons.Right) {
+            else if (e.Button == MouseButtons.Right) {
                 MouseManager.AddingLinkView = null;
                 Invalidate();
             }
@@ -231,9 +256,8 @@ namespace SWE_Final_Project.Views {
             // render the already-settled links
             mExistedOutgoingLinks.ForEach(it => {
                 g.DrawPath(Pens.Black, it.LinesGphPath);
-                g.FillPath(Brushes.Black, it.TextGphPath);
 
-                // draw the string of state content
+                // draw the string of link text
                 using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
                     var pair = it.Model.getLeftUpCornerPositionOnScriptAndGroundSize();
                     Rectangle rect = new Rectangle(

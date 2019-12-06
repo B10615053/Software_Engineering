@@ -26,9 +26,8 @@ namespace SWE_Final_Project {
         // put the 3 types of states on the left side of GUI
         private void buildUpStatesList() {
             int panelW = statesListPanel.Width;
-            int panelH = statesListPanel.Height;
 
-            int locX = panelW / 2;
+            int locX = panelW / 2 - 20;
 
             StateView startStateView = new StartStateView(locX, 50, "", false);
             statesListPanel.Controls.Add(startStateView);
