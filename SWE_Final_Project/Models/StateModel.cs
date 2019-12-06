@@ -196,6 +196,36 @@ namespace SWE_Final_Project.Models {
             }
         }
 
+        public void changePortOfCertainLink(LinkModel linkModel, PortType fromPortType, PortType toPortType, bool isOutgoing) {
+            if (fromPortType == toPortType)
+                return;
+
+            // find the designated port-models
+            PortModel fromPortModel;
+            switch (fromPortType) {
+                case PortType.UP: fromPortModel = mUpPortModel; break;
+                case PortType.RIGHT: fromPortModel = mRightPortModel; break;
+                case PortType.DOWN: fromPortModel = mDownPortModel; break;
+                default: fromPortModel = mLeftPortModel; break;
+            }
+            PortModel toPortModel;
+            switch (toPortType) {
+                case PortType.UP: toPortModel = mUpPortModel; break;
+                case PortType.RIGHT: toPortModel = mRightPortModel; break;
+                case PortType.DOWN: toPortModel = mDownPortModel; break;
+                default: toPortModel = mLeftPortModel; break;
+            }
+
+            // remove the link
+            fromPortModel.getLinks(isOutgoing).Remove(linkModel);
+
+            // re-add the link
+            if (isOutgoing)
+                toPortModel.addOutgoingLink(linkModel);
+            else
+                toPortModel.addIngoingLink(linkModel);
+        }
+
         /* ========================================= */
 
         public override bool Equals(object obj) {

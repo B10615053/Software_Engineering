@@ -366,7 +366,7 @@ namespace SWE_Final_Project.Views.States {
                             // confirmed that the user certainly wanna add this link
                             if (dialogResult == DialogResult.OK) {
                                 // set the destination state-view
-                                MouseManager.AddingLinkView.setDestination();
+                                MouseManager.AddingLinkView.setDestinationOnlyWhenAdding();
 
                                 // set the link-text
                                 MouseManager.AddingLinkView.Model.LinkText = TypingForm.userTypedResultText;
@@ -379,6 +379,9 @@ namespace SWE_Final_Project.Views.States {
                                     MouseManager.AddingLinkView.Model.DstPortType,
                                     MouseManager.AddingLinkView.Model
                                 );
+
+                                // show the info-panel for this link-view
+                                ModelManager.showInfoPanel(MouseManager.AddingLinkView);
 
                                 // remove the adding-link-view (and set the mouse-action back to LOUNGE)
                                 Program.form.AddLinkViewAtCurrentScript(MouseManager.AddingLinkView);

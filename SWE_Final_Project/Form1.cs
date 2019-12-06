@@ -27,7 +27,7 @@ namespace SWE_Final_Project {
         private void buildUpStatesList() {
             int panelW = statesListPanel.Width;
 
-            int locX = panelW / 2 - 20;
+            int locX = panelW / 2;
 
             StateView startStateView = new StartStateView(locX, 50, "", false);
             statesListPanel.Controls.Add(startStateView);
@@ -221,6 +221,10 @@ namespace SWE_Final_Project {
             ScriptCanvas scriptCanvas = tabPage.TheScriptCanvas;
 
             scriptCanvas.setDataByLinkModel(linkModel, isOutgoingLink);
+        }
+
+        public void invalidateCanvasAtCurrentScript() {
+            (scriptsTabControl.SelectedTab as ScriptTabPage).TheScriptCanvas.Invalidate();
         }
 
         /* ============================================================== */

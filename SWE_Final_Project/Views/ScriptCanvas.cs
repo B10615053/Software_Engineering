@@ -108,6 +108,7 @@ namespace SWE_Final_Project.Views {
             if (linkView is null)
                 return;
 
+            linkView.setSrcAndDstPorts(linkModel.SrcPortType, linkModel.DstPortType);
             linkView.generateLinesAndAddToSectionList();
             Invalidate();
         }
@@ -225,9 +226,8 @@ namespace SWE_Final_Project.Views {
             // left-click
             if (e.Button == MouseButtons.Left) {
                 // on a certain link-view
-                if (!(MouseManager.coveringLinkView is null)) {
+                if (!(MouseManager.coveringLinkView is null))
                     ModelManager.showInfoPanel(MouseManager.coveringLinkView);
-                }
             }
 
             // cancel the link adding

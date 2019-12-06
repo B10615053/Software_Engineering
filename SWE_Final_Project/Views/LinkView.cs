@@ -58,7 +58,7 @@ namespace SWE_Final_Project.Views {
         }
 
         // after clicked on an another state-view, set the destination of this link
-        public void setDestination() {
+        public void setDestinationOnlyWhenAdding() {
             if (MouseManager.coveringStateViewAndPort.Key == null
                     || MouseManager.coveringStateViewAndPort.Value == PortType.NONE)
                 return;
@@ -71,6 +71,17 @@ namespace SWE_Final_Project.Views {
 
             // set the end location on script
             mModel.EndLocOnScript = mModel.DstStateModel.getLocationOfCertainPortOnScript(mModel.DstPortType);
+        }
+
+        // set the link-text
+        public void setLinkText(string newLinkText) {
+            mModel.LinkText = newLinkText;
+            Program.form.invalidateCanvasAtCurrentScript();
+        }
+
+        // set the ports of source & destination
+        public void setSrcAndDstPorts(PortType srcPortType = PortType.NONE, PortType dstPortType = PortType.NONE) {
+            Model.setSrcAndDstPorts(srcPortType, dstPortType);
         }
 
         // draw on the designated graphics-path
@@ -95,13 +106,11 @@ namespace SWE_Final_Project.Views {
             }
         }
 
+        /* ================ */
+
         // re-draw
         protected override void OnPaint(PaintEventArgs e) {
             addToGraphicsPath();
         }
-
-        /* ================ */
-
-
     }
 }

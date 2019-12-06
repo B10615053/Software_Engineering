@@ -48,6 +48,7 @@ namespace SWE_Final_Project.Views {
 
         // init w/ a state-view
         private void initializeComponents(StateView stateView) {
+            #region components defines
             // label: type
             TextBox lblType = new TextBox();
             lblType.Text = "Type";
@@ -111,6 +112,7 @@ namespace SWE_Final_Project.Views {
             TextBox txtShowLocY = new TextBox();
             txtShowLocY.Text = (stateView.Location.Y).ToString();
             Controls.Add(txtShowLocY, 1, 3);
+            #endregion
 
             /* ============================= */
             /* ============================= */
@@ -136,9 +138,10 @@ namespace SWE_Final_Project.Views {
                     }
                 }
             };
-
             txtShowLocX.KeyPress += keyPressLoc;
             txtShowLocY.KeyPress += keyPressLoc;
+
+            /* ============================= */
 
             // for pressing enter key at txt-show-text
             KeyPressEventHandler keyPressText = (sender, e) => {
@@ -149,17 +152,17 @@ namespace SWE_Final_Project.Views {
                         stateView.setStateContent(newStateContent);
                 }
             };
-
             if (txtShowText.Enabled)
                 txtShowText.KeyPress += keyPressText;
 
             /* ============================= */
 
-            txtShowText.KeyDown += TxtShowText_KeyDown; ;
+            txtShowText.KeyDown += TxtShowText_KeyDown;
         }
 
         // init w/ a link-view
         private void initializeComponents(LinkView linkView) {
+            #region components defines
             // label: content text
             TextBox lblText = new TextBox();
             lblText.Text = "Text";
@@ -236,6 +239,7 @@ namespace SWE_Final_Project.Views {
                     cbbDstStatePort.Items.Add(portType.ToString("g"));
             cbbDstStatePort.SelectedIndex = (int) linkView.Model.DstPortType;
             Controls.Add(cbbDstStatePort, 1, 4);
+            #endregion
 
             /* ============================= */
             /* ============================= */
@@ -244,43 +248,54 @@ namespace SWE_Final_Project.Views {
             /* ============================= */
             /* ============================= */
 
-            // for pressing enter key at txt-show-loc-x and txt-show-loc-y
-            KeyPressEventHandler keyPressLoc = (sender, e) => {
-                // press enter
-                if (e.KeyChar == 13) {
-                    try {
-                        //int newX = int.Parse(txtShowLocX.Text.ToString());
-                        //int newY = int.Parse(txtShowLocY.Text.ToString());
+            // for index-changing at src & dst ports
+            EventHandler eventHandlerPort = (sender, e) => {
+                // get the port names of src & dst
+                string srcPortName = cbbSrcStatePort.SelectedItem as string;
+                string dstPortName = cbbDstStatePort.SelectedItem as string;
 
-                        //linkView.relocateState(newX, newY, false);
-                    } catch (FormatException) {
-                        // show the alert form to hint user
-                        AlertForm alertForm = new AlertForm("Wrong number format",
-                            "Only integer is allowed.");
-                        alertForm.ShowDialog();
-                    }
-                }
+                // get the original port-types of src & dst
+                PortType origSrcPortType = linkView.Model.SrcPortType;
+                PortType origDstPortType = linkView.Model.DstPortType;
+
+                // get the new port-types of src & dst
+                PortType srcPortType = (PortType) Enum.Parse(typeof(PortType), srcPortName);
+                PortType dstPortType = (PortType) Enum.Parse(typeof(PortType), dstPortName);
+
+                // set src & dst
+                linkView.setSrcAndDstPorts(srcPortType, dstPortType);
+
+                // adjust at the script
+                Program.form.adjustLinkViewAtCurrentScript(linkView.Model, true);
+
+                // modify the terminal (source & destination) states as well
+                linkView.Model.SrcStateModel.changePortOfCertainLink(linkView.Model, origSrcPortType, srcPortType, true);
+                linkView.Model.DstStateModel.changePortOfCertainLink(linkView.Model, origDstPortType, dstPortType, false);
             };
+            cbbSrcStatePort.SelectedIndexChanged += eventHandlerPort;
+            cbbDstStatePort.SelectedIndexChanged += eventHandlerPort;
 
-            //txtShowLocX.KeyPress += keyPressLoc;
-            //txtShowLocY.KeyPress += keyPressLoc;
+            /* ============================= */
 
             // for pressing enter key at txt-show-text
             KeyPressEventHandler keyPressText = (sender, e) => {
                 // press enter
                 if (e.KeyChar == 13) {
-                    string newStateContent = txtShowText.Text.ToString().Trim();
-                    //if (linkView.StateContent != newStateContent)
-                    //    linkView.setStateContent(newStateContent);
+                    string newLinkText = txtShowText.Text.ToString().Trim();
+                    if (linkView.Model.LinkText != newLinkText)
+                        linkView.setLinkText(newLinkText);
                 }
             };
-
             if (txtShowText.Enabled)
                 txtShowText.KeyPress += keyPressText;
 
             /* ============================= */
 
             txtShowText.KeyDown += TxtShowText_KeyDown;
+        }
+
+        private void CbbSrcStatePort_SelectedIndexChanged(object sender, EventArgs e) {
+            throw new NotImplementedException();
         }
 
         /* ============================================================= */

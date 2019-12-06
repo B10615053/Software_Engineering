@@ -170,6 +170,24 @@ namespace SWE_Final_Project.Models {
             );
         }
 
+        // set the ports of source & destination
+        public void setSrcAndDstPorts(PortType srcPortType = PortType.NONE, PortType dstPortType = PortType.NONE) {
+            // set source's port
+            if (srcPortType != PortType.NONE && srcPortType != mSrcPortType) {
+                mSrcPortType = srcPortType;
+                mStartLocOnScript = mSource.getLocationOfCertainPortOnScript(mSrcPortType);
+            }
+
+            // set destination's port
+            if (dstPortType != PortType.NONE && dstPortType != mDstPortType) {
+                mDstPortType = dstPortType;
+                mEndLocOnScript = mDestination.getLocationOfCertainPortOnScript(mDstPortType);
+            }
+
+            // re-adjust lines
+            adjustLines();
+        }
+
         /* ========================================= */
 
         public override bool Equals(object obj) {
