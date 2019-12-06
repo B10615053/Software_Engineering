@@ -265,7 +265,8 @@ namespace SWE_Final_Project.Views.States {
                     // mouse is on the 4 borders of this state-view
                     // -> do linking (adding arrow)
                     else {
-                        Cursor = Cursors.Cross;
+                        if (!(this is EndStateView) || MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK)
+                            Cursor = Cursors.Cross;
 
                         // calculate squared distances among 4 ports
                         int upSqdDis = calcSquaredDistance(e.Location, mPortPosDict[PortType.UP]);
@@ -306,7 +307,8 @@ namespace SWE_Final_Project.Views.States {
             Invalidate();
         }
 
-        // drag a new state-view out
+        // drag a new/exsited state-view (out),
+        // or create a new link, or cancel the adding (not settled) link
         protected override void OnMouseDown(MouseEventArgs e) {
             // left click
             if (e.Button == MouseButtons.Left) {
@@ -335,22 +337,26 @@ namespace SWE_Final_Project.Views.States {
                             MouseManager.posOnStateViewY = e.Y;
                         }
                     }
+
                     // adding link
                     else {
                         // create the link (not settled)
                         if (MouseManager.CurrentMouseAction != MouseAction.CREATING_LINK) {
-                            StateModel stateModel = ModelManager.getStateModelByIdAtCurrentScript(mId);
-                            if (!(stateModel is null)) {
-                                LinkModel newLinkModel = new LinkModel(
-                                    stateModel,
-                                    null,
-                                    MouseManager.coveringStateViewAndPort.Value,
-                                    MouseManager.coveringStateViewAndPort.Value
-                                );
-                                LinkView newLinkView = new LinkView(newLinkModel);
+                            // an END is NOT allowed to have any outgoing links
+                            if (!(this is EndStateView)) {
+                                StateModel stateModel = ModelManager.getStateModelByIdAtCurrentScript(mId);
+                                if (!(stateModel is null)) {
+                                    LinkModel newLinkModel = new LinkModel(
+                                        stateModel,
+                                        null,
+                                        MouseManager.coveringStateViewAndPort.Value,
+                                        MouseManager.coveringStateViewAndPort.Value
+                                    );
+                                    LinkView newLinkView = new LinkView(newLinkModel);
 
-                                MouseManager.CurrentMouseAction = MouseAction.CREATING_LINK;
-                                MouseManager.AddingLinkView = newLinkView;
+                                    MouseManager.CurrentMouseAction = MouseAction.CREATING_LINK;
+                                    MouseManager.AddingLinkView = newLinkView;
+                                }
                             }
                         }
 
@@ -401,50 +407,55 @@ namespace SWE_Final_Project.Views.States {
         }
 
         protected override void OnPaint(PaintEventArgs e) {
-            // draw link-adding hint
+            // render the link-adding hints
             if (mIsInstanceOnScript && mIsMouseMovingOn) {
                 SolidBrush portHintBrush = new SolidBrush(Color.FromArgb(255, 255, 14, 29));
 
-                switch (MouseManager.coveringStateViewAndPort.Value) {
-                    case PortType.UP:
-                        e.Graphics.FillEllipse(
-                            portHintBrush,
-                            mPortPosDict[PortType.UP].X - ADDING_ARROW_HINT_RADIUS / 2,
-                            mPortPosDict[PortType.UP].Y - ADDING_ARROW_HINT_RADIUS / 2,
-                            ADDING_ARROW_HINT_RADIUS,
-                            ADDING_ARROW_HINT_RADIUS
-                        );
-                        break;
+                // check if this view is an end-state-view or not
+                bool isEndState = this is EndStateView;
 
-                    case PortType.RIGHT:
-                        e.Graphics.FillEllipse(
-                            portHintBrush,
-                            mPortPosDict[PortType.RIGHT].X - ADDING_ARROW_HINT_RADIUS / 2,
-                            mPortPosDict[PortType.RIGHT].Y - ADDING_ARROW_HINT_RADIUS / 2,
-                            ADDING_ARROW_HINT_RADIUS,
-                            ADDING_ARROW_HINT_RADIUS
-                        );
-                        break;
+                if (!isEndState || MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
+                    switch (MouseManager.coveringStateViewAndPort.Value) {
+                        case PortType.UP:
+                            e.Graphics.FillEllipse(
+                                portHintBrush,
+                                mPortPosDict[PortType.UP].X - ADDING_ARROW_HINT_RADIUS / 2,
+                                mPortPosDict[PortType.UP].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                                ADDING_ARROW_HINT_RADIUS,
+                                ADDING_ARROW_HINT_RADIUS
+                            );
+                            break;
 
-                    case PortType.DOWN:
-                        e.Graphics.FillEllipse(
-                            portHintBrush,
-                            mPortPosDict[PortType.DOWN].X - ADDING_ARROW_HINT_RADIUS / 2,
-                            mPortPosDict[PortType.DOWN].Y - ADDING_ARROW_HINT_RADIUS / 2,
-                            ADDING_ARROW_HINT_RADIUS,
-                            ADDING_ARROW_HINT_RADIUS
-                        );
-                        break;
+                        case PortType.RIGHT:
+                            e.Graphics.FillEllipse(
+                                portHintBrush,
+                                mPortPosDict[PortType.RIGHT].X - ADDING_ARROW_HINT_RADIUS / 2,
+                                mPortPosDict[PortType.RIGHT].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                                ADDING_ARROW_HINT_RADIUS,
+                                ADDING_ARROW_HINT_RADIUS
+                            );
+                            break;
 
-                    case PortType.LEFT:
-                        e.Graphics.FillEllipse(
-                            portHintBrush,
-                            mPortPosDict[PortType.LEFT].X - ADDING_ARROW_HINT_RADIUS / 2,
-                            mPortPosDict[PortType.LEFT].Y - ADDING_ARROW_HINT_RADIUS / 2,
-                            ADDING_ARROW_HINT_RADIUS,
-                            ADDING_ARROW_HINT_RADIUS
-                        );
-                        break;
+                        case PortType.DOWN:
+                            e.Graphics.FillEllipse(
+                                portHintBrush,
+                                mPortPosDict[PortType.DOWN].X - ADDING_ARROW_HINT_RADIUS / 2,
+                                mPortPosDict[PortType.DOWN].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                                ADDING_ARROW_HINT_RADIUS,
+                                ADDING_ARROW_HINT_RADIUS
+                            );
+                            break;
+
+                        case PortType.LEFT:
+                            e.Graphics.FillEllipse(
+                                portHintBrush,
+                                mPortPosDict[PortType.LEFT].X - ADDING_ARROW_HINT_RADIUS / 2,
+                                mPortPosDict[PortType.LEFT].Y - ADDING_ARROW_HINT_RADIUS / 2,
+                                ADDING_ARROW_HINT_RADIUS,
+                                ADDING_ARROW_HINT_RADIUS
+                            );
+                            break;
+                    }
                 }
             }
 
