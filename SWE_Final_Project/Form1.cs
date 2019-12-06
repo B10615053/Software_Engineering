@@ -16,6 +16,8 @@ using SWE_Final_Project.Views.SubForms;
 
 namespace SWE_Final_Project {
     public partial class Form1: Form {
+        private List<StateView> mStateViewListOnTheShell = new List<StateView>();
+
         public Form1() {
             InitializeComponent();
             buildUpStatesList();
@@ -30,12 +32,22 @@ namespace SWE_Final_Project {
 
             StateView startStateView = new StartStateView(locX, 50, "", false);
             statesListPanel.Controls.Add(startStateView);
+            mStateViewListOnTheShell.Add(startStateView);
 
             StateView endStateView = new EndStateView(locX, 140, "", false);
             statesListPanel.Controls.Add(endStateView);
+            mStateViewListOnTheShell.Add(endStateView);
 
             StateView generalStateView = new GeneralStateView(locX, 240, "", false);
             statesListPanel.Controls.Add(generalStateView);
+            mStateViewListOnTheShell.Add(generalStateView);
+        }
+
+        // get a certain on-the-shell state-view
+        public StateView getCertainStateViewOnTheShell(int idx) {
+            if (idx >= 0 && idx < mStateViewListOnTheShell.Count)
+                return mStateViewListOnTheShell[idx];
+            return null;
         }
 
         // add a new script
@@ -269,6 +281,9 @@ namespace SWE_Final_Project {
 
             // remove the info-panel if existed
             ModelManager.removeInfoPanel();
+
+            // invalidate the start-state-view on the shell if needs
+            Program.form.getCertainStateViewOnTheShell(0).Invalidate();
         }
 
         // mouse-up event on the tab-control

@@ -181,6 +181,9 @@ namespace SWE_Final_Project.Views {
 
                 // show info panel
                 ModelManager.showInfoPanel(newStateView);
+
+                // invalidate the start-state-view on the shell if needs
+                Program.form.getCertainStateViewOnTheShell(0).Invalidate();
             }
 
             // reset both the holding type and dragging to NONE
@@ -213,7 +216,6 @@ namespace SWE_Final_Project.Views {
         protected override void OnPaint(PaintEventArgs e) {
             Graphics g = e.Graphics;
 
-            // if (MouseManager.isDraggingExistedStateView == false) {
             if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
                 foreach (StateView stateView in mExistedStateViewList) {
                     g.DrawPath(Pens.Black, stateView.OutlineGphPath);
@@ -221,12 +223,12 @@ namespace SWE_Final_Project.Views {
                 }
             }
 
-            // currently, the user is creating a new link (arrow)
+            // currently, the user is creating a new link
             if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
                 g.DrawPath(Pens.DarkGray, MouseManager.AddingLinkView.LinesGphPath);
             }
 
-            // render links
+            // render the already-settled links
             mExistedOutgoingLinks.ForEach(it => {
                 g.DrawPath(Pens.Black, it.LinesGphPath);
                 g.FillPath(Brushes.Black, it.TextGphPath);

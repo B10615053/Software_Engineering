@@ -312,14 +312,18 @@ namespace SWE_Final_Project.Views.States {
             if (e.Button == MouseButtons.Left) {
                 // dragging new state-view
                 if (mIsInstanceOnScript == false) {
-                    Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
-                    DrawToBitmap(pic, Bounds);
+                    if (this is StartStateView && ModelManager.getScriptModelByIndex(ModelManager.CurrentSelectedScriptIndex).hasStartStateOnScript());
+                    else {
+                        Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
+                        DrawToBitmap(pic, Bounds);
 
-                    if (pic == null)
-                        return;
+                        if (pic == null)
+                            return;
 
-                    DoDragDrop(pic, DragDropEffects.Copy);
+                        DoDragDrop(pic, DragDropEffects.Copy);
+                    }
                 }
+
                 // dragging existed state-view, or adding link
                 else {
                     // dragging existed state-view

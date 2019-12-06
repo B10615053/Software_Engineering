@@ -8,6 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SWE_Final_Project.Models {
+    // for checking the completeness of a certain script-model
+    [Serializable]
+    public enum ScriptModelCompleteness {
+        // absolutely empty, or only has GENERALs
+        EMPTY_OR_ONLY_HAS_GENERAL,
+        // has a START w/o END
+        HAS_START_BUT_NO_END,
+        // has ENDs w/o START
+        HAS_END_BUT_NO_START,
+        // has both START and ENDs
+        HAS_START_AND_END
+    }
+
     // a mode of a script
     [Serializable]
     public class ScriptModel {
@@ -26,12 +39,21 @@ namespace SWE_Final_Project.Models {
         private bool mHaveUnsavedChanges = true;
         public bool HaveUnsavedChanges { get => mHaveUnsavedChanges; set => mHaveUnsavedChanges = value; }
 
+        // the completeness of the script-model, initially set to EMPTY
+        private ScriptModelCompleteness mCompleteness = ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL;
+        public ScriptModelCompleteness Completeness { get => mCompleteness; set => mCompleteness = value; }
+
         /* ========================================= */
 
         // constructor
         public ScriptModel(string scriptName, List<StateModel> stateList) {
+            // set the script name
             mScriptName = scriptName is null ? "Untitled" : scriptName;
 
+            // initially set the completeness into EMPTY
+            mCompleteness = ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL;
+
+            // add the pre-defined states if exist
             if (!(stateList is null))
                 mExistedStateList.AddRange(stateList);
         }
@@ -54,6 +76,20 @@ namespace SWE_Final_Project.Models {
         // add a new state
         public void addNewState(StateModel newStateModel) {
             mExistedStateList.Add(newStateModel);
+
+            // re-set the script-model's completeness in different cases
+            if (newStateModel.StateType == StateType.START) {
+                if (mCompleteness == ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL)
+                    mCompleteness = ScriptModelCompleteness.HAS_START_BUT_NO_END;
+                else if (mCompleteness == ScriptModelCompleteness.HAS_END_BUT_NO_START)
+                    mCompleteness = ScriptModelCompleteness.HAS_START_AND_END;
+            }
+            else if (newStateModel.StateType == StateType.END) {
+                if (mCompleteness == ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL)
+                    mCompleteness = ScriptModelCompleteness.HAS_END_BUT_NO_START;
+                else if (mCompleteness == ScriptModelCompleteness.HAS_START_BUT_NO_END)
+                    mCompleteness = ScriptModelCompleteness.HAS_START_AND_END;
+            }
         }
 
         // modify a existed state
@@ -67,6 +103,12 @@ namespace SWE_Final_Project.Models {
         // check if this script has been saved at least one time or not
         public bool hasBeenSavedAtLeastOneTime() {
             return !(mSavedFilePath is null);
+        }
+
+        // check if the script currently has a START state
+        public bool hasStartStateOnScript () {
+            return (mCompleteness == ScriptModelCompleteness.HAS_START_BUT_NO_END ||
+                mCompleteness == ScriptModelCompleteness.HAS_START_AND_END);
         }
 
         /* ========================================= */

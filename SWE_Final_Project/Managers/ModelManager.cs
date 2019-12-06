@@ -57,6 +57,9 @@ namespace SWE_Final_Project.Managers {
             ScriptModel newScriptModel = new ScriptModel(newScriptName, stateModels);
             mOpenedScriptList.Add(newScriptModel);
 
+            // invalidate the start-state-view on the shell if needs
+            Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+
             return newScriptModel;
         }
 
@@ -72,6 +75,10 @@ namespace SWE_Final_Project.Managers {
             // not in the opened script list, open it
             if (scriptModelInList is null) {
                 mOpenedScriptList.Add(scriptModel);
+
+                // invalidate the start-state-view on the shell if needs
+                Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+
                 return true;
             }
             // already in the opened script list
@@ -90,6 +97,9 @@ namespace SWE_Final_Project.Managers {
             // and re-adjust the current-selected-script-index
             if (CurrentSelectedScriptIndex >= mOpenedScriptList.Count)
                 CurrentSelectedScriptIndex = mOpenedScriptList.Count - 1;
+
+            // invalidate the start-state-view on the shell if needs
+            Program.form.getCertainStateViewOnTheShell(0).Invalidate();
         }
 
         // add new state on a certain script
