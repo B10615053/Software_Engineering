@@ -110,8 +110,31 @@ namespace SWE_Final_Project.Models {
         public bool removeState(string id) {
             foreach (var s in mExistedStateList) {
                 if (s.Id == id) {
-                    mExistedStateList.Remove(s);
+                    // deal with the completeness of this script:
+                    // if the state the user want to delete is a START state
+                    if (s.StateType == StateType.START) {
+                        if (mCompleteness == ScriptModelCompleteness.HAS_START_AND_END)
+                            mCompleteness = ScriptModelCompleteness.HAS_END_BUT_NO_START;
+                        else /* if (mCompleteness == ScriptModelCompleteness.HAS_START_BUT_NO_END) */
+                            mCompleteness = ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL;
+                    }
+                    // if the state the user want to delete is an END state
+                    else if (s.StateType == StateType.END) {
+                        int numOfEndStates = mExistedStateList.FindAll(it => it.StateType == StateType.END).Count;
+                        // the only one END state
+                        if (numOfEndStates == 1)
+                            if (mCompleteness == ScriptModelCompleteness.HAS_START_AND_END)
+                                mCompleteness = ScriptModelCompleteness.HAS_START_BUT_NO_END;
+                            else if (mCompleteness == ScriptModelCompleteness.HAS_END_BUT_NO_START)
+                                mCompleteness = ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL;
+                    }
 
+                    // mark this script as unsaved
+                    mHaveUnsavedChanges = true;
+                    Program.form.MarkUnsavedScript();
+
+                    // remove it from the state list
+                    mExistedStateList.Remove(s);
                     return true;
                 }
             }
