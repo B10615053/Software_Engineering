@@ -194,7 +194,7 @@
             this.tableLayout_mainWithoutCmd.Name = "tableLayout_mainWithoutCmd";
             this.tableLayout_mainWithoutCmd.RowCount = 1;
             this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 518F));
+            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 633F));
             this.tableLayout_mainWithoutCmd.Size = new System.Drawing.Size(1561, 633);
             this.tableLayout_mainWithoutCmd.TabIndex = 0;
             // 
@@ -202,10 +202,10 @@
             // 
             this.scriptsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scriptsTabControl.Font = new System.Drawing.Font("Consolas", 9F);
-            this.scriptsTabControl.Location = new System.Drawing.Point(281, 3);
+            this.scriptsTabControl.Location = new System.Drawing.Point(282, 3);
             this.scriptsTabControl.Name = "scriptsTabControl";
             this.scriptsTabControl.SelectedIndex = 0;
-            this.scriptsTabControl.Size = new System.Drawing.Size(1277, 627);
+            this.scriptsTabControl.Size = new System.Drawing.Size(1276, 627);
             this.scriptsTabControl.TabIndex = 0;
             this.scriptsTabControl.SelectedIndexChanged += new System.EventHandler(this.ScriptsTabControl_SelectedIndexChanged);
             this.scriptsTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptsTabControl_KeyDown);
@@ -216,7 +216,7 @@
             this.statesListPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statesListPanel.Location = new System.Drawing.Point(3, 3);
             this.statesListPanel.Name = "statesListPanel";
-            this.statesListPanel.Size = new System.Drawing.Size(272, 627);
+            this.statesListPanel.Size = new System.Drawing.Size(273, 627);
             this.statesListPanel.TabIndex = 1;
             // 
             // tableLayout_cmd

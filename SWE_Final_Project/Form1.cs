@@ -223,6 +223,13 @@ namespace SWE_Final_Project {
             scriptCanvas.setDataByLinkModel(linkModel, isOutgoingLink);
         }
 
+        public void deleteStateView(StateModel stateModel) {
+            ScriptTabPage tabPage = (ScriptTabPage) scriptsTabControl.SelectedTab;
+            ScriptCanvas scriptCanvas = tabPage.TheScriptCanvas;
+
+            scriptCanvas.deleteStateView(stateModel);
+        }
+
         public void invalidateCanvasAtCurrentScript() {
             (scriptsTabControl.SelectedTab as ScriptTabPage).TheScriptCanvas.Invalidate();
         }

@@ -69,9 +69,8 @@ namespace SWE_Final_Project.Models {
         }
 
         // get a certain state-model designated by id
-        public StateModel getStateModelById(string id) {
-            return mExistedStateList.Find(it => it.Id == id);
-        }
+        public StateModel getStateModelById(string id)
+            => mExistedStateList.Find(it => it.Id == id);
 
         // add a new state
         public void addNewState(StateModel newStateModel) {
@@ -101,14 +100,22 @@ namespace SWE_Final_Project.Models {
         }
 
         // check if this script has been saved at least one time or not
-        public bool hasBeenSavedAtLeastOneTime() {
-            return !(mSavedFilePath is null);
-        }
+        public bool hasBeenSavedAtLeastOneTime() => (!(mSavedFilePath is null));
 
         // check if the script currently has a START state
-        public bool hasStartStateOnScript () {
-            return (mCompleteness == ScriptModelCompleteness.HAS_START_BUT_NO_END ||
+        public bool hasStartStateOnScript ()
+            => (mCompleteness == ScriptModelCompleteness.HAS_START_BUT_NO_END ||
                 mCompleteness == ScriptModelCompleteness.HAS_START_AND_END);
+
+        public bool removeState(string id) {
+            foreach (var s in mExistedStateList) {
+                if (s.Id == id) {
+                    mExistedStateList.Remove(s);
+
+                    return true;
+                }
+            }
+            return false;
         }
 
         /* ========================================= */
@@ -139,20 +146,6 @@ namespace SWE_Final_Project.Models {
                 ret += "\t" + it.ToString() + "\r\n";
             });
             return ret;
-        }
-
-        public bool removeState(string id)
-        {
-            foreach (var s in mExistedStateList)
-            {
-                if (s.Id == id)
-                {
-                    mExistedStateList.Remove(s);
-
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

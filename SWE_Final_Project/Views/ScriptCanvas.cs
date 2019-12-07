@@ -97,6 +97,7 @@ namespace SWE_Final_Project.Views {
             Invalidate();
         }
 
+        // re-set a certain link-view data by a link-model
         public void setDataByLinkModel(LinkModel linkModel, bool isOutgoing) {
             LinkView linkView;
 
@@ -110,6 +111,20 @@ namespace SWE_Final_Project.Views {
 
             linkView.setSrcAndDstPorts(linkModel.SrcPortType, linkModel.DstPortType);
             linkView.generateLinesAndAddToSectionList();
+            Invalidate();
+        }
+
+        // delete a state-view
+        public void deleteStateView(StateModel stateModel) {
+            // search for the designated state-view by common id w/ corresponding state-model
+            foreach (StateView stateView in mExistedStateViewList)
+                if (stateView.Id == stateModel.Id) {
+                    mExistedStateViewList.Remove(stateView);
+                    Controls.Remove(stateView);
+                    break;
+                }
+
+            // re-draw
             Invalidate();
         }
 

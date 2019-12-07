@@ -219,15 +219,11 @@ namespace SWE_Final_Project.Views.States {
         {
             base.OnKeyDown(e);
             e.Handled = true;
-            if (e.KeyData.Equals(Keys.Delete))
-            {
 
-                if (ModelManager.removeStateModelByIDAtCurrentScript(Id))
-                {
-                    MessageBox.Show("Delete Success");
-                    Invalidate();
-                }
-
+            // delete a certain state
+            if (e.KeyData.Equals(Keys.Delete)) {
+                Program.form.deleteStateView(ModelManager.getStateModelByIdAtCurrentScript(Id));
+                ModelManager.removeStateModelByIDAtCurrentScript(Id);
             }
         }
 
