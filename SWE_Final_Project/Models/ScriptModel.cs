@@ -110,7 +110,7 @@ namespace SWE_Final_Project.Models {
         public bool removeState(string id) {
             foreach (var s in mExistedStateList) {
                 if (s.Id == id) {
-                    // deal with the completeness of this script:
+                    /* deal with the completeness of this script */
                     // if the state the user want to delete is a START state
                     if (s.StateType == StateType.START) {
                         if (mCompleteness == ScriptModelCompleteness.HAS_START_AND_END)

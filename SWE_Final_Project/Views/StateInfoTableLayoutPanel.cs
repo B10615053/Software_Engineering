@@ -12,13 +12,20 @@ using SWE_Final_Project.Views.SubForms;
 
 namespace SWE_Final_Project.Views {
     public class StateInfoTableLayoutPanel: TableLayoutPanel {
+        // the view that just passed in
+        private PictureBox mPassedView = null;
+
+        /* ============================================================= */
+
         // constructor w/ a state-view
         public StateInfoTableLayoutPanel(StateView stateView) {
+            mPassedView = stateView;
             doConstruction(stateView);
         }
 
         // constructor w/ a link-view
         public StateInfoTableLayoutPanel(LinkView linkView) {
+            mPassedView = linkView;
             doConstruction(linkView);
         }
 
@@ -294,10 +301,6 @@ namespace SWE_Final_Project.Views {
             txtShowText.KeyDown += TxtShowText_KeyDown;
         }
 
-        private void CbbSrcStatePort_SelectedIndexChanged(object sender, EventArgs e) {
-            throw new NotImplementedException();
-        }
-
         /* ============================================================= */
 
         // key down event at txt-show-text, for the convenience of saving the script
@@ -305,6 +308,12 @@ namespace SWE_Final_Project.Views {
             // Ctrl + S
             if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
                 Program.form.saveCertainScript(ModelManager.CurrentSelectedScriptIndex);
+
+            // delete
+            else if (e.KeyCode == Keys.Delete) {
+                if (mPassedView is StateView)
+                    (mPassedView as StateView).deleteThisState();
+            }
         }
     }
 }

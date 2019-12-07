@@ -44,6 +44,10 @@ namespace SWE_Final_Project.Views.States {
         // positions of 4 types of ports
         private Dictionary<PortType, Point> mPortPosDict = new Dictionary<PortType, Point>();
 
+        // the location of the script (not the view!) when the mouse clicking down
+        private int mMouseDownCanvasLocX = 0;
+        private int mMouseDownCanvasLocY = 0;
+
         /* ================================================= */
 
         // for calculating the state size, H and V stand for horizontal and vertical respectively
@@ -195,6 +199,12 @@ namespace SWE_Final_Project.Views.States {
             return mPortPosDict[portType];
         }
 
+        // delete myself from the canvas and the model
+        public void deleteThisState() {
+            Program.form.deleteStateView(ModelManager.getStateModelByIdAtCurrentScript(Id));
+            ModelManager.removeStateModelByIDAtCurrentScript(Id);
+        }
+
         // draw on the designated graphics-path
         abstract protected void addToGraphicsPath();
 
@@ -211,19 +221,20 @@ namespace SWE_Final_Project.Views.States {
         protected override void OnMouseClick(MouseEventArgs e) {
             if (mIsInstanceOnScript)
             {
-                ModelManager.showInfoPanel(this);
+                //ModelManager.showInfoPanel(this);
                 Focus();
             }
         }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
             e.Handled = true;
 
             // delete a certain state
-            if (e.KeyData.Equals(Keys.Delete)) {
-                Program.form.deleteStateView(ModelManager.getStateModelByIdAtCurrentScript(Id));
-                ModelManager.removeStateModelByIDAtCurrentScript(Id);
+            if (e.KeyData.Equals(Keys.Delete))
+            {
+                deleteThisState();
             }
         }
 
@@ -322,6 +333,10 @@ namespace SWE_Final_Project.Views.States {
         // drag a new/exsited state-view (out),
         // or create a new link, or cancel the adding (not settled) link
         protected override void OnMouseDown(MouseEventArgs e) {
+            // set the clicking down location of the script (not the view!)
+            mMouseDownCanvasLocX = Location.X + e.X;
+            mMouseDownCanvasLocY = Location.Y + e.Y;
+
             // left click
             if (e.Button == MouseButtons.Left) {
                 // dragging new state-view
@@ -418,9 +433,16 @@ namespace SWE_Final_Project.Views.States {
             addToGraphicsPath();
             if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW)
                 MouseManager.CurrentMouseAction = MouseAction.LOUNGE;
-            // MouseManager.isDraggingExistedStateView = false;
+
+            // if the both locations when clicking down and when up are the same point,
+            // which means that the mouse didn't move during down and up,
+            // show the info-panel
+            if (Location.X + e.X == mMouseDownCanvasLocX && Location.Y + e.Y == mMouseDownCanvasLocY) {
+                ModelManager.showInfoPanel(this);
+            }
         }
 
+        // re-draw
         protected override void OnPaint(PaintEventArgs e) {
             // render the link-adding hints
             if (mIsInstanceOnScript && mIsMouseMovingOn) {
