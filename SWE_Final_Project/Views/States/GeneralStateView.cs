@@ -28,17 +28,17 @@ namespace SWE_Final_Project.Views.States {
             );
 
             // draw the string of state content
-            //mInnerGphPath.Reset();
-            //using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
-            //    Rectangle rect = new Rectangle(Location.X, Location.Y, Size.Width, Size.Height);
+            mInnerGphPath.Reset();
+            using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
+                Rectangle rect = new Rectangle(Location.X, Location.Y, Size.Width, Size.Height);
 
-            //    // for aligning the text to center
-            //    StringFormat stringFormat = new StringFormat();
-            //    stringFormat.Alignment = StringAlignment.Center;
-            //    stringFormat.LineAlignment = StringAlignment.Center;
+                // for aligning the text to center
+                StringFormat stringFormat = new StringFormat();
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
 
-            //    mInnerGphPath.AddString(StateContent, new FontFamily("Consolas"), (int) FontStyle.Regular, 14.0F, rect, stringFormat);
-            //}
+                mInnerGphPath.AddString(StateContent, new FontFamily("Consolas"), (int) FontStyle.Regular, 14.0F, rect, stringFormat);
+            }
         }
 
         // re-draw

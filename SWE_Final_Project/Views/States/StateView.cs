@@ -347,6 +347,9 @@ namespace SWE_Final_Project.Views.States {
 
         // mouse leaved, set is-mouse-moving-on to false, and re-draw
         protected override void OnMouseLeave(EventArgs e) {
+            if (SimulationManager.isSimulating())
+                return;
+
             mIsMouseMovingOn = false;
             Invalidate();
         }
@@ -365,7 +368,7 @@ namespace SWE_Final_Project.Views.States {
 
                 // dragging new state-view
                 if (mIsInstanceOnScript == false) {
-                    if (this is StartStateView && ModelManager.getScriptModelByIndex().hasStartStateOnScript());
+                    if (this is StartStateView && ModelManager.getScriptModelByIndex() != null && ModelManager.getScriptModelByIndex().hasStartStateOnScript());
                     else {
                         Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
                         DrawToBitmap(pic, Bounds);
@@ -377,7 +380,7 @@ namespace SWE_Final_Project.Views.States {
                     }
                 }
 
-                // dragging existed state-view, or adding link
+                // dragging existed state-view, or adding/settling link
                 else {
                     // dragging existed state-view
                     if (MouseManager.coveringStateViewAndPort.Value == PortType.NONE) {

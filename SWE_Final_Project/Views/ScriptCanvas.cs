@@ -155,7 +155,8 @@ namespace SWE_Final_Project.Views {
 
                 // check if the mouse is currently on a certain link
                 foreach (LinkView linkView in mExistedOutgoingLinks) {
-                    if (linkView.LinesGphPath.IsVisible(e.Location)) {
+                    if (linkView.LinesGphPath.IsVisible(e.Location) ||
+                            linkView.TextGphPath.IsVisible(e.Location)) {
                         // ZA HANDO
                         Cursor = Cursors.Hand;
                         // set the current-covering link-view
@@ -163,6 +164,9 @@ namespace SWE_Final_Project.Views {
                         break;
                     }
                 }
+
+                if (SimulationManager.isSimulating())
+                    Invalidate();
             }
         }
 
@@ -259,31 +263,26 @@ namespace SWE_Final_Project.Views {
         protected override void OnPaint(PaintEventArgs e) {
             Graphics g = e.Graphics;
 
-            if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
-                foreach (StateView stateView in mExistedStateViewList) {
-                    // is simulating now
-                    if (SimulationManager.isSimulating()) {
-                        Color simulatingStateColor = SimulationManager.getSimulatingStateColor(stateView.CurrentSimulatingStatus);
-                        g.DrawPath(new Pen(simulatingStateColor), stateView.OutlineGphPath);
-                        g.FillPath(new SolidBrush(simulatingStateColor), stateView.InnerGphPath);
-                    }
-                    // is NOT simulating now
-                    else {
-                        g.DrawPath(Pens.Black, stateView.OutlineGphPath);
-                        g.FillPath(Brushes.Black, stateView.InnerGphPath);
-                    }
-                }
-            }
-
-            // currently, the user is creating a new link
-            if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
-                g.DrawPath(Pens.DarkGray, MouseManager.AddingLinkView.LinesGphPath);
-            }
+            // be used for the special rendering when a certain link is covered during a simulation
+            string dstStateViewId = "";
 
             // render the already-settled links
             mExistedOutgoingLinks.ForEach(it => {
+                bool isSimulatingAndTheMouseIsCoveringThisLink =
+                    SimulationManager.isSimulating() &&
+                    //!(MouseManager.coveringLinkView is null) &&
+                    it == MouseManager.coveringLinkView;
+
                 // draw the lines of the link
-                g.DrawPath(Pens.Black, it.LinesGphPath);
+                if (isSimulatingAndTheMouseIsCoveringThisLink) {
+                    g.DrawPath(new Pen(Color.Red, 2), it.LinesGphPath);
+                    dstStateViewId = it.Model.DstStateModel.Id;
+                }
+                else
+                    g.DrawPath(Pens.Black, it.LinesGphPath);
+
+                // draw the transparent link text for mouse events
+                g.FillPath(Brushes.Transparent, it.TextGphPath);
 
                 // draw the string of the link text
                 using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
@@ -300,9 +299,51 @@ namespace SWE_Final_Project.Views {
                     stringFormat.Alignment = StringAlignment.Center;
                     stringFormat.LineAlignment = StringAlignment.Center;
 
-                    g.DrawString(it.Model.LinkText, font, Brushes.Black, rect, stringFormat);
+                    if (isSimulatingAndTheMouseIsCoveringThisLink)
+                        g.DrawString(it.Model.LinkText, font, Brushes.Red, rect, stringFormat);
+                    else
+                        g.DrawString(it.Model.LinkText, font, Brushes.Black, rect, stringFormat);
                 }
             });
+
+            // currently, the user is creating a new link
+            if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
+                g.DrawPath(Pens.DarkGray, MouseManager.AddingLinkView.LinesGphPath);
+            }
+
+            // render the state-views
+            if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
+                foreach (StateView stateView in mExistedStateViewList) {
+                    // is simulating now
+                    if (SimulationManager.isSimulating()) {
+                        Color simulatingStateColor = SimulationManager.getSimulatingStateColor(stateView.CurrentSimulatingStatus);
+
+                        if (dstStateViewId == stateView.Id) {
+                            g.DrawPath(new Pen(Color.Red, 2), stateView.OutlineGphPath);
+                            if (!(stateView is GeneralStateView))
+                                g.FillPath(new SolidBrush(Color.Red), stateView.InnerGphPath);
+                        }
+                        else {
+                            g.DrawPath(new Pen(simulatingStateColor), stateView.OutlineGphPath);
+                            if (!(stateView is GeneralStateView))
+                                g.FillPath(new SolidBrush(simulatingStateColor), stateView.InnerGphPath);
+                        }
+                    }
+                    // is NOT simulating now
+                    else {
+                        g.DrawPath(Pens.Black, stateView.OutlineGphPath);
+
+                        // if it's a GENERAL, draw the transparent inner staff
+                        if (stateView is GeneralStateView)
+                            g.FillPath(Brushes.Transparent, stateView.InnerGphPath);
+                        // else, normally drawing
+                        else
+                            g.FillPath(Brushes.Black, stateView.InnerGphPath);
+                    }
+                }
+            }
+
+            // end of on-paint
         }
     }
 }

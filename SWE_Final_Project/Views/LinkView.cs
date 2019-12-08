@@ -93,7 +93,13 @@ namespace SWE_Final_Project.Views {
 
             mTextGphPath.Reset();
             using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
-                Rectangle rect = new Rectangle(Location.X, Location.Y, Size.Width, Size.Height);
+                var pair = mModel.getLeftUpCornerPositionOnScriptAndGroundSize();
+                Rectangle rect = new Rectangle(
+                    pair.Key.X,
+                    pair.Key.Y,
+                    pair.Value.Width,
+                    pair.Value.Height
+                );
 
                 // for aligning the text to center
                 StringFormat stringFormat = new StringFormat();
@@ -101,7 +107,11 @@ namespace SWE_Final_Project.Views {
                 stringFormat.LineAlignment = StringAlignment.Center;
 
                 if (mModel.LinkText != null) {
-                    //mTextGphPath.AddString(mModel.LinkText, new FontFamily("Consolas"), (int) FontStyle.Regular, 14.0F, rect, stringFormat);
+                    mTextGphPath.AddString(mModel.LinkText, new FontFamily("Consolas"), (int) FontStyle.Regular, 23.0F, rect, stringFormat);
+                    RectangleF linkTextRect = mTextGphPath.GetBounds();
+
+                    mTextGphPath.Reset();
+                    mTextGphPath.AddRectangle(linkTextRect);
                 }
             }
         }
