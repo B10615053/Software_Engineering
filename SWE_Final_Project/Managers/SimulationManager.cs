@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SWE_Final_Project.Managers {
     // the types of simulation
@@ -26,7 +27,7 @@ namespace SWE_Final_Project.Managers {
         // no START & END state
         NO_START_AND_END,
         // has but cannot reach any END state
-        CANNOT_REACH_END
+        END_NOT_REACHABLE
     }
 
     public class SimulationManager {
@@ -38,8 +39,8 @@ namespace SWE_Final_Project.Managers {
         private static Dictionary<SimulateabilityError, string> mSimulateabilityErrMsgs
             = new Dictionary<SimulateabilityError, string> {
                 { SimulateabilityError.SIMULATEABLE, "No error." },
-                { SimulateabilityError.CANNOT_REACH_END, "The END state is NOT reachable." },
-                { SimulateabilityError.NO_END, "Please create at least 1 END state." },
+                { SimulateabilityError.END_NOT_REACHABLE, "The END state is NOT reachable." },
+                { SimulateabilityError.NO_END, "There\'s NO any END state on the script." },
                 { SimulateabilityError.NO_START, "Please create a START state." },
                 { SimulateabilityError.NO_START_AND_END, "Please create a START state and at least 1 END state." }
             };
@@ -48,20 +49,43 @@ namespace SWE_Final_Project.Managers {
 
         // start the simulation
         public static void startSimulation(SimulationType simulationType) {
+            // local function: really start the simulation
+            void reallyStartSimulation() {
+                mCurrentSimulationType = simulationType;
+                ModelManager.removeInfoPanel();
+            }
+
             // check if the script is simulate-able
             SimulateabilityError err = checkScriptIsSimulateableOrNot();
 
             // yes, it is
-            if (err == SimulateabilityError.SIMULATEABLE) {
-                mCurrentSimulationType = simulationType;
-                ModelManager.removeInfoPanel();
-            }
+            if (err == SimulateabilityError.SIMULATEABLE)
+                reallyStartSimulation();
             // no, it isn't
             else {
-                new AlertForm(
-                    "Your machine is NOT simulate-able.",
-                    mSimulateabilityErrMsgs[err]
-                ).ShowDialog();
+                // err = no END or the END state is not reachable
+                if (err == SimulateabilityError.END_NOT_REACHABLE ||
+                        err == SimulateabilityError.NO_END) {
+                    // let users to decide if they want to boost up the simulation anyways or not
+                    DialogResult dialogResult = new AlertForm(
+                        mSimulateabilityErrMsgs[err],
+                        "Do you still want to start the simulation?",
+                        false,
+                        true,
+                        true
+                    ).ShowDialog();
+
+                    // yes, they still want to
+                    if (dialogResult == DialogResult.Yes)
+                        reallyStartSimulation();
+                }
+                // err = no START or no START & END
+                else {
+                    new AlertForm(
+                        "Your machine is NOT simulate-able.",
+                        mSimulateabilityErrMsgs[err]
+                    ).ShowDialog();
+                }
             }
         }
 
@@ -81,7 +105,7 @@ namespace SWE_Final_Project.Managers {
             // second, check if it can reach any END from START
             List<StateModel> stateModelList = scriptModel.getCopiedStateList();
             if (isEndReachableFromStart(stateModelList) == false)
-                return SimulateabilityError.CANNOT_REACH_END;
+                return SimulateabilityError.END_NOT_REACHABLE;
 
             // it's simulate-able
             return SimulateabilityError.SIMULATEABLE;
