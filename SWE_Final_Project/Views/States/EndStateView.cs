@@ -52,14 +52,16 @@ namespace SWE_Final_Project.Views.States {
             else
                 color = Color.Black;
 
-            g.DrawEllipse(new Pen(color), 0, 0, Size.Width - 1, Size.Height - 1);
-            g.FillEllipse(
-                new SolidBrush(color),
-                INNER_CIRCLE_GAP_THICKNESS, // x at left-up corner
-                INNER_CIRCLE_GAP_THICKNESS, // y at left-up corner
-                Size.Width - 1 - (INNER_CIRCLE_GAP_THICKNESS * 2),
-                Size.Height - 1 - (INNER_CIRCLE_GAP_THICKNESS * 2)
-            );
+            if (SimulationManager.isSimulating() == false) {
+                g.DrawEllipse(new Pen(color), 0, 0, Size.Width - 1, Size.Height - 1);
+                g.FillEllipse(
+                    new SolidBrush(color),
+                    INNER_CIRCLE_GAP_THICKNESS, // x at left-up corner
+                    INNER_CIRCLE_GAP_THICKNESS, // y at left-up corner
+                    Size.Width - 1 - (INNER_CIRCLE_GAP_THICKNESS * 2),
+                    Size.Height - 1 - (INNER_CIRCLE_GAP_THICKNESS * 2)
+                );
+            }
         }
     }
 }

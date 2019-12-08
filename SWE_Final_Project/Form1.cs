@@ -49,6 +49,10 @@ namespace SWE_Final_Project {
             return null;
         }
 
+        // get a certain instance state-view
+        public StateView getCertainInstanceStateViewById(string id)
+            => ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.getStateViewById(id);
+
         // add a new script
         private void addNewScript() {
             if (SimulationManager.checkSimulating())
@@ -63,8 +67,18 @@ namespace SWE_Final_Project {
 
         // add new tab-page of a script
         private void addNewTabPage(ScriptModel scriptModel, bool shouldMarkAsUnsaved) {
+            if (scriptModel == null)
+                return;
+
+            // get state-model list
+            List<StateModel> stateModels = scriptModel.getCopiedStateList();
+            if (stateModels == null) {
+                new AlertForm("Alert", "Something is wrong, I can feel it.").ShowDialog();
+                return;
+            }
+
             // create a new tab-page
-            ScriptTabPage tabPage = new ScriptTabPage(scriptModel.Name, scriptModel.getCopiedStateList());
+            ScriptTabPage tabPage = new ScriptTabPage(scriptModel.Name, stateModels);
             scriptsTabControl.TabPages.Add(tabPage);
 
             // select the new script

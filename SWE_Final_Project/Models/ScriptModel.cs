@@ -60,11 +60,15 @@ namespace SWE_Final_Project.Models {
 
         // get (deep-) copied existed state list
         public List<StateModel> getCopiedStateList() {
-            using (var ms = new MemoryStream()) {
-                var formatter = new BinaryFormatter();
-                formatter.Serialize(ms, mExistedStateList);
-                ms.Position = 0;
-                return (List<StateModel>) formatter.Deserialize(ms);
+            try {
+                using (var ms = new MemoryStream()) {
+                    var formatter = new BinaryFormatter();
+                    formatter.Serialize(ms, mExistedStateList);
+                    ms.Position = 0;
+                    return (List<StateModel>) formatter.Deserialize(ms);
+                }
+            } catch (Exception) {
+                return null;
             }
         }
 

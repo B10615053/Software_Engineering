@@ -53,8 +53,10 @@ namespace SWE_Final_Project.Views.States {
             else
                 color = Color.Black;
 
-            // draw the kuang-kuang
-            g.DrawEllipse(new Pen(color), 0, 0, Size.Width - 1, Size.Height - 1);
+            if (SimulationManager.isSimulating() == false) {
+                // draw the kuang-kuang
+                g.DrawEllipse(new Pen(color), 0, 0, Size.Width - 1, Size.Height - 1);
+            }
 
             // draw the string of state content
             using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {

@@ -128,6 +128,9 @@ namespace SWE_Final_Project.Views {
             Invalidate();
         }
 
+        // get a certain state-view by id
+        public StateView getStateViewById(string id) => mExistedStateViewList.Find(it => it.Id == id);
+
         /* methods */
         /* ==================================================================== */
         /*  events */
@@ -258,8 +261,17 @@ namespace SWE_Final_Project.Views {
 
             if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
                 foreach (StateView stateView in mExistedStateViewList) {
-                    g.DrawPath(Pens.Black, stateView.OutlineGphPath);
-                    g.FillPath(Brushes.Black, stateView.InnerGphPath);
+                    // is simulating now
+                    if (SimulationManager.isSimulating()) {
+                        Color simulatingStateColor = SimulationManager.getSimulatingStateColor(stateView.CurrentSimulatingStatus);
+                        g.DrawPath(new Pen(simulatingStateColor), stateView.OutlineGphPath);
+                        g.FillPath(new SolidBrush(simulatingStateColor), stateView.InnerGphPath);
+                    }
+                    // is NOT simulating now
+                    else {
+                        g.DrawPath(Pens.Black, stateView.OutlineGphPath);
+                        g.FillPath(Brushes.Black, stateView.InnerGphPath);
+                    }
                 }
             }
 
@@ -270,9 +282,10 @@ namespace SWE_Final_Project.Views {
 
             // render the already-settled links
             mExistedOutgoingLinks.ForEach(it => {
+                // draw the lines of the link
                 g.DrawPath(Pens.Black, it.LinesGphPath);
 
-                // draw the string of link text
+                // draw the string of the link text
                 using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
                     var pair = it.Model.getLeftUpCornerPositionOnScriptAndGroundSize();
                     Rectangle rect = new Rectangle(

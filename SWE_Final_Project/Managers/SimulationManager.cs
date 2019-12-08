@@ -1,7 +1,9 @@
 ﻿using SWE_Final_Project.Models;
+using SWE_Final_Project.Views.States;
 using SWE_Final_Project.Views.SubForms;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,10 +32,29 @@ namespace SWE_Final_Project.Managers {
         END_NOT_REACHABLE
     }
 
+    // the statuses of states during a simulation
+    public enum SimulatingStateStatus {
+        // current state
+        CURRENT,
+        // already visited
+        VISITED,
+        // visit-able (reachable) from the current state
+        VISITABLE,
+        // unvisit-able (unreachable) from the current state
+        UNVISITABLE
+    }
+
     public class SimulationManager {
         // the current simulation-type
         private static SimulationType mCurrentSimulationType = SimulationType.NOT_SIMULATING;
         public static SimulationType CurrentSimulationType { get => mCurrentSimulationType; /*set => mCurrentSimulationType = value;*/ }
+
+        // the state-model list in the current working-on machine (script)
+        private static List<StateModel> mAllStateModelList = null;
+
+        // the current state-views' statuses
+        private static Dictionary<SimulatingStateStatus, List<StateModel>>
+            mCurrentStateViewsStatuses = null;
 
         // the different types of simulate-ability errors and their corresponding error messages
         private static Dictionary<SimulateabilityError, string> mSimulateabilityErrMsgs
@@ -43,6 +64,15 @@ namespace SWE_Final_Project.Managers {
                 { SimulateabilityError.NO_END, "There\'s NO any END state on the script." },
                 { SimulateabilityError.NO_START, "Please create a START state." },
                 { SimulateabilityError.NO_START_AND_END, "Please create a START state and at least 1 END state." }
+            };
+
+        // the colors of state-views when doing simulation
+        private static Dictionary<SimulatingStateStatus, Color> mSimulatingStateColors
+            = new Dictionary<SimulatingStateStatus, Color> {
+                { SimulatingStateStatus.CURRENT, Color.Orange },
+                { SimulatingStateStatus.VISITED, Color.DarkOrange },
+                { SimulatingStateStatus.VISITABLE, Color.Black },
+                { SimulatingStateStatus.UNVISITABLE, Color.LightGray }
             };
 
         /* ===================================== */
@@ -57,12 +87,31 @@ namespace SWE_Final_Project.Managers {
                 // remove the info-panel if exists
                 ModelManager.removeInfoPanel();
 
+                // classify all states' statuses
+                StateModel startStateModel = mAllStateModelList.Find(it => it.StateType == StateType.START);
+                classifyAllStatesStatusesWhenOnNextStep(startStateModel);
 
+                foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
+                    stateStatusPair.Value.ForEach(stateModel => {
+                        StateView stateView = Program.form.getCertainInstanceStateViewById(stateModel.Id);
+                        stateView.CurrentSimulatingStatus = stateStatusPair.Key;
+                    });
+                }
             }
 
-            // if there're some unsaved changes, help users save them
-            if (ModelManager.getScriptModelByIndex().HaveUnsavedChanges)
-                Program.form.saveCertainScript();
+            // save the script and get the state-model list
+            try {
+                // if there're some unsaved changes, help users save them
+                if (ModelManager.getScriptModelByIndex().HaveUnsavedChanges)
+                    Program.form.saveCertainScript();
+
+                // get the state-model list
+                mAllStateModelList = ModelManager.getScriptModelByIndex().getCopiedStateList();
+                if (mAllStateModelList == null) throw new Exception();
+            } catch (Exception) {
+                new AlertForm("Alert", "Something is wrong, I can feel it.").ShowDialog();
+                return;
+            }
 
             // check if the script is simulate-able
             SimulateabilityError err = checkScriptIsSimulateableOrNot();
@@ -112,8 +161,7 @@ namespace SWE_Final_Project.Managers {
                 return SimulateabilityError.NO_START;
 
             // second, check if it can reach any END from START
-            List<StateModel> stateModelList = scriptModel.getCopiedStateList();
-            if (isEndReachableFromStart(stateModelList) == false)
+            if (isEndReachableFromStart(mAllStateModelList) == false)
                 return SimulateabilityError.END_NOT_REACHABLE;
 
             // it's simulate-able
@@ -122,6 +170,9 @@ namespace SWE_Final_Project.Managers {
 
         // check if any END state is reachable from START state at a certain (current working) script
         private static bool isEndReachableFromStart(List<StateModel> stateModels) {
+            if (stateModels == null)
+                return false;
+
             // get the START state
             StateModel startStateModel = stateModels.Find(it => it.StateType == StateType.START);
 
@@ -176,6 +227,82 @@ namespace SWE_Final_Project.Managers {
                 return true;
             }
             return false;
+        }
+
+        // get the color of state-view when doing simulation
+        public static Color getSimulatingStateColor(SimulatingStateStatus simulatingStateStatus)
+            => mSimulatingStateColors[simulatingStateStatus];
+
+        // step on the next state during the simulation,
+        // classify all states into CURRENT, VISITED, VISITABLE, and UNVISITABLE
+        private static void classifyAllStatesStatusesWhenOnNextStep(StateModel currentSrc) {
+            // the first step during the simulation (START state)
+            if (mCurrentStateViewsStatuses == null) {
+                mCurrentStateViewsStatuses = new Dictionary<SimulatingStateStatus, List<StateModel>>();
+
+                mCurrentStateViewsStatuses.Add(SimulatingStateStatus.CURRENT, new List<StateModel>());
+                mCurrentStateViewsStatuses.Add(SimulatingStateStatus.VISITED, new List<StateModel>());
+                mCurrentStateViewsStatuses.Add(SimulatingStateStatus.VISITABLE, new List<StateModel>());
+                mCurrentStateViewsStatuses.Add(SimulatingStateStatus.UNVISITABLE, new List<StateModel>());
+
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Add(currentSrc);
+            }
+            // the subsequent simulation after being at the START state
+            else {
+                mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Add(
+                    mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First()
+                );
+
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Clear();
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Add(currentSrc);
+
+                mCurrentStateViewsStatuses[SimulatingStateStatus.VISITABLE].Clear();
+                mCurrentStateViewsStatuses[SimulatingStateStatus.UNVISITABLE].Clear();
+            }
+
+            // be used to do BFS to search END state from START state
+            Queue<StateModel> q = new Queue<StateModel>();
+            q.Enqueue(currentSrc);
+
+            // be used to store the visited state-models
+            HashSet<StateModel> s = new HashSet<StateModel>();
+            s.Add(currentSrc);
+
+            // be used to store the visited link-models
+            HashSet<LinkModel> visitedLinks = new HashSet<LinkModel>();
+
+            // do BFS
+            while (q.Count > 0) {
+                // get the front one
+                StateModel front = q.Dequeue();
+
+                // iterate all of its outgoing links
+                foreach (LinkModel link in front.getAllOutgoingLinks()) {
+                    // get one destination state-model
+                    StateModel dst = link.DstStateModel;
+
+                    // add this link into visisted-links set
+                    visitedLinks.Add(link);
+
+                    // no visited in this BFS algorithm
+                    if (s.Contains(dst) == false) {
+                        s.Add(dst);
+                        q.Enqueue(dst);
+
+                        // if the dst is not in CURRENT neither in VISITED,
+                        // then it shall be in VISITABLE
+                        if (!mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Contains(dst) &&
+                                !mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Contains(dst))
+                            mCurrentStateViewsStatuses[SimulatingStateStatus.VISITABLE].Add(dst);
+                    }
+                }
+            }
+
+            // A state is unvisit-able if and only if it is NOT in the 's' set after the BFS algorithm
+            mAllStateModelList.ForEach(it => {
+                if (s.Contains(it) == false)
+                    mCurrentStateViewsStatuses[SimulatingStateStatus.UNVISITABLE].Add(it);
+            });
         }
     }
 }

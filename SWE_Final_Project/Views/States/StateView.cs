@@ -48,6 +48,16 @@ namespace SWE_Final_Project.Views.States {
         private int mMouseDownCanvasLocX = 0;
         private int mMouseDownCanvasLocY = 0;
 
+        // be used only during the simulation, the current simulating status
+        private SimulatingStateStatus mCurrentSimulatingStatus = SimulatingStateStatus.VISITABLE;
+        public SimulatingStateStatus CurrentSimulatingStatus {
+            get => mCurrentSimulatingStatus;
+            set {
+                mCurrentSimulatingStatus = value;
+                Program.form.invalidateCanvasAtCurrentScript();
+            }
+        }
+
         /* ================================================= */
 
         // for calculating the state size, H and V stand for horizontal and vertical respectively

@@ -58,7 +58,8 @@ namespace SWE_Final_Project.Views.States {
                 color = Color.Black;
 
             // render the start-state-view
-            g.FillEllipse(new SolidBrush(color), 0, 0, Size.Width - 1, Size.Height - 1);
+            if (SimulationManager.isSimulating() == false)
+                g.FillEllipse(new SolidBrush(color), 0, 0, Size.Width - 1, Size.Height - 1);
 
             // if already has a START state, render the forbidden sign on the shell
             if (alreadyHasStartState && !mIsInstanceOnScript) {
