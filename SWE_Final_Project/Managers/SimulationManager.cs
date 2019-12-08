@@ -51,17 +51,26 @@ namespace SWE_Final_Project.Managers {
         public static void startSimulation(SimulationType simulationType) {
             // local function: really start the simulation
             void reallyStartSimulation() {
+                // set the simulation type
                 mCurrentSimulationType = simulationType;
+
+                // remove the info-panel if exists
                 ModelManager.removeInfoPanel();
+
+
             }
+
+            // if there're some unsaved changes, help users save them
+            if (ModelManager.getScriptModelByIndex().HaveUnsavedChanges)
+                Program.form.saveCertainScript();
 
             // check if the script is simulate-able
             SimulateabilityError err = checkScriptIsSimulateableOrNot();
 
-            // yes, it is
+            // yes, it is simulate-able
             if (err == SimulateabilityError.SIMULATEABLE)
                 reallyStartSimulation();
-            // no, it isn't
+            // no, it is not simulate-able
             else {
                 // err = no END or the END state is not reachable
                 if (err == SimulateabilityError.END_NOT_REACHABLE ||
@@ -158,7 +167,12 @@ namespace SWE_Final_Project.Managers {
         // check if is simulating currently, if it's, show alert-dialog and return true
         public static bool checkSimulating() {
             if (isSimulating()) {
-                new AlertForm("Simulating...", "This action is NOT allowed when doing the simulation.").ShowDialog();
+                new AlertForm(
+                    "Simulating...",
+                    "This action is NOT allowed when the simulation is running.\r\n\r\n" +
+                        "Please cancel the simulation before doing this action."
+                ).ShowDialog();
+
                 return true;
             }
             return false;

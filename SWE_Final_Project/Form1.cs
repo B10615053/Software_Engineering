@@ -79,7 +79,10 @@ namespace SWE_Final_Project {
         }
 
         // save the script at the current tab
-        public bool saveCertainScript(int scriptTabIdx) {
+        public bool saveCertainScript(int scriptTabIdx = -1) {
+            if (scriptTabIdx == -1)
+                scriptTabIdx = scriptsTabControl.SelectedIndex;
+
             if (scriptTabIdx < 0 || SimulationManager.checkSimulating())
                 return false;
 

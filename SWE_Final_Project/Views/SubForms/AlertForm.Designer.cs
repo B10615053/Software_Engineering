@@ -44,7 +44,7 @@
             this.txtShowAlertMessage.Name = "txtShowAlertMessage";
             this.txtShowAlertMessage.ReadOnly = true;
             this.txtShowAlertMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtShowAlertMessage.Size = new System.Drawing.Size(512, 109);
+            this.txtShowAlertMessage.Size = new System.Drawing.Size(512, 143);
             this.txtShowAlertMessage.TabIndex = 1;
             // 
             // tableLayoutPanel_baseAtAlertForm
@@ -63,13 +63,13 @@
             this.tableLayoutPanel_baseAtAlertForm.RowCount = 2;
             this.tableLayoutPanel_baseAtAlertForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel_baseAtAlertForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel_baseAtAlertForm.Size = new System.Drawing.Size(538, 205);
+            this.tableLayoutPanel_baseAtAlertForm.Size = new System.Drawing.Size(538, 239);
             this.tableLayoutPanel_baseAtAlertForm.TabIndex = 1;
             // 
             // btnNoAtAlertForm
             // 
             this.btnNoAtAlertForm.Font = new System.Drawing.Font("Consolas", 12F);
-            this.btnNoAtAlertForm.Location = new System.Drawing.Point(192, 148);
+            this.btnNoAtAlertForm.Location = new System.Drawing.Point(192, 182);
             this.btnNoAtAlertForm.Margin = new System.Windows.Forms.Padding(13);
             this.btnNoAtAlertForm.Name = "btnNoAtAlertForm";
             this.btnNoAtAlertForm.Size = new System.Drawing.Size(148, 44);
@@ -81,7 +81,7 @@
             // btnCancelAtAlertForm
             // 
             this.btnCancelAtAlertForm.Font = new System.Drawing.Font("Consolas", 12F);
-            this.btnCancelAtAlertForm.Location = new System.Drawing.Point(13, 148);
+            this.btnCancelAtAlertForm.Location = new System.Drawing.Point(13, 182);
             this.btnCancelAtAlertForm.Margin = new System.Windows.Forms.Padding(13);
             this.btnCancelAtAlertForm.Name = "btnCancelAtAlertForm";
             this.btnCancelAtAlertForm.Size = new System.Drawing.Size(148, 44);
@@ -93,7 +93,7 @@
             // btnYesAtAlertForm
             // 
             this.btnYesAtAlertForm.Font = new System.Drawing.Font("Consolas", 12F);
-            this.btnYesAtAlertForm.Location = new System.Drawing.Point(371, 148);
+            this.btnYesAtAlertForm.Location = new System.Drawing.Point(371, 182);
             this.btnYesAtAlertForm.Margin = new System.Windows.Forms.Padding(13);
             this.btnYesAtAlertForm.Name = "btnYesAtAlertForm";
             this.btnYesAtAlertForm.Size = new System.Drawing.Size(148, 44);
@@ -106,7 +106,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(538, 205);
+            this.ClientSize = new System.Drawing.Size(538, 239);
             this.Controls.Add(this.tableLayoutPanel_baseAtAlertForm);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
