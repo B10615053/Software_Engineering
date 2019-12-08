@@ -51,6 +51,9 @@ namespace SWE_Final_Project {
 
         // add a new script
         private void addNewScript() {
+            if (SimulationManager.checkSimulating())
+                return;
+
             // add new script to model-manager
             ScriptModel adjustedScriptModel = ModelManager.addNewScript("Untitled");
 
@@ -77,7 +80,7 @@ namespace SWE_Final_Project {
 
         // save the script at the current tab
         public bool saveCertainScript(int scriptTabIdx) {
-            if (scriptTabIdx < 0)
+            if (scriptTabIdx < 0 || SimulationManager.checkSimulating())
                 return false;
 
             // get the current tab text w/o asterisk
@@ -169,6 +172,9 @@ namespace SWE_Final_Project {
 
         // show dialog and open the script
         private bool showDialogAndOpenScriptFromDisk() {
+            if (SimulationManager.checkSimulating())
+                return false;
+
             // create a open-file-dialog
             OpenFileDialog openScriptDialog = new OpenFileDialog();
 
@@ -223,11 +229,15 @@ namespace SWE_Final_Project {
             scriptCanvas.setDataByLinkModel(linkModel, isOutgoingLink);
         }
 
-        public void deleteStateView(StateModel stateModel) {
+        public bool deleteStateView(StateModel stateModel) {
+            if (SimulationManager.checkSimulating())
+                return false;
+
             ScriptTabPage tabPage = (ScriptTabPage) scriptsTabControl.SelectedTab;
             ScriptCanvas scriptCanvas = tabPage.TheScriptCanvas;
 
             scriptCanvas.deleteStateView(stateModel);
+            return true;
         }
 
         public void invalidateCanvasAtCurrentScript() {
@@ -298,9 +308,11 @@ namespace SWE_Final_Project {
 
         // mouse-up event on the tab-control
         private void ScriptsTabControl_MouseUp(object sender, MouseEventArgs e) {
+            if (SimulationManager.checkSimulating())
+                return;
+
             // check if the right mouse button was pressed
             if (e.Button == MouseButtons.Right) {
-
                 // iterate through all the tab pages
                 for (int i = 0; i < scriptsTabControl.TabCount; i++) {
                     // get their rectangle area and check if it contains the mouse cursor
@@ -319,6 +331,16 @@ namespace SWE_Final_Project {
                     }
                 }
             }
+        }
+
+        // simulation start: step-by-step
+        private void StepByStepToolStripMenuItem_Click(object sender, EventArgs e) {
+            SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
+        }
+
+        // simulation start: run through
+        private void RunThroughToolStripMenuItem_Click(object sender, EventArgs e) {
+            SimulationManager.startSimulation(SimulationType.RUN_THROUGH);
         }
     }
 }

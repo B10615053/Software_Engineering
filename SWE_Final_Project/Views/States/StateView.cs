@@ -201,8 +201,15 @@ namespace SWE_Final_Project.Views.States {
 
         // delete myself from the canvas and the model
         public void deleteThisState() {
-            Program.form.deleteStateView(ModelManager.getStateModelByIdAtCurrentScript(Id));
+            // remove the view
+            if (Program.form.deleteStateView(ModelManager.getStateModelByIdAtCurrentScript(Id)) == false)
+                return;
+
+            // remove the model
             ModelManager.removeStateModelByIDAtCurrentScript(Id);
+
+            // invalidate the start-state-view on the shell if needs
+            Program.form.getCertainStateViewOnTheShell(0).Invalidate();
         }
 
         // draw on the designated graphics-path
@@ -226,6 +233,7 @@ namespace SWE_Final_Project.Views.States {
             }
         }
 
+        // keyboard key-down events
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
@@ -240,6 +248,9 @@ namespace SWE_Final_Project.Views.States {
 
         // mouse entered, set is-mouse-moving-on to true, and re-draw
         protected override void OnMouseEnter(EventArgs e) {
+            if (SimulationManager.isSimulating())
+                return;
+
             mIsMouseMovingOn = true;
 
             // set the current holding-type of state-views
@@ -339,6 +350,9 @@ namespace SWE_Final_Project.Views.States {
 
             // left click
             if (e.Button == MouseButtons.Left) {
+                if (SimulationManager.isSimulating())
+                    return;
+
                 // dragging new state-view
                 if (mIsInstanceOnScript == false) {
                     if (this is StartStateView && ModelManager.getScriptModelByIndex(ModelManager.CurrentSelectedScriptIndex).hasStartStateOnScript());

@@ -46,11 +46,16 @@ namespace SWE_Final_Project.Views {
             ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 
-            // initialize the components
+            // initialize the components (controls or views)
             if (view is StateView)
                 initializeComponents(view as StateView);
             else if (view is LinkView)
                 initializeComponents(view as LinkView);
+
+            // disable all the controls (views) if it's doing simulation currently
+            if (SimulationManager.isSimulating())
+                foreach (Control control in Controls)
+                    control.Enabled = false;
         }
 
         // init w/ a state-view
