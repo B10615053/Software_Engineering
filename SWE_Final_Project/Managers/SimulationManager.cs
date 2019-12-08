@@ -69,8 +69,8 @@ namespace SWE_Final_Project.Managers {
         // the colors of state-views when doing simulation
         private static Dictionary<SimulatingStateStatus, Color> mSimulatingStateColors
             = new Dictionary<SimulatingStateStatus, Color> {
-                { SimulatingStateStatus.CURRENT, Color.Orange },
-                { SimulatingStateStatus.VISITED, Color.DarkOrange },
+                { SimulatingStateStatus.CURRENT, Color.Red },
+                { SimulatingStateStatus.VISITED, Color.Orange },
                 { SimulatingStateStatus.VISITABLE, Color.Black },
                 { SimulatingStateStatus.UNVISITABLE, Color.LightGray }
             };
@@ -87,16 +87,9 @@ namespace SWE_Final_Project.Managers {
                 // remove the info-panel if exists
                 ModelManager.removeInfoPanel();
 
-                // classify all states' statuses
+                // start the simulation by classifying and re-rendering all the states
                 StateModel startStateModel = mAllStateModelList.Find(it => it.StateType == StateType.START);
-                classifyAllStatesStatusesWhenOnNextStep(startStateModel);
-
-                foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
-                    stateStatusPair.Value.ForEach(stateModel => {
-                        StateView stateView = Program.form.getCertainInstanceStateViewById(stateModel.Id);
-                        stateView.CurrentSimulatingStatus = stateStatusPair.Key;
-                    });
-                }
+                stepOnNextState(startStateModel);
             }
 
             // save the script and get the state-model list
@@ -229,9 +222,37 @@ namespace SWE_Final_Project.Managers {
             return false;
         }
 
+        // get the state-model that is currently staying during the simulation
+        public static StateModel getCurrentStayingStateModel() {
+            if (mCurrentStateViewsStatuses is null ||
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT] is null ||
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Count == 0)
+                return null;
+            return mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First();
+        }
+
         // get the color of state-view when doing simulation
         public static Color getSimulatingStateColor(SimulatingStateStatus simulatingStateStatus)
             => mSimulatingStateColors[simulatingStateStatus];
+
+        // step on the next state during the simulation
+        public static void stepOnNextState(StateModel nextStateModel) {
+            // classify all states' statuses
+            classifyAllStatesStatusesWhenOnNextStep(nextStateModel);
+
+            // re-render the views
+            foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
+                stateStatusPair.Value.ForEach(stateModel => {
+                    StateView stateView = Program.form.getCertainInstanceStateViewById(stateModel.Id);
+                    stateView.CurrentSimulatingStatus = stateStatusPair.Key;
+                });
+            }
+            // re-render the START view
+            StateModel startStateModel = mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First();
+            StateView startStateView = Program.form.getCertainInstanceStateViewById(startStateModel.Id);
+            startStateView.CurrentSimulatingStatus = SimulatingStateStatus.CURRENT;
+
+        }
 
         // step on the next state during the simulation,
         // classify all states into CURRENT, VISITED, VISITABLE, and UNVISITABLE
@@ -291,8 +312,10 @@ namespace SWE_Final_Project.Managers {
 
                         // if the dst is not in CURRENT neither in VISITED,
                         // then it shall be in VISITABLE
-                        if (!mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Contains(dst) &&
-                                !mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Contains(dst))
+                        if (!mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT]
+                                .Exists(sm => sm.Id == dst.Id) &&
+                            !mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED]
+                                .Exists(sm => sm.Id == dst.Id))
                             mCurrentStateViewsStatuses[SimulatingStateStatus.VISITABLE].Add(dst);
                     }
                 }
@@ -300,7 +323,7 @@ namespace SWE_Final_Project.Managers {
 
             // A state is unvisit-able if and only if it is NOT in the 's' set after the BFS algorithm
             mAllStateModelList.ForEach(it => {
-                if (s.Contains(it) == false)
+                if (s.Contains(it) == false && !mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Contains(it))
                     mCurrentStateViewsStatuses[SimulatingStateStatus.UNVISITABLE].Add(it);
             });
         }

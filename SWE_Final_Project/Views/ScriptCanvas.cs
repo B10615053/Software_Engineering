@@ -248,11 +248,26 @@ namespace SWE_Final_Project.Views {
             // left-click
             if (e.Button == MouseButtons.Left) {
                 // on a certain link-view
-                if (!(MouseManager.coveringLinkView is null))
-                    ModelManager.showInfoPanel(MouseManager.coveringLinkView);
+                if (!(MouseManager.coveringLinkView is null)) {
+                    // simulating
+                    if (SimulationManager.isSimulating()) {
+                        StateModel currentStaying = SimulationManager.getCurrentStayingStateModel();
+
+                        bool isActivatableLink =
+                            !(currentStaying is null) &&
+                            !(currentStaying.getAllOutgoingLinks() is null) &&
+                            currentStaying.getAllOutgoingLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
+
+                        if (isActivatableLink)
+                            SimulationManager.stepOnNextState(MouseManager.coveringLinkView.Model.DstStateModel);
+                    }
+                    // not simulating, show info-panel of this link
+                    else
+                        ModelManager.showInfoPanel(MouseManager.coveringLinkView);
+                }
             }
 
-            // cancel the link adding
+            // cancel the link addition
             else if (e.Button == MouseButtons.Right) {
                 MouseManager.AddingLinkView = null;
                 Invalidate();
@@ -264,14 +279,17 @@ namespace SWE_Final_Project.Views {
             Graphics g = e.Graphics;
 
             // be used for the special rendering when a certain link is covered during a simulation
+            StateModel currentStaying = SimulationManager.getCurrentStayingStateModel();
             string dstStateViewId = "";
 
             // render the already-settled links
             mExistedOutgoingLinks.ForEach(it => {
                 bool isSimulatingAndTheMouseIsCoveringThisLink =
                     SimulationManager.isSimulating() &&
-                    //!(MouseManager.coveringLinkView is null) &&
-                    it == MouseManager.coveringLinkView;
+                    it == MouseManager.coveringLinkView &&
+                    !(currentStaying is null) &&
+                    !(currentStaying.getAllOutgoingLinks() is null) &&
+                    currentStaying.getAllOutgoingLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
 
                 // draw the lines of the link
                 if (isSimulatingAndTheMouseIsCoveringThisLink) {
