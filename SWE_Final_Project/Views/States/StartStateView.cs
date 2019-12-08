@@ -48,7 +48,7 @@ namespace SWE_Final_Project.Views.States {
             // check if the current working-on script already has a START state or not
             bool alreadyHasStartState = ModelManager.CurrentSelectedScriptIndex >= 0 &&
                                             ModelManager
-                                                .getScriptModelByIndex(ModelManager.CurrentSelectedScriptIndex)
+                                                .getScriptModelByIndex()
                                                 .hasStartStateOnScript();
 
             // select the color of this start-state-view

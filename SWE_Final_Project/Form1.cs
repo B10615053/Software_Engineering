@@ -88,7 +88,7 @@ namespace SWE_Final_Project {
             currentTabTextWithoutAsterisk = currentTabTextWithoutAsterisk.TrimEnd('*');
 
             // get the script-model
-            ScriptModel scriptModel = ModelManager.getScriptModelByIndex(scriptsTabControl.SelectedIndex);
+            ScriptModel scriptModel = ModelManager.getScriptModelByIndex();
 
             // if it's the twice or more times to save the file,
             // no need to prompt a save-dialog

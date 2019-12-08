@@ -355,7 +355,7 @@ namespace SWE_Final_Project.Views.States {
 
                 // dragging new state-view
                 if (mIsInstanceOnScript == false) {
-                    if (this is StartStateView && ModelManager.getScriptModelByIndex(ModelManager.CurrentSelectedScriptIndex).hasStartStateOnScript());
+                    if (this is StartStateView && ModelManager.getScriptModelByIndex().hasStartStateOnScript());
                     else {
                         Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
                         DrawToBitmap(pic, Bounds);

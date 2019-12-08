@@ -196,6 +196,19 @@ namespace SWE_Final_Project.Models {
             }
         }
 
+        // for simulation, get all outgoing links from this state
+        public List<LinkModel> getAllOutgoingLinks() {
+            List<LinkModel> ret = new List<LinkModel>();
+
+            ret.AddRange(mUpPortModel.getLinks(true));
+            ret.AddRange(mRightPortModel.getLinks(true));
+            ret.AddRange(mDownPortModel.getLinks(true));
+            ret.AddRange(mLeftPortModel.getLinks(true));
+
+            return ret;
+        }
+
+        // change the port of a certain link, e.g., from LEFT changes to DOWN
         public void changePortOfCertainLink(LinkModel linkModel, PortType fromPortType, PortType toPortType, bool isOutgoing) {
             if (fromPortType == toPortType)
                 return;
