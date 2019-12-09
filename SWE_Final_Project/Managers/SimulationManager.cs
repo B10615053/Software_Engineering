@@ -1,4 +1,5 @@
 ﻿using SWE_Final_Project.Models;
+using SWE_Final_Project.Views;
 using SWE_Final_Project.Views.States;
 using SWE_Final_Project.Views.SubForms;
 using System;
@@ -44,6 +45,18 @@ namespace SWE_Final_Project.Managers {
         UNVISITABLE
     }
 
+    // the statuses of links during a simulation
+    public enum SimulatingLinkStatus {
+        // already visited
+        VISITED,
+        // the 1-step reachable outgoing links
+        AVAILABLE,
+        // not visited 2- or more-step reachable outgoing links from the current state
+        VISITABLE,
+        // unreachable from the current state
+        UNVISITABLE
+    }
+
     public class SimulationManager {
         // the current simulation-type
         private static SimulationType mCurrentSimulationType = SimulationType.NOT_SIMULATING;
@@ -52,9 +65,34 @@ namespace SWE_Final_Project.Managers {
         // the state-model list in the current working-on machine (script)
         private static List<StateModel> mAllStateModelList = null;
 
-        // the current state-views' statuses
+        // the link-model list in the current working-on machine (script)
+        private static List<LinkModel> mAllLinkModelList = null;
+
+        // the state-views' statuses at the current moment
         private static Dictionary<SimulatingStateStatus, List<StateModel>>
             mCurrentStateViewsStatuses = null;
+
+        // the colors of state-views when doing simulation
+        private static Dictionary<SimulatingStateStatus, Color> mSimulatingStateColors
+            = new Dictionary<SimulatingStateStatus, Color> {
+                { SimulatingStateStatus.CURRENT, Color.Red },
+                { SimulatingStateStatus.VISITED, Color.Orange },
+                { SimulatingStateStatus.VISITABLE, Color.Black },
+                { SimulatingStateStatus.UNVISITABLE, Color.LightGray }
+            };
+
+        // the link-views' statuses at the current moment
+        private static Dictionary<SimulatingLinkStatus, List<LinkModel>>
+            mCurrentLinkViewStatuses = null;
+
+        // the colors of state-views when doing simulation
+        private static Dictionary<SimulatingLinkStatus, Color> mSimulatingLinkColors
+            = new Dictionary<SimulatingLinkStatus, Color> {
+                { SimulatingLinkStatus.VISITED, Color.Orange },
+                { SimulatingLinkStatus.AVAILABLE, Color.Red },
+                { SimulatingLinkStatus.VISITABLE, Color.Black },
+                { SimulatingLinkStatus.UNVISITABLE, Color.LightGray }
+            };
 
         // the different types of simulate-ability errors and their corresponding error messages
         private static Dictionary<SimulateabilityError, string> mSimulateabilityErrMsgs
@@ -64,15 +102,6 @@ namespace SWE_Final_Project.Managers {
                 { SimulateabilityError.NO_END, "There\'s NO any END state on the script." },
                 { SimulateabilityError.NO_START, "Please create a START state." },
                 { SimulateabilityError.NO_START_AND_END, "Please create a START state and at least 1 END state." }
-            };
-
-        // the colors of state-views when doing simulation
-        private static Dictionary<SimulatingStateStatus, Color> mSimulatingStateColors
-            = new Dictionary<SimulatingStateStatus, Color> {
-                { SimulatingStateStatus.CURRENT, Color.Red },
-                { SimulatingStateStatus.VISITED, Color.Orange },
-                { SimulatingStateStatus.VISITABLE, Color.Black },
-                { SimulatingStateStatus.UNVISITABLE, Color.LightGray }
             };
 
         /* ===================================== */
@@ -89,7 +118,7 @@ namespace SWE_Final_Project.Managers {
 
                 // start the simulation by classifying and re-rendering all the states
                 StateModel startStateModel = mAllStateModelList.Find(it => it.StateType == StateType.START);
-                stepOnNextState(startStateModel);
+                stepOnNextState(null, startStateModel);
             }
 
             // save the script and get the state-model list
@@ -100,6 +129,13 @@ namespace SWE_Final_Project.Managers {
 
                 // get the state-model list
                 mAllStateModelList = ModelManager.getScriptModelByIndex().getCopiedStateList();
+
+                // get the link-model list
+                mAllLinkModelList = new List<LinkModel>();
+                mAllStateModelList.ForEach(stateModel => {
+                    mAllLinkModelList.AddRange(stateModel.getAllOutgoingLinks());
+                });
+
                 if (mAllStateModelList == null) throw new Exception();
             } catch (Exception) {
                 new AlertForm("Alert", "Something is wrong, I can feel it.").ShowDialog();
@@ -231,32 +267,44 @@ namespace SWE_Final_Project.Managers {
             return mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First();
         }
 
-        // get the color of state-view when doing simulation
+        // get the color of state-views when doing simulation
         public static Color getSimulatingStateColor(SimulatingStateStatus simulatingStateStatus)
             => mSimulatingStateColors[simulatingStateStatus];
 
-        // step on the next state during the simulation
-        public static void stepOnNextState(StateModel nextStateModel) {
-            // classify all states' statuses
-            classifyAllStatesStatusesWhenOnNextStep(nextStateModel);
+        // get the color of link-views when doing simulation
+        public static Color getSimulatingLinkColor(SimulatingLinkStatus simulatingLinkStatus)
+            => mSimulatingLinkColors[simulatingLinkStatus];
 
-            // re-render the views
+        // step on the next state during the simulation
+        public static void stepOnNextState(LinkModel walkedLinkModel, StateModel nextStateModel) {
+            // classify all states' statuses
+            classifyAllStatesStatusesWhenOnNextStep(walkedLinkModel, nextStateModel);
+
+            // re-color the views
             foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
                 stateStatusPair.Value.ForEach(stateModel => {
                     StateView stateView = Program.form.getCertainInstanceStateViewById(stateModel.Id);
                     stateView.CurrentSimulatingStatus = stateStatusPair.Key;
                 });
             }
-            // re-render the START view
+            // re-color the START view
             StateModel startStateModel = mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First();
             StateView startStateView = Program.form.getCertainInstanceStateViewById(startStateModel.Id);
             startStateView.CurrentSimulatingStatus = SimulatingStateStatus.CURRENT;
 
+            // re-color the links
+            foreach (var linkStatusPair in mCurrentLinkViewStatuses) {
+                linkStatusPair.Value.ForEach(linkModel => {
+                    LinkView linkView = Program.form.getCertainInstanceLinkViewById(linkModel.Id);
+                    linkView.CurrentSimulatingStatus = linkStatusPair.Key;
+                });
+            }
         }
 
         // step on the next state during the simulation,
         // classify all states into CURRENT, VISITED, VISITABLE, and UNVISITABLE
-        private static void classifyAllStatesStatusesWhenOnNextStep(StateModel currentSrc) {
+        private static void classifyAllStatesStatusesWhenOnNextStep(LinkModel walkedLinkModel, StateModel walkedOverStateModel) {
+            #region the initialization of every step at the first
             // the first step during the simulation (START state)
             if (mCurrentStateViewsStatuses == null) {
                 mCurrentStateViewsStatuses = new Dictionary<SimulatingStateStatus, List<StateModel>>();
@@ -266,7 +314,7 @@ namespace SWE_Final_Project.Managers {
                 mCurrentStateViewsStatuses.Add(SimulatingStateStatus.VISITABLE, new List<StateModel>());
                 mCurrentStateViewsStatuses.Add(SimulatingStateStatus.UNVISITABLE, new List<StateModel>());
 
-                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Add(currentSrc);
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Add(walkedOverStateModel);
             }
             // the subsequent simulation after being at the START state
             else {
@@ -275,19 +323,44 @@ namespace SWE_Final_Project.Managers {
                 );
 
                 mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Clear();
-                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Add(currentSrc);
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Add(walkedOverStateModel);
 
                 mCurrentStateViewsStatuses[SimulatingStateStatus.VISITABLE].Clear();
                 mCurrentStateViewsStatuses[SimulatingStateStatus.UNVISITABLE].Clear();
             }
 
+            // the first step during the simulation (START state)
+            if (mCurrentLinkViewStatuses == null) {
+                mCurrentLinkViewStatuses = new Dictionary<SimulatingLinkStatus, List<LinkModel>>();
+
+                mCurrentLinkViewStatuses.Add(SimulatingLinkStatus.VISITED, new List<LinkModel>());
+                mCurrentLinkViewStatuses.Add(SimulatingLinkStatus.AVAILABLE, new List<LinkModel>());
+                mCurrentLinkViewStatuses.Add(SimulatingLinkStatus.VISITABLE, new List<LinkModel>());
+                mCurrentLinkViewStatuses.Add(SimulatingLinkStatus.UNVISITABLE, new List<LinkModel>());
+            }
+            // the subsequent simulation after being at the START state
+            else {
+                if (!(walkedLinkModel is null))
+                    mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITED].Add(walkedLinkModel);
+
+                mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Clear();
+                mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITABLE].Clear();
+                mCurrentLinkViewStatuses[SimulatingLinkStatus.UNVISITABLE].Clear();
+            }
+
+            // simply add all of outgoing links of the current walked-over state-model
+            mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].AddRange(
+                walkedOverStateModel.getAllOutgoingLinks()
+            );
+            #endregion
+
             // be used to do BFS to search END state from START state
             Queue<StateModel> q = new Queue<StateModel>();
-            q.Enqueue(currentSrc);
+            q.Enqueue(walkedOverStateModel);
 
             // be used to store the visited state-models
             HashSet<StateModel> s = new HashSet<StateModel>();
-            s.Add(currentSrc);
+            s.Add(walkedOverStateModel);
 
             // be used to store the visited link-models
             HashSet<LinkModel> visitedLinks = new HashSet<LinkModel>();
@@ -321,10 +394,21 @@ namespace SWE_Final_Project.Managers {
                 }
             }
 
-            // A state is unvisit-able if and only if it is NOT in the 's' set after the BFS algorithm
+            // a state is unvisit-able if and only if
+            // it is NOT in the 's' set after the BFS algorithm neither in visited
             mAllStateModelList.ForEach(it => {
                 if (s.Contains(it) == false && !mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Contains(it))
                     mCurrentStateViewsStatuses[SimulatingStateStatus.UNVISITABLE].Add(it);
+            });
+
+            // decide the rest links are visit-able or un-visit-able
+            mAllLinkModelList.ForEach(it => {
+                if (visitedLinks.Contains(it)
+                        && !mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Contains(it)
+                        && !mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITED].Contains(it))
+                    mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITABLE].Add(it);
+                if (visitedLinks.Contains(it) == false && !mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITED].Contains(it))
+                    mCurrentLinkViewStatuses[SimulatingLinkStatus.UNVISITABLE].Add(it);
             });
         }
     }

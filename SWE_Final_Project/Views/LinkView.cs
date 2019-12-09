@@ -23,6 +23,16 @@ namespace SWE_Final_Project.Views {
         protected GraphicsPath mTextGphPath = new GraphicsPath();
         internal GraphicsPath TextGphPath { get => mTextGphPath; }
 
+        // be used only during the simulation, the current simulating status
+        private SimulatingLinkStatus mCurrentSimulatingStatus = SimulatingLinkStatus.VISITABLE;
+        public SimulatingLinkStatus CurrentSimulatingStatus {
+            get => mCurrentSimulatingStatus;
+            set {
+                mCurrentSimulatingStatus = value;
+                Program.form.invalidateCanvasAtCurrentScript();
+            }
+        }
+
         /* ============================== */
 
         // constructor

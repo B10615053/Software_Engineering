@@ -131,6 +131,9 @@ namespace SWE_Final_Project.Views {
         // get a certain state-view by id
         public StateView getStateViewById(string id) => mExistedStateViewList.Find(it => it.Id == id);
 
+        // get a certain link-view by id
+        public LinkView getLinkViewById(string id) => mExistedOutgoingLinks.Find(it => it.Model.Id == id);
+
         /* methods */
         /* ==================================================================== */
         /*  events */
@@ -259,7 +262,10 @@ namespace SWE_Final_Project.Views {
                             currentStaying.getAllOutgoingLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
 
                         if (isActivatableLink)
-                            SimulationManager.stepOnNextState(MouseManager.coveringLinkView.Model.DstStateModel);
+                            SimulationManager.stepOnNextState(
+                                MouseManager.coveringLinkView.Model,
+                                MouseManager.coveringLinkView.Model.DstStateModel
+                            );
                     }
                     // not simulating, show info-panel of this link
                     else
@@ -291,11 +297,18 @@ namespace SWE_Final_Project.Views {
                     !(currentStaying.getAllOutgoingLinks() is null) &&
                     currentStaying.getAllOutgoingLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
 
-                // draw the lines of the link
+                /* draw the lines of the link */
+                // is simulating and the mouse is covering a walkable link
                 if (isSimulatingAndTheMouseIsCoveringThisLink) {
                     g.DrawPath(new Pen(Color.Red, 2), it.LinesGphPath);
                     dstStateViewId = it.Model.DstStateModel.Id;
                 }
+                // is simulating
+                else if (SimulationManager.isSimulating()) {
+                    Color simulatingLinkColor = SimulationManager.getSimulatingLinkColor(it.CurrentSimulatingStatus);
+                    g.DrawPath(new Pen(simulatingLinkColor), it.LinesGphPath);
+                }
+                // is not simulating
                 else
                     g.DrawPath(Pens.Black, it.LinesGphPath);
 

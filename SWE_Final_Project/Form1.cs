@@ -53,6 +53,10 @@ namespace SWE_Final_Project {
         public StateView getCertainInstanceStateViewById(string id)
             => ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.getStateViewById(id);
 
+        // get a certain instance link-view
+        public LinkView getCertainInstanceLinkViewById(string id)
+            => ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.getLinkViewById(id);
+
         // add a new script
         private void addNewScript() {
             if (SimulationManager.checkSimulating())
