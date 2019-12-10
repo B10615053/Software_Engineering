@@ -52,6 +52,7 @@ namespace SWE_Final_Project.Models {
 
         private static readonly int ARROW_SIGN_OFFSET_PARALEL = 12;
         private static readonly int ARROW_SIGN_OFFSET_CHUIZHI = 6;
+        private static readonly int ARROW_SIGN_LENGTH = 12;
 
         /* ========================================= */
 
@@ -103,7 +104,11 @@ namespace SWE_Final_Project.Models {
             // start & end are the same point, no need for lines
             if (sptX == eptX && sptY == eptY)
                 return;
-            // need a single vertical or horizontal line
+            else
+            {
+                SectionList.Add(new LineModel(sptX, sptY, eptX, eptY));
+            }
+            /*// need a single vertical or horizontal line
             else if (sptX == eptX || sptY == eptY)
                 SectionList.Add(new LineModel(sptX, sptY, eptX, eptY));
             // need 3 lines
@@ -122,11 +127,74 @@ namespace SWE_Final_Project.Models {
                     SectionList.Add(new LineModel(midPtX, sptY, midPtX, eptY));
                     SectionList.Add(new LineModel(midPtX, eptY, eptX, eptY));
                 }
-            }
+            }*/
 
             // add 2 more short lines as an arrow sign
             LineModel lastLine = SectionList.Last();
-            // to up
+
+            // Correct first short line's radian
+            double firstShortRadian = lastLine.radian + Math.PI / 6.0;
+            if (firstShortRadian >= 2 * Math.PI)
+                firstShortRadian -= 2 * Math.PI;
+            else if (firstShortRadian < 0)
+                firstShortRadian += 2 * Math.PI;
+            // First quadrant(0 ~ 90)
+            if (firstShortRadian <= (Math.PI / 2.0))
+            {
+                firstShortRadian -= 0;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX + Math.Cos(firstShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY + Math.Sin(firstShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+            // Second quadrant(90 ~ 180)
+            else if (firstShortRadian <= Math.PI)
+            {
+                firstShortRadian = Math.PI - firstShortRadian;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX - Math.Cos(firstShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY + Math.Sin(firstShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+            // Third quadrant(180 ~ 270)
+            else if (firstShortRadian <= (3 * Math.PI / 2.0))
+            {
+                firstShortRadian -= Math.PI;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX - Math.Cos(firstShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY - Math.Sin(firstShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+            // Fourth quadrant(270 ~ 360)
+            else if (firstShortRadian <= (2 * Math.PI))
+            {
+                firstShortRadian = 2 * Math.PI - firstShortRadian;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX + Math.Cos(firstShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY - Math.Sin(firstShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+
+            // Correct first short line's radian
+            double secondShortRadian = lastLine.radian - Math.PI / 6.0;
+            if (secondShortRadian >= 2 * Math.PI)
+                secondShortRadian -= 2 * Math.PI;
+            else if (secondShortRadian < 0)
+                secondShortRadian += 2 * Math.PI;
+            // First quadrant(0 ~ 90)
+            if (secondShortRadian <= (Math.PI / 2.0))
+            {
+                secondShortRadian -= 0;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX + Math.Cos(secondShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY + Math.Sin(secondShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+            // Second quadrant(90 ~ 180)
+            else if (secondShortRadian <= Math.PI)
+            {
+                secondShortRadian = Math.PI - secondShortRadian;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX - Math.Cos(secondShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY + Math.Sin(secondShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+            // Third quadrant(180 ~ 270)
+            else if (secondShortRadian <= (3 * Math.PI / 2.0))
+            {
+                secondShortRadian -= Math.PI;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX - Math.Cos(secondShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY - Math.Sin(secondShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+            // Fourth quadrant(270 ~ 360)
+            else if (secondShortRadian <= (2 * Math.PI))
+            {
+                secondShortRadian = 2 * Math.PI - secondShortRadian;
+                SectionList.Add(new LineModel(eptX, eptY, Convert.ToInt32(eptX + Math.Cos(secondShortRadian) * ARROW_SIGN_LENGTH), Convert.ToInt32(eptY - Math.Sin(secondShortRadian) * ARROW_SIGN_LENGTH)));
+            }
+
+            /*// to up
             if (lastLine.Direction == DirectionType.TO_UP) {
                 SectionList.Add(new LineModel(eptX, eptY, eptX - ARROW_SIGN_OFFSET_CHUIZHI, eptY + ARROW_SIGN_OFFSET_PARALEL));
                 SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_CHUIZHI, eptY + ARROW_SIGN_OFFSET_PARALEL));
@@ -145,7 +213,7 @@ namespace SWE_Final_Project.Models {
             else if (lastLine.Direction == DirectionType.TO_LEFT) {
                 SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_PARALEL, eptY - ARROW_SIGN_OFFSET_CHUIZHI));
                 SectionList.Add(new LineModel(eptX, eptY, eptX + ARROW_SIGN_OFFSET_PARALEL, eptY + ARROW_SIGN_OFFSET_CHUIZHI));
-            }
+            }*/
         }
 
         // get the position at the left-up corner

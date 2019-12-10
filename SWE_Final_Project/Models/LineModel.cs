@@ -19,6 +19,8 @@ namespace SWE_Final_Project.Models {
     // the line-model
     [Serializable]
     public class LineModel {
+        public double radian = 0;
+
         // the direction-type of this line
         private DirectionType mDirectionType = DirectionType.LITERALLY_THE_SAME_POINT;
         public DirectionType Direction { get => mDirectionType; }
@@ -38,7 +40,7 @@ namespace SWE_Final_Project.Models {
             mSrcLocOnScript = new Point(srcOnScript.X, srcOnScript.Y);
             mDstLocOnScript = new Point(dstOnScript.X, dstOnScript.Y);
 
-            setDirectionType();
+            setRadian();
         }
 
         // constructor
@@ -46,7 +48,7 @@ namespace SWE_Final_Project.Models {
             this(new Point(srcX, srcY), new Point(dstX, dstY)) { }
 
         // set the direction-type according to the src & dst points
-        private void setDirectionType() {
+        private void setRadian() {
             // start point XY
             int sptX = mSrcLocOnScript.X;
             int sptY = mSrcLocOnScript.Y;
@@ -54,7 +56,45 @@ namespace SWE_Final_Project.Models {
             int eptX = mDstLocOnScript.X;
             int eptY = mDstLocOnScript.Y;
 
-            // they're the same point
+            // Radian equal π/2(90) or 3π/2(270)
+            if (eptX == sptX)
+            {
+                // Point vertical down
+                if (eptY > sptY)
+                    radian = 3 * Math.PI / 2.0;
+                // Point vertical up
+                else
+                    radian = Math.PI / 2.0;
+            }
+            // Other degree
+            else
+            {
+                double slope = Convert.ToDouble(eptY - sptY) / Convert.ToDouble(eptX - sptX);
+                radian = Math.Atan(slope);
+                // First quadrant(0 ~ 90)
+                if (radian >= 0 && (eptX < sptX) && (eptY <= sptY))
+                {
+                    radian += 0;
+                }
+                // Second quadrant(90 ~ 180)
+                else if(radian <= 0 && (eptX > sptX) && (eptY <= sptY))
+                {
+                    radian += Math.PI;
+                }
+                // Third quadrant(180 ~ 270)
+                else if (radian > 0 && (eptX > sptX) && (eptY > sptY))
+                {
+                    radian += Math.PI;
+                }
+                // Fourth quadrant(270 ~ 360)
+                else if (radian < 0 && (eptX < sptX) && (eptY > sptY))
+                {
+                    radian += 2 * Math.PI;
+                }
+            }
+            Console.WriteLine("The " + radian + " is equal to " + (180.0 / Math.PI) * radian);
+
+            /*// they're the same point
             if (sptX == eptX && sptY == eptY)
                 mDirectionType = DirectionType.LITERALLY_THE_SAME_POINT;
             // it's a vertical line
@@ -73,7 +113,7 @@ namespace SWE_Final_Project.Models {
             }
             // it's a slashed line
             else
-                mDirectionType = DirectionType.SLASHED;
+                mDirectionType = DirectionType.SLASHED;*/
         }
 
         // check if the line is vertical or not
