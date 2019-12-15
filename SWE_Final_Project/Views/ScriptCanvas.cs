@@ -128,6 +128,27 @@ namespace SWE_Final_Project.Views {
             Invalidate();
         }
 
+        // delete a link-view
+        public void deleteLinkView(LinkModel linkModel)
+        {
+            // search for the designated link-view by common id w/ corresponding link-model
+            foreach (LinkView linkView in mExistedIngoingLinks)
+                if (linkView.Model.Id == linkModel.Id)
+                {
+                    mExistedIngoingLinks.Remove(linkView);
+                    Controls.Remove(linkView);
+                    break;
+                }
+            foreach (LinkView linkView in mExistedOutgoingLinks)
+                if (linkView.Model.Id == linkModel.Id)
+                {
+                    mExistedOutgoingLinks.Remove(linkView);
+                    break;
+                }
+            // re-draw
+            Invalidate();
+        }
+
         // get a certain state-view by id
         public StateView getStateViewById(string id) => mExistedStateViewList.Find(it => it.Id == id);
 

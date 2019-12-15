@@ -134,14 +134,14 @@
             // stepByStepToolStripMenuItem
             // 
             this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.stepByStepToolStripMenuItem.Text = "Step by step";
             this.stepByStepToolStripMenuItem.Click += new System.EventHandler(this.StepByStepToolStripMenuItem_Click);
             // 
             // runThroughToolStripMenuItem
             // 
             this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
-            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.runThroughToolStripMenuItem.Text = "Run through";
             this.runThroughToolStripMenuItem.Click += new System.EventHandler(this.RunThroughToolStripMenuItem_Click);
             // 

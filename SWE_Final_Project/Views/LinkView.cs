@@ -132,5 +132,19 @@ namespace SWE_Final_Project.Views {
         protected override void OnPaint(PaintEventArgs e) {
             addToGraphicsPath();
         }
+
+        // delete myself from the canvas and the model
+        public void deleteThisState()
+        {
+            // remove the view
+            if (Program.form.deleteLinkView(mModel) == false)
+                return;
+
+            // remove the model
+            ModelManager.removeLinkModelAtCurrentScript(mModel);
+
+            // invalidate the start-state-view on the shell if needs
+            // Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+        }
     }
 }

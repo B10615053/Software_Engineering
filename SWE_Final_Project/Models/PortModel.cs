@@ -40,6 +40,15 @@ namespace SWE_Final_Project.Models {
                 addIngoingLink(newLinkModel);
         }
 
+        // delete outgoing or ingoing link
+        public void deleteLink(LinkModel deleteLinkModel, bool isOutgoing)
+        {
+            if (isOutgoing)
+                mOutgoingLinks.Remove(deleteLinkModel);
+            else
+                mIngoingLinks.Remove(deleteLinkModel);
+        }
+
         // get links
         public List<LinkModel> getLinks(bool isOutgoing) {
             return isOutgoing ? mOutgoingLinks : mIngoingLinks;

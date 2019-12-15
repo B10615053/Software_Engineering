@@ -180,6 +180,22 @@ namespace SWE_Final_Project.Models {
             }
         }
 
+        // delete a link-model at certain port of this state-model
+        public void deleteLinkAtCertainPort(LinkModel deleteLinkModel, PortType atPortType, bool isOutgoing)
+        {
+            switch (atPortType)
+            {
+                case PortType.UP:
+                    mUpPortModel.deleteLink(deleteLinkModel, isOutgoing); break;
+                case PortType.RIGHT:
+                    mRightPortModel.deleteLink(deleteLinkModel, isOutgoing); break;
+                case PortType.DOWN:
+                    mDownPortModel.deleteLink(deleteLinkModel, isOutgoing); break;
+                case PortType.LEFT:
+                    mLeftPortModel.deleteLink(deleteLinkModel, isOutgoing); break;
+            }
+        }
+
         // get a certain (up, right, down, left) port-model
         public PortModel getCertainPortModel(PortType portType) {
             switch (portType) {

@@ -261,6 +261,18 @@ namespace SWE_Final_Project {
             return true;
         }
 
+        public bool deleteLinkView(LinkModel linkModel)
+        {
+            if (SimulationManager.checkSimulating())
+                return false;
+
+            ScriptTabPage tabPage = (ScriptTabPage)scriptsTabControl.SelectedTab;
+            ScriptCanvas scriptCanvas = tabPage.TheScriptCanvas;
+
+            scriptCanvas.deleteLinkView(linkModel);
+            return true;
+        }
+
         public void invalidateCanvasAtCurrentScript() {
             (scriptsTabControl.SelectedTab as ScriptTabPage).TheScriptCanvas.Invalidate();
         }

@@ -192,5 +192,17 @@ namespace SWE_Final_Project.Managers {
 
         public static bool removeStateModelByIDAtCurrentScript(string id)
             => mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
+
+        // remove the linkModel form srcState and dstState
+        public static bool removeLinkModelAtCurrentScript(LinkModel deleteLinkModel)
+        {
+            string srcStateId = deleteLinkModel.SrcStateModel.Id;
+            PortType src = deleteLinkModel.SrcPortType;
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(srcStateId).deleteLinkAtCertainPort(deleteLinkModel, src, true);
+            string dstStateId = deleteLinkModel.DstStateModel.Id;
+            PortType dst = deleteLinkModel.DstPortType;
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(dstStateId).deleteLinkAtCertainPort(deleteLinkModel, dst, true);
+            return true;
+        }
     }
 }
