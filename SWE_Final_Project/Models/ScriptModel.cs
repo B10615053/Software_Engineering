@@ -100,6 +100,7 @@ namespace SWE_Final_Project.Models {
 
         // modify a existed state
         public void modifyState(StateView stateView) {
+            Console.WriteLine("\tId: " + stateView.Id);
             StateModel toBeModifiedState = mExistedStateList.Find(it => it.Id == stateView.Id);
             if (toBeModifiedState is null)
                 return;

@@ -65,7 +65,9 @@ namespace SWE_Final_Project.Managers {
                     ScriptModel undoneScript = pair.Key.Pop();
                     pair.Value.Push(new ScriptModel(undoneScript));
 
-                    return pair.Key.Peek();
+                    debugPrint();
+
+                    return new ScriptModel(pair.Key.Peek());
                 }
             }
 
@@ -85,7 +87,7 @@ namespace SWE_Final_Project.Managers {
                     ScriptModel redoneScript = pair.Value.Pop();
                     pair.Key.Push(new ScriptModel(redoneScript));
 
-                    return pair.Key.Peek();
+                    return new ScriptModel(pair.Key.Peek());
                 }
             }
 

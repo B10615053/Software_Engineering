@@ -71,6 +71,15 @@ namespace SWE_Final_Project.Models {
                 mId = id;
         }
 
+        // copy constructor
+        public StateModel(StateModel stateModel): this(
+            stateModel.StateType,
+            stateModel.LocOnScript,
+            stateModel.SizeOnScript,
+            stateModel.ContentText,
+            stateModel.Id
+        ) {}
+
         // constructor
         public StateModel(ref StateView stateView) {
             setDataByStateView(stateView);
@@ -269,6 +278,8 @@ namespace SWE_Final_Project.Models {
         }
 
         public override string ToString() {
+            //return Id;
+
             string ret = "";
             if (mStateType == StateType.START)
                 ret += "START";

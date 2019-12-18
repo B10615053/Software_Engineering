@@ -262,10 +262,11 @@ namespace SWE_Final_Project.Managers {
         public static void undo(int idx = -1) {
             if (idx == -1)
                 idx = CurrentSelectedScriptIndex;
+
             if (idx >= 0 && idx < mOpenedScriptList.Count) {
                 ScriptModel currentTop = HistoryManager.Undo(idx);
                 if (!(currentTop is null)) {
-                    mOpenedScriptList[idx] = currentTop;
+                    mOpenedScriptList[idx] = new ScriptModel(currentTop);
                     Program.form.invalidateCanvasAtCurrentScript(mOpenedScriptList[idx]);
                 }
             }

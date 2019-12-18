@@ -54,6 +54,8 @@ namespace SWE_Final_Project.Views {
                     else
                         stateView = new GeneralStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
 
+                    stateView.Id = it.Id;
+
                     // add link-views
                     var allPortTypes = Enum.GetValues(typeof(PortType));
                     foreach (PortType portType in allPortTypes) {
@@ -120,6 +122,8 @@ namespace SWE_Final_Project.Views {
                     stateView = new EndStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
                 else
                     stateView = new GeneralStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
+
+                stateView.Id = it.Id;
 
                 // add link-views
                 var allPortTypes = Enum.GetValues(typeof(PortType));
