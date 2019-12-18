@@ -66,6 +66,7 @@ namespace SWE_Final_Project.Views {
                     }
 
                     // add state-view
+                    mExistedStateViewList.Add(stateView);
                     Controls.Add(stateView);
                 });
 
@@ -97,6 +98,48 @@ namespace SWE_Final_Project.Views {
             Invalidate();
         }
 
+        // re-set the whole script
+        public void setDataByScriptModel(ScriptModel scriptModel) {
+            if (scriptModel is null)
+                return;
+
+            // set the script name
+            mScriptNameAtCanvas = scriptModel.Name;
+
+            mExistedStateViewList.Clear();
+            Controls.Clear();
+            mExistedIngoingLinks.Clear();
+            mExistedOutgoingLinks.Clear();
+
+            scriptModel.getCopiedStateList().ForEach(it => {
+                // build state-view
+                StateView stateView;
+                if (it.StateType == StateType.START)
+                    stateView = new StartStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
+                else if (it.StateType == StateType.END)
+                    stateView = new EndStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
+                else
+                    stateView = new GeneralStateView(it.LocOnScript.X, it.LocOnScript.Y, it.ContentText, true);
+
+                // add link-views
+                var allPortTypes = Enum.GetValues(typeof(PortType));
+                foreach (PortType portType in allPortTypes) {
+                    // add outgoing links
+                    foreach (LinkModel linkModel in it.getCertainPortModel(portType).getLinks(true))
+                        mExistedOutgoingLinks.Add(new LinkView(linkModel));
+                    // add ingoing links
+                    foreach (LinkModel linkModel in it.getCertainPortModel(portType).getLinks(false))
+                        mExistedIngoingLinks.Add(new LinkView(linkModel));
+                }
+
+                // add state-view
+                mExistedStateViewList.Add(stateView);
+                Controls.Add(stateView);
+            });
+
+            Invalidate();
+        }
+
         // re-set a certain link-view data by a link-model
         public void setDataByLinkModel(LinkModel linkModel, bool isOutgoing) {
             LinkView linkView;
@@ -109,7 +152,7 @@ namespace SWE_Final_Project.Views {
             if (linkView is null)
                 return;
 
-            linkView.setSrcAndDstPorts(linkModel.SrcPortType, linkModel.DstPortType);
+            linkView.setSrcAndDstPorts(linkModel.SrcPortType, linkModel.DstPortType, makeHistory: false);
             linkView.generateLinesAndAddToSectionList();
             Invalidate();
         }

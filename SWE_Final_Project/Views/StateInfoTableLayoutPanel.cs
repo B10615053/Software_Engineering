@@ -314,12 +314,18 @@ namespace SWE_Final_Project.Views {
             if (e.KeyCode == Keys.S && e.Modifiers == Keys.Control)
                 Program.form.saveCertainScript(ModelManager.CurrentSelectedScriptIndex);
 
+            // Ctrl + Z
+            else if (e.KeyCode == Keys.Z && e.Modifiers == Keys.Control) {
+                if (SimulationManager.checkSimulating() == false)
+                    ModelManager.undo();
+            }
+
             // delete
             else if (e.KeyCode == Keys.Delete) {
                 if (mPassedView is StateView)
                     (mPassedView as StateView).deleteThisState();
                 else if (mPassedView is LinkView)
-                    (mPassedView as LinkView).deleteThisState();
+                    (mPassedView as LinkView).deleteThisLink();
             }
         }
     }

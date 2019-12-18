@@ -273,8 +273,12 @@ namespace SWE_Final_Project {
             return true;
         }
 
-        public void invalidateCanvasAtCurrentScript() {
-            (scriptsTabControl.SelectedTab as ScriptTabPage).TheScriptCanvas.Invalidate();
+        public void invalidateCanvasAtCurrentScript(ScriptModel scriptModel = null) {
+            ScriptCanvas canvas = (scriptsTabControl.SelectedTab as ScriptTabPage).TheScriptCanvas;
+
+            if (!(scriptModel is null))
+                canvas.setDataByScriptModel(scriptModel);
+            canvas.Invalidate();
         }
 
         /* ============================================================== */
@@ -324,6 +328,12 @@ namespace SWE_Final_Project {
                 // Ctrl + O: open script
                 else if (e.KeyCode == Keys.O)
                     showDialogAndOpenScriptFromDisk();
+
+                // Ctrl + Z: undo
+                else if (e.KeyCode == Keys.Z) {
+                    if (SimulationManager.checkSimulating() == false)
+                        ModelManager.undo(scriptsTabControl.SelectedIndex);
+                }
             }
         }
 

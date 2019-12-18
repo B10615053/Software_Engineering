@@ -60,6 +60,9 @@ namespace SWE_Final_Project.Managers {
             ScriptModel newScriptModel = new ScriptModel(newScriptName, stateModels);
             mOpenedScriptList.Add(newScriptModel);
 
+            // start up its own history management
+            HistoryManager.startScriptHistory(newScriptModel);
+
             // invalidate the start-state-view on the shell if needs
             Program.form.getCertainStateViewOnTheShell(0).Invalidate();
 
@@ -79,6 +82,9 @@ namespace SWE_Final_Project.Managers {
             if (scriptModelInList is null) {
                 mOpenedScriptList.Add(scriptModel);
 
+                // start up its own history management
+                HistoryManager.startScriptHistory(scriptModel);
+
                 // invalidate the start-state-view on the shell if needs
                 Program.form.getCertainStateViewOnTheShell(0).Invalidate();
 
@@ -94,8 +100,11 @@ namespace SWE_Final_Project.Managers {
             if (CurrentSelectedScriptIndex < 0)
                 return;
 
-            // remove the script-model from the list,
+            // remove the script-model from the list
             mOpenedScriptList.RemoveAt(CurrentSelectedScriptIndex);
+
+            // close and remove its history management as well
+            HistoryManager.closeAndRemoveScriptHistoryByIdx(CurrentSelectedScriptIndex);
 
             // and re-adjust the current-selected-script-index
             if (CurrentSelectedScriptIndex >= mOpenedScriptList.Count)
@@ -105,32 +114,47 @@ namespace SWE_Final_Project.Managers {
             Program.form.getCertainStateViewOnTheShell(0).Invalidate();
         }
 
-        // add new state on a certain script
-        public static void addNewStateOnCertainScript(StateModel newStateModel) {
-            if (CurrentSelectedScriptIndex < 0)
-                return;
-            mOpenedScriptList[CurrentSelectedScriptIndex].addNewState(newStateModel);
-            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
-            Program.form.MarkUnsavedScript();
-            // debugPrint();
-        }
-
         // rename the current working-on script
         public static void renameScript(string newScriptName, bool isSaving) {
             if (CurrentSelectedScriptIndex < 0)
                 return;
+
             mOpenedScriptList[CurrentSelectedScriptIndex].Name = newScriptName;
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = !isSaving;
+
+            // add a record in its own history management
+            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
             if (!isSaving)
                 Program.form.MarkUnsavedScript();
+        }
+
+        // add new state on a certain script
+        public static void addNewStateOnCertainScript(StateModel newStateModel) {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+
+            mOpenedScriptList[CurrentSelectedScriptIndex].addNewState(newStateModel);
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+            Program.form.MarkUnsavedScript();
+
+            // add a record in its own history management
+            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
+            // debugPrint();
         }
 
         // modify a certain state on a certain script
         public static void modifyStateOnCertainScript(StateView stateView) {
             if (CurrentSelectedScriptIndex < 0)
                 return;
+
             mOpenedScriptList[CurrentSelectedScriptIndex].modifyState(stateView);
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+
+            // add a record in its own history management
+            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
             Program.form.MarkUnsavedScript();
             // debugPrint();
         }
@@ -142,8 +166,11 @@ namespace SWE_Final_Project.Managers {
 
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(from.Id).addLinkAtCertainPort(linkModel, fromPortType, true);
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(to.Id).addLinkAtCertainPort(linkModel, toPortType, false);
-
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+
+            // add a record in its own history management
+            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
             Program.form.MarkUnsavedScript();
         }
 
@@ -190,19 +217,58 @@ namespace SWE_Final_Project.Managers {
             Console.WriteLine("********************");
         }
 
-        public static bool removeStateModelByIDAtCurrentScript(string id)
-            => mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
+        public static bool removeStateModelByIDAtCurrentScript(string id) {
+            bool reallyRemoved = mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
+
+            if (reallyRemoved)
+                HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
+            return reallyRemoved;
+        }
 
         // remove the linkModel form srcState and dstState
-        public static bool removeLinkModelAtCurrentScript(LinkModel deleteLinkModel)
-        {
+        public static bool removeLinkModelAtCurrentScript(LinkModel deleteLinkModel) {
             string srcStateId = deleteLinkModel.SrcStateModel.Id;
             PortType src = deleteLinkModel.SrcPortType;
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(srcStateId).deleteLinkAtCertainPort(deleteLinkModel, src, true);
+
             string dstStateId = deleteLinkModel.DstStateModel.Id;
             PortType dst = deleteLinkModel.DstPortType;
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(dstStateId).deleteLinkAtCertainPort(deleteLinkModel, dst, true);
+
+            // mark this script as unsaved
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+            Program.form.MarkUnsavedScript();
+
+            // add a record in its own history management
+            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
             return true;
+        }
+
+        // modify a link at a certain script
+        public static void modifyLinkOnCertainScript(LinkView linkView) {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+
+            // add a record in its own history management
+            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+            Program.form.MarkUnsavedScript();
+        }
+
+        // undo a change at a certain script
+        public static void undo(int idx = -1) {
+            if (idx == -1)
+                idx = CurrentSelectedScriptIndex;
+            if (idx >= 0 && idx < mOpenedScriptList.Count) {
+                ScriptModel currentTop = HistoryManager.Undo(idx);
+                if (!(currentTop is null)) {
+                    mOpenedScriptList[idx] = currentTop;
+                    Program.form.invalidateCanvasAtCurrentScript(mOpenedScriptList[idx]);
+                }
+            }
         }
     }
 }

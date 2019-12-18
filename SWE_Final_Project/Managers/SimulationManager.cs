@@ -284,13 +284,15 @@ namespace SWE_Final_Project.Managers {
             foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
                 stateStatusPair.Value.ForEach(stateModel => {
                     StateView stateView = Program.form.getCertainInstanceStateViewById(stateModel.Id);
-                    stateView.CurrentSimulatingStatus = stateStatusPair.Key;
+                    if (!(stateView is null))
+                        stateView.CurrentSimulatingStatus = stateStatusPair.Key;
                 });
             }
             // re-color the START view
             StateModel startStateModel = mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First();
             StateView startStateView = Program.form.getCertainInstanceStateViewById(startStateModel.Id);
-            startStateView.CurrentSimulatingStatus = SimulatingStateStatus.CURRENT;
+            if (!(startStateView is null))
+                startStateView.CurrentSimulatingStatus = SimulatingStateStatus.CURRENT;
 
             // re-color the links
             foreach (var linkStatusPair in mCurrentLinkViewStatuses) {

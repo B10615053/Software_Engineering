@@ -58,6 +58,9 @@ namespace SWE_Final_Project.Models {
                 mExistedStateList.AddRange(stateList);
         }
 
+        // copy constructor
+        public ScriptModel(ScriptModel rhs): this(rhs.Name, rhs.getCopiedStateList()) {}
+
         // get (deep-) copied existed state list
         public List<StateModel> getCopiedStateList() {
             try {

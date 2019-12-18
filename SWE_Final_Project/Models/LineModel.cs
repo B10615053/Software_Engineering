@@ -92,9 +92,9 @@ namespace SWE_Final_Project.Models {
                     radian += 2 * Math.PI;
                 }
             }
-            Console.WriteLine("The " + radian + " is equal to " + (180.0 / Math.PI) * radian);
+            //Console.WriteLine("The " + radian + " is equal to " + (180.0 / Math.PI) * radian);
 
-            /*// they're the same point
+            // they're the same point
             if (sptX == eptX && sptY == eptY)
                 mDirectionType = DirectionType.LITERALLY_THE_SAME_POINT;
             // it's a vertical line
@@ -113,7 +113,7 @@ namespace SWE_Final_Project.Models {
             }
             // it's a slashed line
             else
-                mDirectionType = DirectionType.SLASHED;*/
+                mDirectionType = DirectionType.SLASHED;
         }
 
         // check if the line is vertical or not

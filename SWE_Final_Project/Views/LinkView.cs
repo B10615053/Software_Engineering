@@ -87,11 +87,14 @@ namespace SWE_Final_Project.Views {
         public void setLinkText(string newLinkText) {
             mModel.LinkText = newLinkText;
             Program.form.invalidateCanvasAtCurrentScript();
+            ModelManager.modifyLinkOnCertainScript(this);
         }
 
         // set the ports of source & destination
-        public void setSrcAndDstPorts(PortType srcPortType = PortType.NONE, PortType dstPortType = PortType.NONE) {
+        public void setSrcAndDstPorts(PortType srcPortType = PortType.NONE, PortType dstPortType = PortType.NONE, bool makeHistory = true) {
             Model.setSrcAndDstPorts(srcPortType, dstPortType);
+            if (makeHistory)
+                ModelManager.modifyLinkOnCertainScript(this);
         }
 
         // draw on the designated graphics-path
@@ -134,7 +137,7 @@ namespace SWE_Final_Project.Views {
         }
 
         // delete myself from the canvas and the model
-        public void deleteThisState()
+        public void deleteThisLink()
         {
             // remove the view
             if (Program.form.deleteLinkView(mModel) == false)

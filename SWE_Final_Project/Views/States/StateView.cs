@@ -86,13 +86,13 @@ namespace SWE_Final_Project.Views.States {
 
             // set the state content
             if (mIsTextable)
-                setStateContent(stateContent);
+                setStateContent(stateContent, false);
             // set the certain state size since it's un-textable
             else
-                resizeStateBySize(UNTEXTABLE_STATE_SIZE);
+                resizeStateBySize(UNTEXTABLE_STATE_SIZE, false);
 
             // set the location
-            relocateState(x, y);
+            relocateState(x, y, updateModel: false);
 
             // set the ports positions
             resetPortPositions();
@@ -107,20 +107,20 @@ namespace SWE_Final_Project.Views.States {
         /* ================================================= */
 
         // set the state content string
-        public void setStateContent(string newStateContent) {
+        public void setStateContent(string newStateContent, bool updateModel = true) {
             // un-textable, return directly
             if (mIsTextable == false)
                 return;
 
             // set the content and do re-sizing
-            resizeStateByContent(newStateContent.Trim());
+            resizeStateByContent(newStateContent.Trim(), false);
 
             // set the location
-            relocateState(Location.X, Location.Y, false);
+            relocateState(Location.X, Location.Y, false, updateModel);
         }
 
         // re-size the state once the content text has changed
-        protected void resizeStateByContent(string newStateContent) {
+        protected void resizeStateByContent(string newStateContent, bool updateModel = true) {
             // set the state content
             mStateContent = newStateContent.Trim();
 
@@ -140,14 +140,15 @@ namespace SWE_Final_Project.Views.States {
             resetPortPositions();
 
             // changes at data model
-            ModelManager.modifyStateOnCertainScript(this);
+            if (updateModel)
+                ModelManager.modifyStateOnCertainScript(this);
 
             // re-draw
             Invalidate();
         }
 
         // re-size the state once the content text has changed
-        protected void resizeStateBySize(Size newSize) {
+        protected void resizeStateBySize(Size newSize, bool updateModel = true) {
             // set the size
             Size = newSize;
 
@@ -155,7 +156,8 @@ namespace SWE_Final_Project.Views.States {
             resetPortPositions();
 
             // changes at data model
-            ModelManager.modifyStateOnCertainScript(this);
+            if (updateModel)
+                ModelManager.modifyStateOnCertainScript(this);
 
             // re-draw
             Invalidate();
@@ -189,7 +191,7 @@ namespace SWE_Final_Project.Views.States {
         }
 
         // re-locate the state
-        public void relocateState(int x, int y, bool areParamsAtCorner = true) {
+        public void relocateState(int x, int y, bool areParamsAtCorner = true, bool updateModel = true) {
             /* if the are-params-at-corner parameter is false,
              * means that the x and y parameters are at the center
              */
@@ -201,7 +203,8 @@ namespace SWE_Final_Project.Views.States {
                 Location = new Point(x, y);
 
             // changes at data model
-            ModelManager.modifyStateOnCertainScript(this);
+            if (updateModel)
+                ModelManager.modifyStateOnCertainScript(this);
         }
 
         // get the position of a certain port
@@ -302,7 +305,8 @@ namespace SWE_Final_Project.Views.States {
                     if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW) {
                         relocateState(
                             Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
-                            Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
+                            Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2,
+                            updateModel: false
                         );
                     }
 
@@ -458,13 +462,24 @@ namespace SWE_Final_Project.Views.States {
         // dropped (not dragging)
         protected override void OnMouseUp(MouseEventArgs e) {
             addToGraphicsPath();
-            if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW)
+
+            int lx = Location.X;
+            int ly = Location.Y;
+
+            if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW) {
+                relocateState(
+                    Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
+                    Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2,
+                    updateModel: lx + e.X != mMouseDownCanvasLocX || ly + e.Y != mMouseDownCanvasLocY
+                );
+
                 MouseManager.CurrentMouseAction = MouseAction.LOUNGE;
+            }
 
             // if the both locations when clicking down and when up are the same point,
             // which means that the mouse didn't move during down and up,
             // show the info-panel
-            if (Location.X + e.X == mMouseDownCanvasLocX && Location.Y + e.Y == mMouseDownCanvasLocY) {
+            if (lx + e.X == mMouseDownCanvasLocX && ly + e.Y == mMouseDownCanvasLocY) {
                 ModelManager.showInfoPanel(this);
             }
         }
