@@ -337,6 +337,11 @@ namespace SWE_Final_Project {
                     if (SimulationManager.checkSimulating() == false)
                         ModelManager.undo(scriptsTabControl.SelectedIndex);
                 }
+
+                else if (e.KeyCode == Keys.Y) {
+                    if (SimulationManager.checkSimulating() == false)
+                        ModelManager.redo(scriptsTabControl.SelectedIndex);
+                }
             }
         }
 

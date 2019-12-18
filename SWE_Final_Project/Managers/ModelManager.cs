@@ -271,5 +271,19 @@ namespace SWE_Final_Project.Managers {
                 }
             }
         }
+
+        // redo a change at a certain script
+        public static void redo(int idx = -1) {
+            if (idx == -1)
+                idx = CurrentSelectedScriptIndex;
+
+            if (idx >= 0 && idx < mOpenedScriptList.Count) {
+                ScriptModel currentTop = HistoryManager.Redo(idx);
+                if (!(currentTop is null)) {
+                    mOpenedScriptList[idx] = new ScriptModel(currentTop);
+                    Program.form.invalidateCanvasAtCurrentScript(mOpenedScriptList[idx]);
+                }
+            }
+        }
     }
 }

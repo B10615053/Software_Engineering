@@ -320,6 +320,12 @@ namespace SWE_Final_Project.Views {
                     ModelManager.undo();
             }
 
+            // Ctrl + Y
+            else if (e.KeyCode == Keys.Y && e.Modifiers == Keys.Control) {
+                if (SimulationManager.checkSimulating() == false)
+                    ModelManager.redo();
+            }
+
             // delete
             else if (e.KeyCode == Keys.Delete) {
                 if (mPassedView is StateView)
