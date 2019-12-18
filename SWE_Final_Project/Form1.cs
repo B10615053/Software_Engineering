@@ -278,6 +278,9 @@ namespace SWE_Final_Project {
 
             if (!(scriptModel is null))
                 canvas.setDataByScriptModel(scriptModel);
+
+            getCertainStateViewOnTheShell(0).Invalidate();
+
             canvas.Invalidate();
         }
 

@@ -50,12 +50,21 @@ namespace SWE_Final_Project.Models {
             // set the script name
             mScriptName = scriptName is null ? "Untitled" : scriptName;
 
-            // initially set the completeness into EMPTY
-            mCompleteness = ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL;
-
             // add the pre-defined states if exist
             if (!(stateList is null))
                 mExistedStateList.AddRange(stateList);
+
+            // set the completeness correctly
+            bool hasStart = mExistedStateList.Exists(it => it.StateType == StateType.START);
+            bool hasEnd = mExistedStateList.Exists(it => it.StateType == StateType.END);
+            if (hasStart && hasEnd)
+                mCompleteness = ScriptModelCompleteness.HAS_START_AND_END;
+            else if (hasStart)
+                mCompleteness = ScriptModelCompleteness.HAS_START_BUT_NO_END;
+            else if (hasEnd)
+                mCompleteness = ScriptModelCompleteness.HAS_END_BUT_NO_START;
+            else
+                mCompleteness = ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL;
         }
 
         // copy constructor
