@@ -343,6 +343,14 @@ namespace SWE_Final_Project {
                         ModelManager.redo(scriptsTabControl.SelectedIndex);
                 }
             }
+
+            // F5 pressed: start/stop a simulation
+            else if (e.KeyCode == Keys.F5) {
+                if (SimulationManager.isSimulating())
+                    SimulationManager.stopSimulation();
+                else
+                    SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
+            }
         }
 
         // switch between scripts

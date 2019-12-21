@@ -333,6 +333,14 @@ namespace SWE_Final_Project.Views {
                 else if (mPassedView is LinkView)
                     (mPassedView as LinkView).deleteThisLink();
             }
+
+            // F5
+            else if (e.KeyCode == Keys.F5) {
+                if (SimulationManager.isSimulating())
+                    SimulationManager.stopSimulation();
+                else
+                    SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
+            }
         }
     }
 }
