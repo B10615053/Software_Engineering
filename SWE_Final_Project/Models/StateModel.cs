@@ -221,14 +221,24 @@ namespace SWE_Final_Project.Models {
             }
         }
 
-        // for simulation, get all outgoing links from this state
-        public List<LinkModel> getAllOutgoingLinks() {
+        // for simulation, get all outgoing and/or ingoing links from this state
+        public List<LinkModel> getConnectedLinks(bool needOutgoing = true, bool needIngoing = false) {
             List<LinkModel> ret = new List<LinkModel>();
 
-            ret.AddRange(mUpPortModel.getLinks(true));
-            ret.AddRange(mRightPortModel.getLinks(true));
-            ret.AddRange(mDownPortModel.getLinks(true));
-            ret.AddRange(mLeftPortModel.getLinks(true));
+            // get all outgoing links
+            if (needOutgoing) {
+                ret.AddRange(mUpPortModel.getLinks(true));
+                ret.AddRange(mRightPortModel.getLinks(true));
+                ret.AddRange(mDownPortModel.getLinks(true));
+                ret.AddRange(mLeftPortModel.getLinks(true));
+            }
+            // get all ingoing links
+            if (needIngoing) {
+                ret.AddRange(mUpPortModel.getLinks(false));
+                ret.AddRange(mRightPortModel.getLinks(false));
+                ret.AddRange(mDownPortModel.getLinks(false));
+                ret.AddRange(mLeftPortModel.getLinks(false));
+            }
 
             return ret;
         }

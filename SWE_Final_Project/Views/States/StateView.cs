@@ -367,11 +367,8 @@ namespace SWE_Final_Project.Views.States {
 
             // left click
             if (e.Button == MouseButtons.Left) {
-                if (SimulationManager.isSimulating())
-                    return;
-
                 // dragging new state-view
-                if (mIsInstanceOnScript == false) {
+                if (mIsInstanceOnScript == false && SimulationManager.isSimulating() == false) {
                     if (this is StartStateView && ModelManager.getScriptModelByIndex() != null && ModelManager.getScriptModelByIndex().hasStartStateOnScript());
                     else {
                         Bitmap pic = new Bitmap(ClientSize.Width, ClientSize.Height);
@@ -384,20 +381,47 @@ namespace SWE_Final_Project.Views.States {
                     }
                 }
 
-                // dragging existed state-view, or adding/settling link
+                // dragging existed state-view, or adding/settling link, or simulating
                 else {
-                    // dragging existed state-view
                     if (MouseManager.coveringStateViewAndPort.Value == PortType.NONE) {
-                        if (MouseManager.CurrentMouseAction != MouseAction.CREATING_LINK) {
-                            // MouseManager.isDraggingExistedStateView = true;
-                            MouseManager.CurrentMouseAction = MouseAction.DRAGGING_EXISTED_STATE_VIEW;
-                            MouseManager.posOnStateViewX = e.X;
-                            MouseManager.posOnStateViewY = e.Y;
+                        // simulating
+                        if (SimulationManager.isSimulating()) {
+                            StateModel model = ModelManager.getStateModelByIdAtCurrentScript(Id);
+
+                            // this is the state in the route
+                            if (SimulationManager.isCertainStateInRoute(model)) {
+                                SimulationManager.backToCerainState(model);
+                            }
+
+                            // not in the route, then check if this state is available currently
+                            else {
+                                List<LinkModel> ingoingLinks = model.getConnectedLinks(false, true);
+                                ingoingLinks.ForEach(ingoing => {
+                                    if (SimulationManager.isCertainLinkAvailableCurrently(ingoing)) {
+                                        SimulationManager.stepOnNextState(
+                                            ingoing,
+                                            ingoing.DstStateModel
+                                        );
+                                    }
+                                });
+                            }
+                        }
+
+                        // dragging existed state-view
+                        else {
+                            if (MouseManager.CurrentMouseAction != MouseAction.CREATING_LINK) {
+                                MouseManager.CurrentMouseAction = MouseAction.DRAGGING_EXISTED_STATE_VIEW;
+                                MouseManager.posOnStateViewX = e.X;
+                                MouseManager.posOnStateViewY = e.Y;
+                            }
                         }
                     }
 
                     // adding link
                     else {
+                        if (SimulationManager.isSimulating())
+                            return;
+
                         // create the link (not settled)
                         if (MouseManager.CurrentMouseAction != MouseAction.CREATING_LINK) {
                             // an END is NOT allowed to have any outgoing links

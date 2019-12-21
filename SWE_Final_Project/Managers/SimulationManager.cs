@@ -68,6 +68,9 @@ namespace SWE_Final_Project.Managers {
         // the link-model list in the current working-on machine (script)
         private static List<LinkModel> mAllLinkModelList = null;
 
+        // the state-model stack used to store the simulation route
+        private static Stack<StateModel> mRouteStatesStack = new Stack<StateModel>();
+
         // the state-views' statuses at the current moment
         private static Dictionary<SimulatingStateStatus, List<StateModel>>
             mCurrentStateViewsStatuses = null;
@@ -110,6 +113,9 @@ namespace SWE_Final_Project.Managers {
         public static void startSimulation(SimulationType simulationType) {
             // local function: really start the simulation
             void reallyStartSimulation() {
+                // clear the route
+                mRouteStatesStack.Clear();
+
                 // set the simulation type
                 mCurrentSimulationType = simulationType;
 
@@ -136,7 +142,7 @@ namespace SWE_Final_Project.Managers {
                 // get the link-model list
                 mAllLinkModelList = new List<LinkModel>();
                 mAllStateModelList.ForEach(stateModel => {
-                    mAllLinkModelList.AddRange(stateModel.getAllOutgoingLinks());
+                    mAllLinkModelList.AddRange(stateModel.getConnectedLinks());
                 });
 
                 if (mAllStateModelList == null) throw new Exception();
@@ -195,6 +201,9 @@ namespace SWE_Final_Project.Managers {
             mCurrentStateViewsStatuses.Clear(); mCurrentStateViewsStatuses = null;
             mCurrentLinkViewStatuses.Clear(); mCurrentLinkViewStatuses = null;
 
+            // clear the route
+            mRouteStatesStack.Clear();
+
             // re-render
             Program.form.invalidateCanvasAtCurrentScript();
         }
@@ -242,7 +251,7 @@ namespace SWE_Final_Project.Managers {
                 StateModel front = q.Dequeue();
 
                 // iterate all of its outgoing links
-                foreach (LinkModel link in front.getAllOutgoingLinks()) {
+                foreach (LinkModel link in front.getConnectedLinks()) {
                     // get one destination state-model
                     StateModel dst = link.DstStateModel;
 
@@ -300,30 +309,58 @@ namespace SWE_Final_Project.Managers {
 
         // step on the next state during the simulation
         public static void stepOnNextState(LinkModel walkedLinkModel, StateModel nextStateModel) {
+            // push the next-state-model into the route stack
+            mRouteStatesStack.Push(nextStateModel);
+
             // classify all states' statuses
             classifyAllStatesStatusesWhenOnNextStep(walkedLinkModel, nextStateModel);
 
-            // re-color the views
-            foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
-                stateStatusPair.Value.ForEach(stateModel => {
-                    StateView stateView = Program.form.getCertainInstanceStateViewById(stateModel.Id);
-                    if (!(stateView is null))
-                        stateView.CurrentSimulatingStatus = stateStatusPair.Key;
-                });
-            }
-            // re-color the START view
-            StateModel startStateModel = mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First();
-            StateView startStateView = Program.form.getCertainInstanceStateViewById(startStateModel.Id);
-            if (!(startStateView is null))
-                startStateView.CurrentSimulatingStatus = SimulatingStateStatus.CURRENT;
+            // re-color all the views
+            recolorViews();
+        }
 
-            // re-color the links
-            foreach (var linkStatusPair in mCurrentLinkViewStatuses) {
-                linkStatusPair.Value.ForEach(linkModel => {
-                    LinkView linkView = Program.form.getCertainInstanceLinkViewById(linkModel.Id);
-                    linkView.CurrentSimulatingStatus = linkStatusPair.Key;
-                });
+        // back to a certain step
+        public static void backToCertainStateByIdx(int routeIndex) {
+            if (routeIndex >= mRouteStatesStack.Count - 1 || routeIndex < 0)
+                return;
+
+            while (mRouteStatesStack.Count > routeIndex + 1) {
+                StateModel dst = mRouteStatesStack.Pop();
+                StateModel src = mRouteStatesStack.Peek();
+                LinkModel link = src.getConnectedLinks().Find(it => it.DstStateModel.Id == dst.Id);
+
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Clear();
+                mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Remove(dst);
+                mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITED].Remove(link);
+
+                classifyAllStatesStatusesWhenOnNextStep(null, src);
             }
+
+            // re-color all the views
+            recolorViews();
+        }
+
+        // back to a certain step
+        public static void backToCerainState(StateModel stateModel) {
+            if (mRouteStatesStack == null ||
+                    stateModel == null ||
+                    mRouteStatesStack.Contains(stateModel) == false)
+                return;
+
+            while (mRouteStatesStack.Peek().Equals(stateModel) == false) {
+                StateModel dst = mRouteStatesStack.Pop();
+                StateModel src = mRouteStatesStack.Peek();
+                LinkModel link = src.getConnectedLinks().Find(it => it.DstStateModel.Id == dst.Id);
+
+                mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Clear();
+                mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Remove(dst);
+                mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITED].Remove(link);
+
+                classifyAllStatesStatusesWhenOnNextStep(null, src);
+            }
+
+            // re-color all the views
+            recolorViews();
         }
 
         // step on the next state during the simulation,
@@ -343,9 +380,11 @@ namespace SWE_Final_Project.Managers {
             }
             // the subsequent simulation after being at the START state
             else {
-                mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Add(
-                    mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First()
-                );
+                if (mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Count > 0) {
+                    mCurrentStateViewsStatuses[SimulatingStateStatus.VISITED].Add(
+                        mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First()
+                    );
+                }
 
                 mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Clear();
                 mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Add(walkedOverStateModel);
@@ -375,7 +414,7 @@ namespace SWE_Final_Project.Managers {
 
             // simply add all of outgoing links of the current walked-over state-model
             mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].AddRange(
-                walkedOverStateModel.getAllOutgoingLinks()
+                walkedOverStateModel.getConnectedLinks()
             );
             #endregion
 
@@ -396,7 +435,7 @@ namespace SWE_Final_Project.Managers {
                 StateModel front = q.Dequeue();
 
                 // iterate all of its outgoing links
-                foreach (LinkModel link in front.getAllOutgoingLinks()) {
+                foreach (LinkModel link in front.getConnectedLinks()) {
                     // get one destination state-model
                     StateModel dst = link.DstStateModel;
 
@@ -435,6 +474,53 @@ namespace SWE_Final_Project.Managers {
                 if (visitedLinks.Contains(it) == false && !mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITED].Contains(it))
                     mCurrentLinkViewStatuses[SimulatingLinkStatus.UNVISITABLE].Add(it);
             });
+        }
+
+        public static int getRouteLength() => mRouteStatesStack.Count;
+
+        public static bool isCertainStateInRoute(StateModel stateModel) {
+            if (isSimulating() == false ||
+                    mAllStateModelList == null ||
+                    mAllStateModelList.Count == 0 ||
+                    mCurrentStateViewsStatuses == null ||
+                    mRouteStatesStack == null)
+                return false;
+            return mRouteStatesStack.Contains(stateModel);
+        }
+
+        public static bool isCertainLinkAvailableCurrently(LinkModel linkModel) {
+            if (isSimulating() == false ||
+                    mAllLinkModelList == null ||
+                    mAllLinkModelList.Count == 0 ||
+                    mCurrentLinkViewStatuses == null ||
+                    mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE] == null ||
+                    mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Count == 0)
+                return false;
+            return mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Exists(it => it.Id == linkModel.Id);
+        }
+
+        private static void recolorViews() {
+            // re-color the views
+            foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
+                stateStatusPair.Value.ForEach(stateModel => {
+                    StateView stateView = Program.form.getCertainInstanceStateViewById(stateModel.Id);
+                    if (!(stateView is null))
+                        stateView.CurrentSimulatingStatus = stateStatusPair.Key;
+                });
+            }
+            // re-color the START view
+            StateModel startStateModel = mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].First();
+            StateView startStateView = Program.form.getCertainInstanceStateViewById(startStateModel.Id);
+            if (!(startStateView is null))
+                startStateView.CurrentSimulatingStatus = SimulatingStateStatus.CURRENT;
+
+            // re-color the links
+            foreach (var linkStatusPair in mCurrentLinkViewStatuses) {
+                linkStatusPair.Value.ForEach(linkModel => {
+                    LinkView linkView = Program.form.getCertainInstanceLinkViewById(linkModel.Id);
+                    linkView.CurrentSimulatingStatus = linkStatusPair.Key;
+                });
+            }
         }
     }
 }

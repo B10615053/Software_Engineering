@@ -326,8 +326,8 @@ namespace SWE_Final_Project.Views {
 
                         bool isActivatableLink =
                             !(currentStaying is null) &&
-                            !(currentStaying.getAllOutgoingLinks() is null) &&
-                            currentStaying.getAllOutgoingLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
+                            !(currentStaying.getConnectedLinks() is null) &&
+                            currentStaying.getConnectedLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
 
                         if (isActivatableLink)
                             SimulationManager.stepOnNextState(
@@ -335,6 +335,7 @@ namespace SWE_Final_Project.Views {
                                 MouseManager.coveringLinkView.Model.DstStateModel
                             );
                     }
+
                     // not simulating, show info-panel of this link
                     else
                         ModelManager.showInfoPanel(MouseManager.coveringLinkView);
@@ -362,8 +363,8 @@ namespace SWE_Final_Project.Views {
                     SimulationManager.isSimulating() &&
                     it == MouseManager.coveringLinkView &&
                     !(currentStaying is null) &&
-                    !(currentStaying.getAllOutgoingLinks() is null) &&
-                    currentStaying.getAllOutgoingLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
+                    !(currentStaying.getConnectedLinks() is null) &&
+                    currentStaying.getConnectedLinks().Exists(l => l.Id == MouseManager.coveringLinkView.Model.Id);
 
                 /* draw the lines of the link */
                 // is simulating and the mouse is covering a walkable link
