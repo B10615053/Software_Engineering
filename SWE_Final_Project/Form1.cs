@@ -334,10 +334,13 @@ namespace SWE_Final_Project {
 
                 // Ctrl + Z: undo
                 else if (e.KeyCode == Keys.Z) {
-                    if (SimulationManager.checkSimulating() == false)
+                    if (SimulationManager.isSimulating() == false)
                         ModelManager.undo(scriptsTabControl.SelectedIndex);
+                    else
+                        SimulationManager.backToCertainStateByIdx(SimulationManager.getRouteLength() - 2);
                 }
 
+                // Ctrl + Y: redo
                 else if (e.KeyCode == Keys.Y) {
                     if (SimulationManager.checkSimulating() == false)
                         ModelManager.redo(scriptsTabControl.SelectedIndex);
