@@ -393,5 +393,10 @@ namespace SWE_Final_Project {
         private void RunThroughToolStripMenuItem_Click(object sender, EventArgs e) {
             SimulationManager.startSimulation(SimulationType.RUN_THROUGH);
         }
+
+        // simulation stop
+        private void StopRunningToolStripMenuItem_Click(object sender, EventArgs e) {
+            SimulationManager.stopSimulation();
+        }
     }
 }

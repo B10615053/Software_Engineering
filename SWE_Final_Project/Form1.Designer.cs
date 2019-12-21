@@ -44,6 +44,7 @@
             this.txtCmdUserInput = new System.Windows.Forms.TextBox();
             this.txtCmdOutput = new System.Windows.Forms.TextBox();
             this.panelInfoContainer = new System.Windows.Forms.Panel();
+            this.stopRunningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -126,7 +127,8 @@
             // 
             this.runToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stepByStepToolStripMenuItem,
-            this.runThroughToolStripMenuItem});
+            this.runThroughToolStripMenuItem,
+            this.stopRunningToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
             this.runToolStripMenuItem.Size = new System.Drawing.Size(51, 23);
             this.runToolStripMenuItem.Text = "Run";
@@ -134,14 +136,14 @@
             // stepByStepToolStripMenuItem
             // 
             this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.stepByStepToolStripMenuItem.Text = "Step by step";
             this.stepByStepToolStripMenuItem.Click += new System.EventHandler(this.StepByStepToolStripMenuItem_Click);
             // 
             // runThroughToolStripMenuItem
             // 
             this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
-            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.runThroughToolStripMenuItem.Text = "Run through";
             this.runThroughToolStripMenuItem.Click += new System.EventHandler(this.RunThroughToolStripMenuItem_Click);
             // 
@@ -270,6 +272,13 @@
             this.panelInfoContainer.Size = new System.Drawing.Size(302, 880);
             this.panelInfoContainer.TabIndex = 2;
             // 
+            // stopRunningToolStripMenuItem
+            // 
+            this.stopRunningToolStripMenuItem.Name = "stopRunningToolStripMenuItem";
+            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.stopRunningToolStripMenuItem.Text = "Stop";
+            this.stopRunningToolStripMenuItem.Click += new System.EventHandler(this.StopRunningToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -313,6 +322,7 @@
         private System.Windows.Forms.ToolStripMenuItem runThroughToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem promptTypingFormWhenCreatingGeneralStateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopRunningToolStripMenuItem;
     }
 }
 

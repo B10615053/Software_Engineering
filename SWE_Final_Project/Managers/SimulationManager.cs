@@ -121,6 +121,9 @@ namespace SWE_Final_Project.Managers {
                 stepOnNextState(null, startStateModel);
             }
 
+            if (isSimulating())
+                return;
+
             // save the script and get the state-model list
             try {
                 // if there're some unsaved changes, help users save them
@@ -174,6 +177,26 @@ namespace SWE_Final_Project.Managers {
                     ).ShowDialog();
                 }
             }
+        }
+
+        // stop the simulation
+        public static void stopSimulation() {
+            if (isSimulating() == false)
+                return;
+
+            // turn the simulation system into not-simulating status
+            mCurrentSimulationType = SimulationType.NOT_SIMULATING;
+
+            // clear state- and link- models stored in the simulation system
+            mAllStateModelList.Clear(); mAllStateModelList = null;
+            mAllLinkModelList.Clear(); mAllLinkModelList = null;
+
+            // clear state- and link- views' statuses
+            mCurrentStateViewsStatuses.Clear(); mCurrentStateViewsStatuses = null;
+            mCurrentLinkViewStatuses.Clear(); mCurrentLinkViewStatuses = null;
+
+            // re-render
+            Program.form.invalidateCanvasAtCurrentScript();
         }
 
         // check if it's a simulate-able state machine, e.g., if it has a START and an END or not
