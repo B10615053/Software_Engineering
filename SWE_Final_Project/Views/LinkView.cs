@@ -90,6 +90,13 @@ namespace SWE_Final_Project.Views {
             ModelManager.modifyLinkOnCertainScript(this);
         }
 
+        public void setSrcAndDst(StateModel src, StateModel dst) {
+            Model.SrcStateModel = src;
+            Model.DstStateModel = dst;
+            Program.form.invalidateCanvasAtCurrentScript();
+            ModelManager.modifyLinkOnCertainScript(this);
+        }
+
         // set the ports of source & destination
         public void setSrcAndDstPorts(PortType srcPortType = PortType.NONE, PortType dstPortType = PortType.NONE, bool makeHistory = true) {
             Model.setSrcAndDstPorts(srcPortType, dstPortType);

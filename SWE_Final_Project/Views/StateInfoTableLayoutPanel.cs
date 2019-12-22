@@ -195,12 +195,17 @@ namespace SWE_Final_Project.Views {
             lblSrcState.Text = "Source";
             lblSrcState.BorderStyle = BorderStyle.None;
             lblSrcState.ReadOnly = true;
-            Controls.Add(lblSrcState, 0, 1);
+            //Controls.Add(lblSrcState, 0, 1);
 
-            // text-box: src state
-            TextBox txtShowSrcState = new TextBox();
-            txtShowSrcState.Text = linkView.Model.SrcStateModel.ContentText;
-            Controls.Add(txtShowSrcState, 1, 1);
+            // list-box: src state
+            List <StateModel> stateList = ModelManager.getCurrentWorkingScript().getCopiedStateList();
+            int i = stateList.FindIndex(it => it.Id == linkView.Model.SrcStateModel.Id);
+            ComboBox cbbSrcState = new ComboBox();
+            cbbSrcState.DropDownStyle = ComboBoxStyle.DropDownList;
+            foreach (StateModel stateModel in stateList)
+                cbbSrcState.Items.Add(stateModel);
+            cbbSrcState.SelectedIndex = i;
+            //Controls.Add(cbbSrcState, 1, 1);
 
             /* === */
 
@@ -227,12 +232,16 @@ namespace SWE_Final_Project.Views {
             lblDstState.Text = "Destination";
             lblDstState.BorderStyle = BorderStyle.None;
             lblDstState.ReadOnly = true;
-            Controls.Add(lblDstState, 0, 3);
+            //Controls.Add(lblDstState, 0, 3);
 
-            // text-box: dst state
-            TextBox txtShowDstState = new TextBox();
-            txtShowDstState.Text = linkView.Model.DstStateModel.ContentText;
-            Controls.Add(txtShowDstState, 1, 3);
+            // list-box: dst state
+            i = stateList.FindIndex(it => it.Id == linkView.Model.DstStateModel.Id);
+            ComboBox cbbDstState = new ComboBox();
+            cbbDstState.DropDownStyle = ComboBoxStyle.DropDownList;
+            foreach (StateModel stateModel in stateList)
+                cbbDstState.Items.Add(stateModel);
+            cbbDstState.SelectedIndex = i;
+            //Controls.Add(cbbDstState, 1, 3);
 
             /* === */
 
@@ -258,6 +267,52 @@ namespace SWE_Final_Project.Views {
             /* ============================= */
             /* ============================= */
             /* ============================= */
+            /* ============================= */
+
+            // for index-changing at src & dst models
+            EventHandler eventHandlerConnectedStateModel = (sender, e) => {
+                // get port-types of src & dst
+                PortType srcPortType = linkView.Model.SrcPortType;
+                PortType dstPortType = linkView.Model.DstPortType;
+
+                // get the state-models of src & dst
+                StateModel srcState = cbbSrcState.SelectedItem as StateModel;
+                StateModel dstState = cbbDstState.SelectedItem as StateModel;
+
+                // get the original state-models of src & dst
+                StateModel origSrcState = linkView.Model.SrcStateModel;
+                StateModel origDstState = linkView.Model.DstStateModel;
+
+                // remove this link from the original src & dst state-models
+                //origSrcState.deleteLinkAtCertainPort(linkView.Model, srcPortType, true);
+                //origDstState.deleteLinkAtCertainPort(linkView.Model, dstPortType, false);
+
+                ModelManager.removeLinkBetween2StatesOnCertainScript(
+                    origSrcState,
+                    srcPortType,
+                    origDstState,
+                    dstPortType,
+                    linkView.Model
+                );
+
+                ModelManager.addLinkBetween2StatesOnCertainScript(
+                    srcState,
+                    srcPortType,
+                    dstState,
+                    dstPortType,
+                    linkView.Model
+                );
+
+                // set this link's new src & dst state-models
+                linkView.Model.SrcStateModel = srcState;
+                linkView.Model.DstStateModel = dstState;
+
+                // adjust at the script
+                //Program.form.adjustLinkViewAtCurrentScript(linkView.Model, true);
+            };
+            cbbSrcState.SelectedIndexChanged += eventHandlerConnectedStateModel;
+            cbbDstState.SelectedIndexChanged += eventHandlerConnectedStateModel;
+
             /* ============================= */
 
             // for index-changing at src & dst ports

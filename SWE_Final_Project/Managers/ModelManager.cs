@@ -30,6 +30,13 @@ namespace SWE_Final_Project.Managers {
             }
         }
 
+        // get the current working-on script
+        public static ScriptModel getCurrentWorkingScript() {
+            if (CurrentSelectedScriptIndex < 0 || CurrentSelectedScriptIndex >= mOpenedScriptList.Count)
+                return null;
+            return mOpenedScriptList[CurrentSelectedScriptIndex];
+        }
+
         // get the designated script-model by index
         public static ScriptModel getScriptModelByIndex(int idx = -1) {
             if (idx == -1)
@@ -166,6 +173,21 @@ namespace SWE_Final_Project.Managers {
 
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(from.Id).addLinkAtCertainPort(linkModel, fromPortType, true);
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(to.Id).addLinkAtCertainPort(linkModel, toPortType, false);
+            mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
+
+            // add a record in its own history management
+            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
+            Program.form.MarkUnsavedScript();
+        }
+
+        // remove a link between two states
+        public static void removeLinkBetween2StatesOnCertainScript(StateModel from, PortType fromPortType, StateModel to, PortType toPortType, LinkModel linkModel) {
+            if (CurrentSelectedScriptIndex < 0)
+                return;
+
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(from.Id).deleteLinkAtCertainPort(linkModel, fromPortType, true);
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(to.Id).deleteLinkAtCertainPort(linkModel, toPortType, false);
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
 
             // add a record in its own history management
