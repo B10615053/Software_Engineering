@@ -9,14 +9,14 @@ using System.Windows.Forms;
 namespace SWE_Final_Project.Managers {
     public enum LogType {
         SIMULATION_START_OR_END,
-        DURING_SIMULATION
+        SIMULATION_ROUTE
     }
 
     public class LogManager {
         // the dictionary used to store classified log texts
         private static Dictionary<LogType, List<string>> mLogTextDict = new Dictionary<LogType, List<string>> {
             { LogType.SIMULATION_START_OR_END, new List<string>() },
-            { LogType.DURING_SIMULATION, new List<string>() }
+            { LogType.SIMULATION_ROUTE, new List<string>() }
         };
 
         // do logging w/ a single text
@@ -41,12 +41,17 @@ namespace SWE_Final_Project.Managers {
             // add to the list of the corresponding type
             mLogTextDict[logType].AddRange(texts);
 
-            // select the color determined by the log-type
-            rtxtBx.SelectionColor = getLogColor(logType);
-
             // write all of 1the texts into the rich-text-box
-            foreach (string text in texts)
+            bool theFirst = true;
+            foreach (string text in texts) {
+                if (theFirst) {
+                    rtxtBx.SelectionColor = getLogColor(logType);
+                    theFirst = false;
+                }
+                else
+                    rtxtBx.SelectionColor = Color.Green;
                 rtxtBx.AppendText(text + "\r\n");
+            }
 
             // let the rich-text-box automatically scroll to end
             rtxtBx.ScrollToCaret();
@@ -56,8 +61,8 @@ namespace SWE_Final_Project.Managers {
         private static Color getLogColor(LogType logType) {
             switch (logType) {
                 case LogType.SIMULATION_START_OR_END:
-                    return Color.AliceBlue;
-                case LogType.DURING_SIMULATION:
+                    return Color.Orange;
+                case LogType.SIMULATION_ROUTE:
                     return Color.White;
             }
             return Color.White;

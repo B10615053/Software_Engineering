@@ -223,6 +223,7 @@ namespace SWE_Final_Project.Views {
             else if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE) {
                 Cursor = Cursors.Default;
                 MouseManager.coveringLinkView = null;
+                MouseManager.coveringStateViewAndPort = new KeyValuePair<StateView, PortType>(null, PortType.NONE);
 
                 // check if the mouse is currently on a certain link
                 foreach (LinkView linkView in mExistedOutgoingLinks) {
@@ -418,7 +419,18 @@ namespace SWE_Final_Project.Views {
                     if (SimulationManager.isSimulating()) {
                         Color simulatingStateColor = SimulationManager.getSimulatingStateColor(stateView.CurrentSimulatingStatus);
 
-                        if (dstStateViewId == stateView.Id) {
+                        string coveringStateViewId = "";
+                        if (!(MouseManager.coveringStateViewAndPort.Key is null)) {
+                            StateModel coveringStateModel = ModelManager.getStateModelByIdAtCurrentScript(MouseManager.coveringStateViewAndPort.Key.Id);
+                            if (!(coveringStateModel is null)) {
+                                coveringStateModel.getConnectedLinks(false, true).ForEach(ingoing => {
+                                    if (SimulationManager.isCertainLinkAvailableCurrently(ingoing))
+                                        coveringStateViewId = coveringStateModel.Id;
+                                });
+                            }
+                        }
+
+                        if (dstStateViewId == stateView.Id || coveringStateViewId == stateView.Id) {
                             g.DrawPath(new Pen(Color.Red, 2), stateView.OutlineGphPath);
                             if (!(stateView is GeneralStateView))
                                 g.FillPath(new SolidBrush(Color.Red), stateView.InnerGphPath);
@@ -429,6 +441,7 @@ namespace SWE_Final_Project.Views {
                                 g.FillPath(new SolidBrush(simulatingStateColor), stateView.InnerGphPath);
                         }
                     }
+
                     // is NOT simulating now
                     else {
                         g.DrawPath(Pens.Black, stateView.OutlineGphPath);

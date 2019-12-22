@@ -301,7 +301,6 @@ namespace SWE_Final_Project.Views.States {
                 else if (mOutlineGphPath.IsVisible(canvasX, canvasY)) {
                     // mouse is at the inner stuff of this state-view
                     // -> do moving (relocating the dragged state-view)
-                    // if (MouseManager.isDraggingExistedStateView) {
                     if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW) {
                         relocateState(
                             Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
@@ -339,7 +338,7 @@ namespace SWE_Final_Project.Views.States {
                         Invalidate();
                     }
                 }
-
+                
                 // if it's creating a link
                 if (MouseManager.CurrentMouseAction == MouseAction.CREATING_LINK) {
                     MouseManager.AddingLinkView.adjustLinesByChangingEndLocOnScript(
@@ -386,24 +385,26 @@ namespace SWE_Final_Project.Views.States {
                     if (MouseManager.coveringStateViewAndPort.Value == PortType.NONE) {
                         // simulating
                         if (SimulationManager.isSimulating()) {
-                            StateModel model = ModelManager.getStateModelByIdAtCurrentScript(Id);
+                            if (mIsInstanceOnScript) {
+                                StateModel model = ModelManager.getStateModelByIdAtCurrentScript(Id);
 
-                            // this is the state in the route
-                            if (SimulationManager.isCertainStateInRoute(model)) {
-                                SimulationManager.backToCerainState(model);
-                            }
+                                // this is the state in the route
+                                if (SimulationManager.isCertainStateInRoute(model)) {
+                                    SimulationManager.backToCerainState(model);
+                                }
 
-                            // not in the route, then check if this state is available currently
-                            else {
-                                List<LinkModel> ingoingLinks = model.getConnectedLinks(false, true);
-                                ingoingLinks.ForEach(ingoing => {
-                                    if (SimulationManager.isCertainLinkAvailableCurrently(ingoing)) {
-                                        SimulationManager.stepOnNextState(
-                                            ingoing,
-                                            ingoing.DstStateModel
-                                        );
-                                    }
-                                });
+                                // not in the route, then check if this state is available currently
+                                else {
+                                    List<LinkModel> ingoingLinks = model.getConnectedLinks(false, true);
+                                    ingoingLinks.ForEach(ingoing => {
+                                        if (SimulationManager.isCertainLinkAvailableCurrently(ingoing)) {
+                                            SimulationManager.stepOnNextState(
+                                                ingoing,
+                                                ingoing.DstStateModel
+                                            );
+                                        }
+                                    });
+                                }
                             }
                         }
 

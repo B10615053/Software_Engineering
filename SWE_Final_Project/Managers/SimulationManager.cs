@@ -570,7 +570,7 @@ namespace SWE_Final_Project.Managers {
             foreach (LinkModel linkModel in mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE])
                 logTexts.Add(spaces + " - " + linkModel.LinkText + " => " + linkModel.DstStateModel.ToString());
 
-            LogManager.Log(LogType.DURING_SIMULATION, logTexts);
+            LogManager.Log(LogType.SIMULATION_ROUTE, logTexts);
         }
     }
 }
