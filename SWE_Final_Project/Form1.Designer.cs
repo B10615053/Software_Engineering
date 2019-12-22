@@ -33,6 +33,7 @@
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepByStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopRunningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,9 +43,8 @@
             this.statesListPanel = new System.Windows.Forms.Panel();
             this.tableLayout_cmd = new System.Windows.Forms.TableLayoutPanel();
             this.txtCmdUserInput = new System.Windows.Forms.TextBox();
-            this.txtCmdOutput = new System.Windows.Forms.TextBox();
             this.panelInfoContainer = new System.Windows.Forms.Panel();
-            this.stopRunningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rtxtCmdOutput = new System.Windows.Forms.RichTextBox();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -136,16 +136,23 @@
             // stepByStepToolStripMenuItem
             // 
             this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.stepByStepToolStripMenuItem.Text = "Step by step";
             this.stepByStepToolStripMenuItem.Click += new System.EventHandler(this.StepByStepToolStripMenuItem_Click);
             // 
             // runThroughToolStripMenuItem
             // 
             this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
-            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.runThroughToolStripMenuItem.Text = "Run through";
             this.runThroughToolStripMenuItem.Click += new System.EventHandler(this.RunThroughToolStripMenuItem_Click);
+            // 
+            // stopRunningToolStripMenuItem
+            // 
+            this.stopRunningToolStripMenuItem.Name = "stopRunningToolStripMenuItem";
+            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.stopRunningToolStripMenuItem.Text = "Stop";
+            this.stopRunningToolStripMenuItem.Click += new System.EventHandler(this.StopRunningToolStripMenuItem_Click);
             // 
             // screenshotToolStripMenuItem
             // 
@@ -229,7 +236,7 @@
             this.tableLayout_cmd.ColumnCount = 1;
             this.tableLayout_cmd.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayout_cmd.Controls.Add(this.txtCmdUserInput, 0, 1);
-            this.tableLayout_cmd.Controls.Add(this.txtCmdOutput, 0, 0);
+            this.tableLayout_cmd.Controls.Add(this.rtxtCmdOutput, 0, 0);
             this.tableLayout_cmd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout_cmd.Location = new System.Drawing.Point(3, 642);
             this.tableLayout_cmd.Name = "tableLayout_cmd";
@@ -251,19 +258,6 @@
             this.txtCmdUserInput.Size = new System.Drawing.Size(1555, 18);
             this.txtCmdUserInput.TabIndex = 0;
             // 
-            // txtCmdOutput
-            // 
-            this.txtCmdOutput.BackColor = System.Drawing.Color.Black;
-            this.txtCmdOutput.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtCmdOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtCmdOutput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCmdOutput.Location = new System.Drawing.Point(3, 3);
-            this.txtCmdOutput.Multiline = true;
-            this.txtCmdOutput.Name = "txtCmdOutput";
-            this.txtCmdOutput.ReadOnly = true;
-            this.txtCmdOutput.Size = new System.Drawing.Size(1555, 202);
-            this.txtCmdOutput.TabIndex = 1;
-            // 
             // panelInfoContainer
             // 
             this.panelInfoContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -272,12 +266,18 @@
             this.panelInfoContainer.Size = new System.Drawing.Size(302, 880);
             this.panelInfoContainer.TabIndex = 2;
             // 
-            // stopRunningToolStripMenuItem
+            // rtxtCmdOutput
             // 
-            this.stopRunningToolStripMenuItem.Name = "stopRunningToolStripMenuItem";
-            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.stopRunningToolStripMenuItem.Text = "Stop";
-            this.stopRunningToolStripMenuItem.Click += new System.EventHandler(this.StopRunningToolStripMenuItem_Click);
+            this.rtxtCmdOutput.BackColor = System.Drawing.Color.Black;
+            this.rtxtCmdOutput.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtxtCmdOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtxtCmdOutput.Font = new System.Drawing.Font("Consolas", 13F);
+            this.rtxtCmdOutput.ForeColor = System.Drawing.Color.White;
+            this.rtxtCmdOutput.Location = new System.Drawing.Point(3, 3);
+            this.rtxtCmdOutput.Name = "rtxtCmdOutput";
+            this.rtxtCmdOutput.Size = new System.Drawing.Size(1555, 202);
+            this.rtxtCmdOutput.TabIndex = 1;
+            this.rtxtCmdOutput.Text = "";
             // 
             // Form1
             // 
@@ -315,7 +315,6 @@
         private System.Windows.Forms.ToolStripMenuItem screenshotToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayout_cmd;
         private System.Windows.Forms.TextBox txtCmdUserInput;
-        private System.Windows.Forms.TextBox txtCmdOutput;
         private System.Windows.Forms.Panel statesListPanel;
         public System.Windows.Forms.Panel panelInfoContainer;
         private System.Windows.Forms.ToolStripMenuItem stepByStepToolStripMenuItem;
@@ -323,6 +322,7 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem promptTypingFormWhenCreatingGeneralStateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopRunningToolStripMenuItem;
+        private System.Windows.Forms.RichTextBox rtxtCmdOutput;
     }
 }
 

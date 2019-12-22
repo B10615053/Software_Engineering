@@ -284,6 +284,9 @@ namespace SWE_Final_Project {
             canvas.Invalidate();
         }
 
+        // get the rich-text-box which is used to show logs
+        public RichTextBox getCmdLogoutBox() => rtxtCmdOutput;
+
         /* ============================================================== */
         /* user events */
 

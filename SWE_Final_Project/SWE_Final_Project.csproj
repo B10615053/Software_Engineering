@@ -53,6 +53,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Managers\HistoryManager.cs" />
+    <Compile Include="Managers\LogManager.cs" />
     <Compile Include="Managers\ModelManager.cs" />
     <Compile Include="Managers\MouseManager.cs" />
     <Compile Include="Managers\SerializationManager.cs" />

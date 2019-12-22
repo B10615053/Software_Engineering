@@ -288,7 +288,15 @@ namespace SWE_Final_Project.Models {
         }
 
         public override string ToString() {
-            //return Id;
+            if (mStateType == StateType.START)
+                return "START";
+            else if (mStateType == StateType.END)
+                return "END";
+            else {
+                if (mContentText.Length == 0)
+                    return "<no text>";
+                return mContentText;
+            }
 
             string ret = "";
             if (mStateType == StateType.START)

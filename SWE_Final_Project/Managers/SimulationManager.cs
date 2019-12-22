@@ -122,6 +122,9 @@ namespace SWE_Final_Project.Managers {
                 // remove the info-panel if exists
                 ModelManager.removeInfoPanel();
 
+                // log out
+                LogManager.Log(LogType.SIMULATION_START_OR_END, "Simulation starts.");
+
                 // start the simulation by classifying and re-rendering all the states
                 StateModel startStateModel = mAllStateModelList.Find(it => it.StateType == StateType.START);
                 stepOnNextState(null, startStateModel);
@@ -206,6 +209,9 @@ namespace SWE_Final_Project.Managers {
 
             // re-render
             Program.form.invalidateCanvasAtCurrentScript();
+
+            // log out
+            LogManager.Log(LogType.SIMULATION_START_OR_END, "Simulation ends.");
         }
 
         // check if it's a simulate-able state machine, e.g., if it has a START and an END or not
@@ -317,6 +323,9 @@ namespace SWE_Final_Project.Managers {
 
             // re-color all the views
             recolorViews();
+
+            // log out
+            logoutCurrentRoute();
         }
 
         // back to a certain step
@@ -338,6 +347,9 @@ namespace SWE_Final_Project.Managers {
 
             // re-color all the views
             recolorViews();
+
+            // log out
+            logoutCurrentRoute();
         }
 
         // back to a certain step
@@ -361,6 +373,9 @@ namespace SWE_Final_Project.Managers {
 
             // re-color all the views
             recolorViews();
+
+            // log out
+            logoutCurrentRoute();
         }
 
         // step on the next state during the simulation,
@@ -476,8 +491,10 @@ namespace SWE_Final_Project.Managers {
             });
         }
 
+        // get the current length of route
         public static int getRouteLength() => mRouteStatesStack.Count;
 
+        // check if a certain state is in the route or not
         public static bool isCertainStateInRoute(StateModel stateModel) {
             if (isSimulating() == false ||
                     mAllStateModelList == null ||
@@ -488,6 +505,7 @@ namespace SWE_Final_Project.Managers {
             return mRouteStatesStack.Contains(stateModel);
         }
 
+        // check if a certain link is available (1-step reachable) currently or not
         public static bool isCertainLinkAvailableCurrently(LinkModel linkModel) {
             if (isSimulating() == false ||
                     mAllLinkModelList == null ||
@@ -499,6 +517,7 @@ namespace SWE_Final_Project.Managers {
             return mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Exists(it => it.Id == linkModel.Id);
         }
 
+        // re-color all the views, including state-views and link-views
         private static void recolorViews() {
             // re-color the views
             foreach (var stateStatusPair in mCurrentStateViewsStatuses) {
@@ -521,6 +540,37 @@ namespace SWE_Final_Project.Managers {
                     linkView.CurrentSimulatingStatus = linkStatusPair.Key;
                 });
             }
+        }
+
+        // log out the current route in a simulation
+        private static void logoutCurrentRoute() {
+            StringBuilder sBuf = new StringBuilder();
+
+            // get the string of the route
+            bool theFirst = true;
+            foreach (StateModel stateModel in mRouteStatesStack) {
+                if (theFirst) {
+                    sBuf.Insert(0, stateModel.ToString());
+                    theFirst = false;
+                }
+                else
+                    sBuf.Insert(0, stateModel.ToString() + " -> ");
+            }
+            string routeStr = sBuf.ToString();
+
+            // get the string of spaces with the same length as the route string
+            sBuf.Clear();
+            foreach (char c in routeStr)
+                sBuf.Append(" ");
+            string spaces = sBuf.ToString();
+
+            // build the list of log texts
+            List<string> logTexts = new List<string>();
+            logTexts.Add(routeStr);
+            foreach (LinkModel linkModel in mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE])
+                logTexts.Add(spaces + " - " + linkModel.LinkText + " => " + linkModel.DstStateModel.ToString());
+
+            LogManager.Log(LogType.DURING_SIMULATION, logTexts);
         }
     }
 }
