@@ -123,7 +123,7 @@ namespace SWE_Final_Project.Models {
             {
                 if (s.Id == id)
                 {
-                    ret=s.getConnectedLinks(true,false);
+                    ret=s.getConnectedLinks(true,true);
                 }
             }
                
