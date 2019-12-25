@@ -116,6 +116,22 @@ namespace SWE_Final_Project.Models {
             toBeModifiedState.setDataByStateView(stateView);
         }
 
+        public List<LinkModel> getOutLink(string id)
+        {
+            List<LinkModel> ret = new List<LinkModel>();
+            foreach (var s in mExistedStateList)
+            {
+                if (s.Id == id)
+                {
+                    ret=s.getConnectedLinks(true,false);
+                }
+            }
+               
+           
+            return ret;
+        }
+
+
         // check if this script has been saved at least one time or not
         public bool hasBeenSavedAtLeastOneTime() => (!(mSavedFilePath is null));
 
@@ -147,6 +163,7 @@ namespace SWE_Final_Project.Models {
                     }
 
                     // mark this script as unsaved
+                                  
                     mHaveUnsavedChanges = true;
                     Program.form.MarkUnsavedScript();
 

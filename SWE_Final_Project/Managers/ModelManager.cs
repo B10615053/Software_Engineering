@@ -54,6 +54,8 @@ namespace SWE_Final_Project.Managers {
             return mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(id);
         }
 
+       
+
         // add new script, and return the re-adjusted script name
         public static ScriptModel addNewScript(string newScriptName, List<StateModel> stateModels = null) {
             // deal w/ duplicated script names
@@ -243,10 +245,29 @@ namespace SWE_Final_Project.Managers {
             bool reallyRemoved = mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
 
             if (reallyRemoved)
-                HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+            {
+                // mOpenedScriptList[CurrentSelectedScriptIndex].
+                List<LinkModel> ret = new List<LinkModel>();
+                ret = mOpenedScriptList[CurrentSelectedScriptIndex].getOutLink(id);
+                foreach (var s in ret)
+                {
+                    removeLinkModelAtCurrentScript(s);
+                    
+                }
+
+               HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+            }
 
             return reallyRemoved;
         }
+
+        public static  List<LinkModel> getAllLinkInState(string id)
+        {
+            List<LinkModel> ret = new List<LinkModel>();
+            ret = mOpenedScriptList[CurrentSelectedScriptIndex].getOutLink(id);
+            return ret;
+        }
+
 
         // remove the linkModel form srcState and dstState
         public static bool removeLinkModelAtCurrentScript(LinkModel deleteLinkModel) {

@@ -54,6 +54,7 @@ namespace SWE_Final_Project.Models {
         private PortModel mDownPortModel = new PortModel();
         private PortModel mLeftPortModel = new PortModel();
 
+        
         /* ========================================= */
 
         // constructor

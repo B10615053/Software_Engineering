@@ -217,7 +217,12 @@ namespace SWE_Final_Project.Views.States {
             // remove the view
             if (Program.form.deleteStateView(ModelManager.getStateModelByIdAtCurrentScript(Id)) == false)
                 return;
-
+            List<LinkModel> ret = new List<LinkModel>();
+            ret = ModelManager.getAllLinkInState(Id);
+            foreach(var s in ret)
+            {
+                Program.form.deleteLinkView(s);
+            }
             // remove the model
             ModelManager.removeStateModelByIDAtCurrentScript(Id);
 

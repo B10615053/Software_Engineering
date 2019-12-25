@@ -412,5 +412,10 @@ namespace SWE_Final_Project {
         private void StopRunningToolStripMenuItem_Click(object sender, EventArgs e) {
             SimulationManager.stopSimulation();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
