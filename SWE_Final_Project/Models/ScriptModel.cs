@@ -116,7 +116,7 @@ namespace SWE_Final_Project.Models {
             toBeModifiedState.setDataByStateView(stateView);
         }
 
-        public List<LinkModel> getOutLink(string id)
+        public List<LinkModel> getAllLinks(string id)
         {
             List<LinkModel> ret = new List<LinkModel>();
             foreach (var s in mExistedStateList)

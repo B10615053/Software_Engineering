@@ -242,29 +242,24 @@ namespace SWE_Final_Project.Managers {
         }
 
         public static bool removeStateModelByIDAtCurrentScript(string id) {
-            bool reallyRemoved = mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
-
-            if (reallyRemoved)
-            {
-                // mOpenedScriptList[CurrentSelectedScriptIndex].
                 List<LinkModel> ret = new List<LinkModel>();
-                ret = mOpenedScriptList[CurrentSelectedScriptIndex].getOutLink(id);
+                ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinks(id);
                 foreach (var s in ret)
                 {
                     removeLinkModelAtCurrentScript(s);
                     
                 }
 
+                mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
                HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
-            }
 
-            return reallyRemoved;
+            return true;
         }
 
         public static  List<LinkModel> getAllLinkInState(string id)
         {
             List<LinkModel> ret = new List<LinkModel>();
-            ret = mOpenedScriptList[CurrentSelectedScriptIndex].getOutLink(id);
+            ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinks(id);
             return ret;
         }
 
