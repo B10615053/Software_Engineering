@@ -45,6 +45,10 @@
             this.txtCmdUserInput = new System.Windows.Forms.TextBox();
             this.rtxtCmdOutput = new System.Windows.Forms.RichTextBox();
             this.panelInfoContainer = new System.Windows.Forms.Panel();
+            this.wholeWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentWorkingScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.withScriptNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.withoutScriptNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -158,6 +162,9 @@
             // 
             // screenshotToolStripMenuItem
             // 
+            this.screenshotToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.wholeWindowToolStripMenuItem,
+            this.currentWorkingScriptToolStripMenuItem});
             this.screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
             this.screenshotToolStripMenuItem.Size = new System.Drawing.Size(100, 24);
             this.screenshotToolStripMenuItem.Text = "Screenshot";
@@ -209,7 +216,7 @@
             this.tableLayout_mainWithoutCmd.Name = "tableLayout_mainWithoutCmd";
             this.tableLayout_mainWithoutCmd.RowCount = 1;
             this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 634F));
+            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 635F));
             this.tableLayout_mainWithoutCmd.Size = new System.Drawing.Size(1561, 635);
             this.tableLayout_mainWithoutCmd.TabIndex = 0;
             // 
@@ -289,6 +296,36 @@
             this.panelInfoContainer.Size = new System.Drawing.Size(302, 880);
             this.panelInfoContainer.TabIndex = 2;
             // 
+            // wholeWindowToolStripMenuItem
+            // 
+            this.wholeWindowToolStripMenuItem.Name = "wholeWindowToolStripMenuItem";
+            this.wholeWindowToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
+            this.wholeWindowToolStripMenuItem.Text = "Whole window";
+            this.wholeWindowToolStripMenuItem.Click += new System.EventHandler(this.WholeWindowToolStripMenuItem_Click);
+            // 
+            // currentWorkingScriptToolStripMenuItem
+            // 
+            this.currentWorkingScriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.withScriptNameToolStripMenuItem,
+            this.withoutScriptNameToolStripMenuItem});
+            this.currentWorkingScriptToolStripMenuItem.Name = "currentWorkingScriptToolStripMenuItem";
+            this.currentWorkingScriptToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
+            this.currentWorkingScriptToolStripMenuItem.Text = "Current working script";
+            // 
+            // withScriptNameToolStripMenuItem
+            // 
+            this.withScriptNameToolStripMenuItem.Name = "withScriptNameToolStripMenuItem";
+            this.withScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
+            this.withScriptNameToolStripMenuItem.Text = "With script name";
+            this.withScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithScriptNameToolStripMenuItem_Click);
+            // 
+            // withoutScriptNameToolStripMenuItem
+            // 
+            this.withoutScriptNameToolStripMenuItem.Name = "withoutScriptNameToolStripMenuItem";
+            this.withoutScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
+            this.withoutScriptNameToolStripMenuItem.Text = "Without script name";
+            this.withoutScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithoutScriptNameToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -298,7 +335,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "State Machine Simulator - G03";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.tableLayout_base.ResumeLayout(false);
             this.tableLayout_base.PerformLayout();
             this.mainMenuStrip.ResumeLayout(false);
@@ -335,6 +372,10 @@
         private System.Windows.Forms.ToolStripMenuItem promptTypingFormWhenCreatingGeneralStateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopRunningToolStripMenuItem;
         private System.Windows.Forms.RichTextBox rtxtCmdOutput;
+        private System.Windows.Forms.ToolStripMenuItem wholeWindowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem currentWorkingScriptToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem withScriptNameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem withoutScriptNameToolStripMenuItem;
     }
 }
 

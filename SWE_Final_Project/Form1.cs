@@ -287,6 +287,27 @@ namespace SWE_Final_Project {
         // get the rich-text-box which is used to show logs
         public RichTextBox getCmdLogoutBox() => rtxtCmdOutput;
 
+        // do screenshot
+        public void doScreenshot(Control control) {
+            Bitmap screenshot = new Bitmap(control.Width, control.Height);
+            Rectangle formRect = new Rectangle(0, 0, control.Width, control.Height);
+
+            control.DrawToBitmap(screenshot, formRect);
+
+            SaveFileDialog screenshotSaveDialog = new SaveFileDialog();
+            screenshotSaveDialog.DefaultExt = "jpg";
+            screenshotSaveDialog.RestoreDirectory = true;
+            screenshotSaveDialog.FileName = "";
+
+            if (screenshotSaveDialog.ShowDialog() == DialogResult.OK) {
+                screenshot.Save(
+                    screenshotSaveDialog.FileName,
+                    System.Drawing.Imaging.ImageFormat.Jpeg
+                );
+                new AlertForm("Alert", "Screenshot saved.").ShowDialog();
+            }
+        }
+
         /* ============================================================== */
         /* user events */
 
@@ -321,46 +342,71 @@ namespace SWE_Final_Project {
 
         // user keyboard actions at a certain script
         private void ScriptsTabControl_KeyDown(object sender, KeyEventArgs e) {
-            // Ctrl pressed
-            if (e.Modifiers == Keys.Control) {
-                // Ctrl + N: new script
-                if (e.KeyCode == Keys.N)
-                    addNewScript();
-
-                // Ctrl + S: save script
-                if (e.KeyCode == Keys.S)
-                    saveCertainScript(scriptsTabControl.SelectedIndex);
-
-                // Ctrl + O: open script
-                else if (e.KeyCode == Keys.O)
-                    showDialogAndOpenScriptFromDisk();
-
-                // Ctrl + Z: undo
-                else if (e.KeyCode == Keys.Z) {
-                    if (SimulationManager.isSimulating() == false)
-                        ModelManager.undo(scriptsTabControl.SelectedIndex);
+            // F11: screenshots
+            if (e.KeyCode == Keys.F11) {
+                // Ctrl + F11: current working-on script w/ name
+                if (e.Modifiers == Keys.Control) {
+                    if (scriptsTabControl is null || scriptsTabControl.SelectedTab is null)
+                        new AlertForm("No script opened", "There is NO any scripts opened.").ShowDialog();
                     else
-                        SimulationManager.backToCertainStateByIdx(SimulationManager.getRouteLength() - 2);
+                        doScreenshot(scriptsTabControl);
                 }
 
-                // Ctrl + Y: redo
-                else if (e.KeyCode == Keys.Y) {
-                    if (SimulationManager.checkSimulating() == false)
-                        ModelManager.redo(scriptsTabControl.SelectedIndex);
+                // Shift + F11: current working-on script w/o name
+                else if (e.Modifiers == Keys.Shift) {
+                    if (scriptsTabControl is null || scriptsTabControl.SelectedTab is null)
+                        new AlertForm("No script opened", "There is NO any scripts opened.").ShowDialog();
+                    else
+                        doScreenshot(((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas);
                 }
-            }
 
-            // F5 pressed: start/stop a simulation
-            else if (e.KeyCode == Keys.F5) {
-                if (SimulationManager.isSimulating())
-                    SimulationManager.stopSimulation();
+                // F11: the whole window
                 else
-                    SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
+                    doScreenshot(this);
             }
 
-            // Ctrl + Shift + P, for debugging
-            else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.P) {
-                //ModelManager.debugPrint();
+            else {
+                // Ctrl pressed
+                if (e.Modifiers == Keys.Control) {
+                    // Ctrl + N: new script
+                    if (e.KeyCode == Keys.N)
+                        addNewScript();
+
+                    // Ctrl + S: save script
+                    if (e.KeyCode == Keys.S)
+                        saveCertainScript(scriptsTabControl.SelectedIndex);
+
+                    // Ctrl + O: open script
+                    else if (e.KeyCode == Keys.O)
+                        showDialogAndOpenScriptFromDisk();
+
+                    // Ctrl + Z: undo
+                    else if (e.KeyCode == Keys.Z) {
+                        if (SimulationManager.isSimulating() == false)
+                            ModelManager.undo(scriptsTabControl.SelectedIndex);
+                        else
+                            SimulationManager.backToCertainStateByIdx(SimulationManager.getRouteLength() - 2);
+                    }
+
+                    // Ctrl + Y: redo
+                    else if (e.KeyCode == Keys.Y) {
+                        if (SimulationManager.checkSimulating() == false)
+                            ModelManager.redo(scriptsTabControl.SelectedIndex);
+                    }
+                }
+
+                // F5 pressed: start/stop a simulation
+                else if (e.KeyCode == Keys.F5) {
+                    if (SimulationManager.isSimulating())
+                        SimulationManager.stopSimulation();
+                    else
+                        SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
+                }
+
+                // Ctrl + Shift + P, for debugging
+                else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.P) {
+                    //ModelManager.debugPrint();
+                }
             }
         }
 
@@ -418,9 +464,30 @@ namespace SWE_Final_Project {
             SimulationManager.stopSimulation();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
+        // screenshot feature: the whole window
+        private void WholeWindowToolStripMenuItem_Click(object sender, EventArgs e) {
+            doScreenshot(this);
+        }
 
+        // screenshot feature: the current working-on script w/ script name
+        private void WithScriptNameToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (scriptsTabControl is null || scriptsTabControl.SelectedTab is null)
+                new AlertForm("No script opened", "There is NO any scripts opened.").ShowDialog();
+            else
+                doScreenshot(scriptsTabControl);
+        }
+
+        // screenshot feature: the current working-on script w/o script name
+        private void WithoutScriptNameToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (scriptsTabControl is null || scriptsTabControl.SelectedTab is null)
+                new AlertForm("No script opened", "There is NO any scripts opened.").ShowDialog();
+            else
+                doScreenshot(((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas);
+        }
+
+        // key-down event for form1
+        private void Form1_KeyDown(object sender, KeyEventArgs e) {
+            
         }
     }
 }
