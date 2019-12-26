@@ -126,8 +126,9 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
-            this.saveAsToolStripMenuItem.Text = "Save Script as...";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
+            this.saveAsToolStripMenuItem.Text = "Export the current working script as JPG";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // runToolStripMenuItem
             // 

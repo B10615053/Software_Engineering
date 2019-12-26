@@ -288,7 +288,7 @@ namespace SWE_Final_Project {
         public RichTextBox getCmdLogoutBox() => rtxtCmdOutput;
 
         // do screenshot
-        public void doScreenshot(Control control) {
+        public void doScreenshot(Control control, string msgWhenScreenshottedSuccessfully = "Screenshot saved.") {
             Bitmap screenshot = new Bitmap(control.Width, control.Height);
             Rectangle formRect = new Rectangle(0, 0, control.Width, control.Height);
 
@@ -304,7 +304,7 @@ namespace SWE_Final_Project {
                     screenshotSaveDialog.FileName,
                     System.Drawing.Imaging.ImageFormat.Jpeg
                 );
-                new AlertForm("Alert", "Screenshot saved.").ShowDialog();
+                new AlertForm("Alert", msgWhenScreenshottedSuccessfully).ShowDialog();
             }
         }
 
@@ -488,6 +488,14 @@ namespace SWE_Final_Project {
         // key-down event for form1
         private void Form1_KeyDown(object sender, KeyEventArgs e) {
             
+        }
+
+        // export the current working-on script as an image of JPG
+        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (scriptsTabControl is null || scriptsTabControl.SelectedTab is null)
+                new AlertForm("No script opened", "There is NO any scripts opened.").ShowDialog();
+            else
+                doScreenshot(((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas, "Exported successfully!");
         }
     }
 }
