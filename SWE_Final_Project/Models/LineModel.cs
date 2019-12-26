@@ -92,7 +92,6 @@ namespace SWE_Final_Project.Models {
                     radian += 2 * Math.PI;
                 }
             }
-            //Console.WriteLine("The " + radian + " is equal to " + (180.0 / Math.PI) * radian);
 
             // they're the same point
             if (sptX == eptX && sptY == eptY)

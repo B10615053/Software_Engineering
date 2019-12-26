@@ -140,8 +140,7 @@ namespace SWE_Final_Project.Views.States {
             resetPortPositions();
 
             // changes at data model
-            if (updateModel)
-                ModelManager.modifyStateOnCertainScript(this);
+            ModelManager.modifyStateOnCertainScript(this, updateModel);
 
             // re-draw
             Invalidate();
@@ -156,15 +155,14 @@ namespace SWE_Final_Project.Views.States {
             resetPortPositions();
 
             // changes at data model
-            if (updateModel)
-                ModelManager.modifyStateOnCertainScript(this);
+            ModelManager.modifyStateOnCertainScript(this, updateModel);
 
             // re-draw
             Invalidate();
         }
 
         // re-set the positions of 4 types of ports
-        protected void resetPortPositions() {
+        public void resetPortPositions() {
             // up port
             if (mPortPosDict.ContainsKey(PortType.UP))
                 mPortPosDict[PortType.UP] = new Point(Size.Width / 2, 0);
@@ -203,8 +201,7 @@ namespace SWE_Final_Project.Views.States {
                 Location = new Point(x, y);
 
             // changes at data model
-            if (updateModel)
-                ModelManager.modifyStateOnCertainScript(this);
+            ModelManager.modifyStateOnCertainScript(this, updateModel);
         }
 
         // get the position of a certain port

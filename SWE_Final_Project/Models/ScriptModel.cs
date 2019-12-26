@@ -109,7 +109,6 @@ namespace SWE_Final_Project.Models {
 
         // modify a existed state
         public void modifyState(StateView stateView) {
-            Console.WriteLine("\tId: " + stateView.Id);
             StateModel toBeModifiedState = mExistedStateList.Find(it => it.Id == stateView.Id);
             if (toBeModifiedState is null)
                 return;
@@ -198,10 +197,20 @@ namespace SWE_Final_Project.Models {
         }
 
         public override string ToString() {
-            string ret = mScriptName + "\r\n";
+            string ret = "Script: " + mScriptName + "\r\n";
+
+            ret += "\r\nStates:\r\n";
             mExistedStateList.ForEach(it => {
                 ret += "\t" + it.ToString() + "\r\n";
             });
+
+            ret += "\r\nLinks:\r\n";
+            mExistedStateList.ForEach(it => {
+                it.getConnectedLinks(true, true).ForEach(l => {
+                    ret += "\t" + l.Id + "[" + l.SrcStateModel.Id + "," + l.DstStateModel.Id + "]\r\n";
+                });
+            });
+
             return ret;
         }
     }

@@ -87,21 +87,20 @@ namespace SWE_Final_Project.Views {
         public void setLinkText(string newLinkText) {
             mModel.LinkText = newLinkText;
             Program.form.invalidateCanvasAtCurrentScript();
-            ModelManager.modifyLinkOnCertainScript(this);
+            ModelManager.modifyLinkOnCertainScript(this, true);
         }
 
-        public void setSrcAndDst(StateModel src, StateModel dst) {
+        public void setSrcAndDst(StateModel src, StateModel dst, bool makeHistory) {
             Model.SrcStateModel = src;
             Model.DstStateModel = dst;
             Program.form.invalidateCanvasAtCurrentScript();
-            ModelManager.modifyLinkOnCertainScript(this);
+            ModelManager.modifyLinkOnCertainScript(this, makeHistory);
         }
 
         // set the ports of source & destination
         public void setSrcAndDstPorts(PortType srcPortType = PortType.NONE, PortType dstPortType = PortType.NONE, bool makeHistory = true) {
             Model.setSrcAndDstPorts(srcPortType, dstPortType);
-            if (makeHistory)
-                ModelManager.modifyLinkOnCertainScript(this);
+            ModelManager.modifyLinkOnCertainScript(this, makeHistory);
         }
 
         // draw on the designated graphics-path
@@ -151,7 +150,7 @@ namespace SWE_Final_Project.Views {
                 return;
 
             // remove the model
-            ModelManager.removeLinkModelAtCurrentScript(mModel);
+            ModelManager.removeLinkModelAtCurrentScript(mModel, true);
 
             // invalidate the start-state-view on the shell if needs
             // Program.form.getCertainStateViewOnTheShell(0).Invalidate();

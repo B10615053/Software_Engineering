@@ -146,7 +146,7 @@ namespace SWE_Final_Project.Views {
 
         // re-set a certain link-view data by a link-model
         public void setDataByLinkModel(LinkModel linkModel, bool isOutgoing) {
-            LinkView linkView;
+            LinkView linkView = null;
 
             if (isOutgoing)
                 linkView = mExistedOutgoingLinks.Find(it => it.Model.Equals(linkModel));

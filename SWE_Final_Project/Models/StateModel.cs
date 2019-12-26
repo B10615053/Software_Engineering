@@ -289,6 +289,13 @@ namespace SWE_Final_Project.Models {
         }
 
         public override string ToString() {
+            //if (mStateType == StateType.START)
+            //    return "|START|" + mLocOnScript.ToString();
+            //else if (mStateType == StateType.END)
+            //    return "|END" + mLocOnScript.ToString();
+            //else
+            //    return "|" + mContentText + "|" + mLocOnScript.ToString();
+
             if (mStateType == StateType.START)
                 return "START";
             else if (mStateType == StateType.END)

@@ -62,12 +62,12 @@
             this.tableLayout_base.Controls.Add(this.panelInfoContainer, 1, 1);
             this.tableLayout_base.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayout_base.Location = new System.Drawing.Point(0, 0);
-            this.tableLayout_base.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayout_base.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayout_base.Name = "tableLayout_base";
             this.tableLayout_base.RowCount = 2;
-            this.tableLayout_base.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
+            this.tableLayout_base.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayout_base.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout_base.Size = new System.Drawing.Size(1411, 730);
+            this.tableLayout_base.Size = new System.Drawing.Size(1881, 912);
             this.tableLayout_base.TabIndex = 0;
             // 
             // mainMenuStrip
@@ -82,8 +82,8 @@
             this.settingsToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.mainMenuStrip.Size = new System.Drawing.Size(1411, 22);
+            this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
+            this.mainMenuStrip.Size = new System.Drawing.Size(1881, 28);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
@@ -95,34 +95,34 @@
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(38, 18);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newScriptToolStripMenuItem
             // 
             this.newScriptToolStripMenuItem.Name = "newScriptToolStripMenuItem";
-            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.newScriptToolStripMenuItem.Text = "New Script";
             this.newScriptToolStripMenuItem.Click += new System.EventHandler(this.NewScriptToolStripMenuItem_Click);
             // 
             // openScriptToolStripMenuItem
             // 
             this.openScriptToolStripMenuItem.Name = "openScriptToolStripMenuItem";
-            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.openScriptToolStripMenuItem.Text = "Open Script";
             this.openScriptToolStripMenuItem.Click += new System.EventHandler(this.OpenScriptToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.saveToolStripMenuItem.Text = "Save Script";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
             this.saveAsToolStripMenuItem.Text = "Save Script as...";
             // 
             // runToolStripMenuItem
@@ -132,34 +132,34 @@
             this.runThroughToolStripMenuItem,
             this.stopRunningToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(41, 18);
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
             this.runToolStripMenuItem.Text = "Run";
             // 
             // stepByStepToolStripMenuItem
             // 
             this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.stepByStepToolStripMenuItem.Text = "Step by step";
             this.stepByStepToolStripMenuItem.Click += new System.EventHandler(this.StepByStepToolStripMenuItem_Click);
             // 
             // runThroughToolStripMenuItem
             // 
             this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
-            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.runThroughToolStripMenuItem.Text = "Run through";
             this.runThroughToolStripMenuItem.Click += new System.EventHandler(this.RunThroughToolStripMenuItem_Click);
             // 
             // stopRunningToolStripMenuItem
             // 
             this.stopRunningToolStripMenuItem.Name = "stopRunningToolStripMenuItem";
-            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.stopRunningToolStripMenuItem.Text = "Stop";
             this.stopRunningToolStripMenuItem.Click += new System.EventHandler(this.StopRunningToolStripMenuItem_Click);
             // 
             // screenshotToolStripMenuItem
             // 
             this.screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
-            this.screenshotToolStripMenuItem.Size = new System.Drawing.Size(81, 18);
+            this.screenshotToolStripMenuItem.Size = new System.Drawing.Size(100, 24);
             this.screenshotToolStripMenuItem.Text = "Screenshot";
             // 
             // settingsToolStripMenuItem
@@ -167,14 +167,14 @@
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(64, 18);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(80, 24);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // promptTypingFormWhenCreatingGeneralStateToolStripMenuItem
             // 
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.CheckOnClick = true;
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Name = "promptTypingFormWhenCreatingGeneralStateToolStripMenuItem";
-            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Size = new System.Drawing.Size(338, 22);
+            this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Size = new System.Drawing.Size(419, 26);
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Text = "Prompt typing box when creating general state";
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Click += new System.EventHandler(this.PromptTypingFormWhenCreatingGeneralStateToolStripMenuItem_Click);
             // 
@@ -182,17 +182,17 @@
             // 
             this.tableLayout_main.ColumnCount = 1;
             this.tableLayout_main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout_main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+            this.tableLayout_main.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayout_main.Controls.Add(this.tableLayout_mainWithoutCmd, 0, 0);
             this.tableLayout_main.Controls.Add(this.tableLayout_cmd, 0, 1);
             this.tableLayout_main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayout_main.Location = new System.Drawing.Point(2, 24);
-            this.tableLayout_main.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayout_main.Location = new System.Drawing.Point(3, 30);
+            this.tableLayout_main.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayout_main.Name = "tableLayout_main";
             this.tableLayout_main.RowCount = 2;
             this.tableLayout_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 72.72727F));
             this.tableLayout_main.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.27273F));
-            this.tableLayout_main.Size = new System.Drawing.Size(1176, 704);
+            this.tableLayout_main.Size = new System.Drawing.Size(1567, 880);
             this.tableLayout_main.TabIndex = 1;
             // 
             // tableLayout_mainWithoutCmd
@@ -204,24 +204,24 @@
             this.tableLayout_mainWithoutCmd.Controls.Add(this.scriptsTabControl, 1, 0);
             this.tableLayout_mainWithoutCmd.Controls.Add(this.statesListPanel, 0, 0);
             this.tableLayout_mainWithoutCmd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayout_mainWithoutCmd.Location = new System.Drawing.Point(2, 2);
-            this.tableLayout_mainWithoutCmd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayout_mainWithoutCmd.Location = new System.Drawing.Point(3, 2);
+            this.tableLayout_mainWithoutCmd.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayout_mainWithoutCmd.Name = "tableLayout_mainWithoutCmd";
             this.tableLayout_mainWithoutCmd.RowCount = 1;
             this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 506F));
-            this.tableLayout_mainWithoutCmd.Size = new System.Drawing.Size(1172, 507);
+            this.tableLayout_mainWithoutCmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 634F));
+            this.tableLayout_mainWithoutCmd.Size = new System.Drawing.Size(1561, 635);
             this.tableLayout_mainWithoutCmd.TabIndex = 0;
             // 
             // scriptsTabControl
             // 
             this.scriptsTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scriptsTabControl.Font = new System.Drawing.Font("Consolas", 9F);
-            this.scriptsTabControl.Location = new System.Drawing.Point(211, 2);
-            this.scriptsTabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.scriptsTabControl.Location = new System.Drawing.Point(282, 2);
+            this.scriptsTabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.scriptsTabControl.Name = "scriptsTabControl";
             this.scriptsTabControl.SelectedIndex = 0;
-            this.scriptsTabControl.Size = new System.Drawing.Size(959, 503);
+            this.scriptsTabControl.Size = new System.Drawing.Size(1276, 631);
             this.scriptsTabControl.TabIndex = 0;
             this.scriptsTabControl.SelectedIndexChanged += new System.EventHandler(this.ScriptsTabControl_SelectedIndexChanged);
             this.scriptsTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptsTabControl_KeyDown);
@@ -230,10 +230,10 @@
             // statesListPanel
             // 
             this.statesListPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.statesListPanel.Location = new System.Drawing.Point(2, 2);
-            this.statesListPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.statesListPanel.Location = new System.Drawing.Point(3, 2);
+            this.statesListPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.statesListPanel.Name = "statesListPanel";
-            this.statesListPanel.Size = new System.Drawing.Size(205, 503);
+            this.statesListPanel.Size = new System.Drawing.Size(273, 631);
             this.statesListPanel.TabIndex = 1;
             // 
             // tableLayout_cmd
@@ -244,13 +244,13 @@
             this.tableLayout_cmd.Controls.Add(this.txtCmdUserInput, 0, 1);
             this.tableLayout_cmd.Controls.Add(this.rtxtCmdOutput, 0, 0);
             this.tableLayout_cmd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayout_cmd.Location = new System.Drawing.Point(2, 513);
-            this.tableLayout_cmd.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayout_cmd.Location = new System.Drawing.Point(3, 641);
+            this.tableLayout_cmd.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayout_cmd.Name = "tableLayout_cmd";
             this.tableLayout_cmd.RowCount = 2;
             this.tableLayout_cmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayout_cmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.tableLayout_cmd.Size = new System.Drawing.Size(1172, 189);
+            this.tableLayout_cmd.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tableLayout_cmd.Size = new System.Drawing.Size(1561, 237);
             this.tableLayout_cmd.TabIndex = 1;
             // 
             // txtCmdUserInput
@@ -260,10 +260,10 @@
             this.txtCmdUserInput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCmdUserInput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCmdUserInput.ForeColor = System.Drawing.SystemColors.Window;
-            this.txtCmdUserInput.Location = new System.Drawing.Point(2, 169);
-            this.txtCmdUserInput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtCmdUserInput.Location = new System.Drawing.Point(3, 211);
+            this.txtCmdUserInput.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtCmdUserInput.Name = "txtCmdUserInput";
-            this.txtCmdUserInput.Size = new System.Drawing.Size(1168, 15);
+            this.txtCmdUserInput.Size = new System.Drawing.Size(1555, 18);
             this.txtCmdUserInput.TabIndex = 0;
             // 
             // rtxtCmdOutput
@@ -273,29 +273,29 @@
             this.rtxtCmdOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtxtCmdOutput.Font = new System.Drawing.Font("Consolas", 13F);
             this.rtxtCmdOutput.ForeColor = System.Drawing.Color.White;
-            this.rtxtCmdOutput.Location = new System.Drawing.Point(2, 2);
-            this.rtxtCmdOutput.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rtxtCmdOutput.Location = new System.Drawing.Point(3, 2);
+            this.rtxtCmdOutput.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.rtxtCmdOutput.Name = "rtxtCmdOutput";
-            this.rtxtCmdOutput.Size = new System.Drawing.Size(1168, 163);
+            this.rtxtCmdOutput.Size = new System.Drawing.Size(1555, 205);
             this.rtxtCmdOutput.TabIndex = 1;
             this.rtxtCmdOutput.Text = "";
             // 
             // panelInfoContainer
             // 
             this.panelInfoContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelInfoContainer.Location = new System.Drawing.Point(1182, 24);
-            this.panelInfoContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panelInfoContainer.Location = new System.Drawing.Point(1576, 30);
+            this.panelInfoContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelInfoContainer.Name = "panelInfoContainer";
-            this.panelInfoContainer.Size = new System.Drawing.Size(227, 704);
+            this.panelInfoContainer.Size = new System.Drawing.Size(302, 880);
             this.panelInfoContainer.TabIndex = 2;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1411, 730);
+            this.ClientSize = new System.Drawing.Size(1881, 912);
             this.Controls.Add(this.tableLayout_base);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "State Machine Simulator - G03";
             this.Load += new System.EventHandler(this.Form1_Load);

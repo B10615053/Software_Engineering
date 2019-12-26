@@ -357,6 +357,11 @@ namespace SWE_Final_Project {
                 else
                     SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
             }
+
+            // Ctrl + Shift + P, for debugging
+            else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.P) {
+                //ModelManager.debugPrint();
+            }
         }
 
         // switch between scripts

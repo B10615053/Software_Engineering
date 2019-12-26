@@ -154,7 +154,7 @@ namespace SWE_Final_Project.Managers {
         }
 
         // modify a certain state on a certain script
-        public static void modifyStateOnCertainScript(StateView stateView) {
+        public static void modifyStateOnCertainScript(StateView stateView, bool makeHistory) {
             if (CurrentSelectedScriptIndex < 0)
                 return;
 
@@ -162,7 +162,8 @@ namespace SWE_Final_Project.Managers {
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
 
             // add a record in its own history management
-            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+            if (makeHistory)
+                HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
 
             Program.form.MarkUnsavedScript();
             // debugPrint();
@@ -234,11 +235,17 @@ namespace SWE_Final_Project.Managers {
 
         // for debugging
         public static void debugPrint() {
+            StringBuilder sBuf = new StringBuilder();
             mOpenedScriptList.ForEach(it => {
                 Console.WriteLine(it.ToString());
                 Console.WriteLine("========");
+                sBuf.Append(it.ToString() + "\r\n");
+                sBuf.Append("========" + "\r\n");
             });
             Console.WriteLine("********************");
+            sBuf.Append("********************" + "\r\n");
+
+            //File.WriteAllText(Path.Combine(@"D:\", Guid.NewGuid().ToString() + ".txt"), sBuf.ToString());
         }
 
         public static bool removeStateModelByIDAtCurrentScript(string id) {
@@ -246,7 +253,7 @@ namespace SWE_Final_Project.Managers {
                 ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinks(id);
                 foreach (var s in ret)
                 {
-                    removeLinkModelAtCurrentScript(s);
+                    removeLinkModelAtCurrentScript(s, false);
                     
                 }
 
@@ -258,6 +265,9 @@ namespace SWE_Final_Project.Managers {
 
         public static  List<LinkModel> getAllLinkInState(string id)
         {
+            if (CurrentSelectedScriptIndex < 0)
+                return null;
+
             List<LinkModel> ret = new List<LinkModel>();
             ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinks(id);
             return ret;
@@ -265,7 +275,7 @@ namespace SWE_Final_Project.Managers {
 
 
         // remove the linkModel form srcState and dstState
-        public static bool removeLinkModelAtCurrentScript(LinkModel deleteLinkModel) {
+        public static bool removeLinkModelAtCurrentScript(LinkModel deleteLinkModel, bool updateModel) {
             string srcStateId = deleteLinkModel.SrcStateModel.Id;
             PortType src = deleteLinkModel.SrcPortType;
             mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(srcStateId).deleteLinkAtCertainPort(deleteLinkModel, src, true);
@@ -283,14 +293,15 @@ namespace SWE_Final_Project.Managers {
 
             return true;
         }
-
+        
         // modify a link at a certain script
-        public static void modifyLinkOnCertainScript(LinkView linkView) {
+        public static void modifyLinkOnCertainScript(LinkView linkView, bool makeHistory) {
             if (CurrentSelectedScriptIndex < 0)
                 return;
 
             // add a record in its own history management
-            HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+            if (makeHistory)
+                HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
 
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
             Program.form.MarkUnsavedScript();

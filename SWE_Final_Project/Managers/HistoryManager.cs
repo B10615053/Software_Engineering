@@ -48,7 +48,7 @@ namespace SWE_Final_Project.Managers {
                 mScriptsHistoryStacks[scriptIndex].Key.Push(new ScriptModel(doneScriptModel));
                 clearUndoneStack(scriptIndex);
 
-                debugPrint();
+                //debugPrint();
             }
         }
 
@@ -65,7 +65,7 @@ namespace SWE_Final_Project.Managers {
                     ScriptModel undoneScript = pair.Key.Pop();
                     pair.Value.Push(new ScriptModel(undoneScript));
 
-                    debugPrint();
+                    //debugPrint();
 
                     return new ScriptModel(pair.Key.Peek());
                 }
