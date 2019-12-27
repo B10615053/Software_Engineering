@@ -270,6 +270,7 @@ namespace SWE_Final_Project.Models {
         }
 
         public override string ToString() {
+            return LinkText;
             return "[" + SrcStateModel.ContentText + " -> " + DstStateModel.ContentText + "]";
         }
     }

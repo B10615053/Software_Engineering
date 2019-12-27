@@ -88,6 +88,8 @@ namespace SWE_Final_Project.Views {
             mModel.LinkText = newLinkText;
             Program.form.invalidateCanvasAtCurrentScript();
             ModelManager.modifyLinkOnCertainScript(this, true);
+
+            Program.form.updateExistedObject(mModel);
         }
 
         public void setSrcAndDst(StateModel src, StateModel dst, bool makeHistory) {

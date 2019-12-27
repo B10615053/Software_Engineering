@@ -84,6 +84,9 @@ namespace SWE_Final_Project.Models {
             }
         }
 
+        // get existed state list
+        public List<StateModel> getStateList() => mExistedStateList;
+
         // get a certain state-model designated by id
         public StateModel getStateModelById(string id)
             => mExistedStateList.Find(it => it.Id == id);
@@ -115,14 +118,15 @@ namespace SWE_Final_Project.Models {
             toBeModifiedState.setDataByStateView(stateView);
         }
 
-        public List<LinkModel> getAllLinks(string id)
+        // get all links that are connected w/ a certain state
+        public List<LinkModel> getAllLinksThatAreConnectedWithCertainState(string id)
         {
             List<LinkModel> ret = new List<LinkModel>();
             foreach (var s in mExistedStateList)
             {
                 if (s.Id == id)
                 {
-                    ret=s.getConnectedLinks(true,true);
+                    ret=s.getConnectedLinks(true, true);
                 }
             }
                
@@ -130,6 +134,13 @@ namespace SWE_Final_Project.Models {
             return ret;
         }
 
+        // get all non-duplicated links in this script
+        public List<LinkModel> getAllLinksInWholeScript() {
+            HashSet<LinkModel> linkSet = new HashSet<LinkModel>();
+            foreach (StateModel state in mExistedStateList)
+                state.getConnectedLinks(true, true).ForEach(link => linkSet.Add(link));
+            return linkSet.ToList();
+        }
 
         // check if this script has been saved at least one time or not
         public bool hasBeenSavedAtLeastOneTime() => (!(mSavedFilePath is null));

@@ -308,6 +308,101 @@ namespace SWE_Final_Project {
             }
         }
 
+        // clear all existed objects in cbb's
+        public void clearExistedObjects() {
+            cbbExistedStates.Items.Clear();
+            cbbExistedLinks.Items.Clear();
+
+            lblExistedStates.Text = "States (0)";
+            lblExistedLinks.Text = "Links (0)";
+        }
+
+        // re-load the states and links' data to cbb's
+        public void reloadExistedObjects(List<StateModel> states = null, List<LinkModel> links = null) {
+            clearExistedObjects();
+
+            if (!(states is null))
+                states.ForEach(it => cbbExistedStates.Items.Add(it));
+            if (!(links is null))
+                links.ForEach(it => cbbExistedLinks.Items.Add(it));
+
+            lblExistedStates.Text = "States (" + cbbExistedStates.Items.Count.ToString() + ")";
+            lblExistedLinks.Text = "Links (" + cbbExistedLinks.Items.Count.ToString() + ")";
+
+            cbbExistedStates.SelectedIndex = cbbExistedStates.Items.Count - 1;
+            cbbExistedLinks.SelectedIndex = cbbExistedLinks.Items.Count - 1;
+        }
+
+        // add the object to certain cbb: state
+        public void addExistedObject(StateModel state) {
+            if (cbbExistedStates.Items.Contains(state) == false)
+                cbbExistedStates.Items.Add(state);
+            lblExistedStates.Text = "States (" + cbbExistedStates.Items.Count.ToString() + ")";
+            cbbExistedStates.SelectedItem = state;
+        }
+
+        // add the object to certain cbb: link
+        public void addExistedObject(LinkModel link) {
+            if (cbbExistedLinks.Items.Contains(link) == false)
+                cbbExistedLinks.Items.Add(link);
+            lblExistedLinks.Text = "Links (" + cbbExistedLinks.Items.Count.ToString() + ")";
+            cbbExistedLinks.SelectedItem = link;
+        }
+
+        // remove the object from certain cbb: state
+        public void removeExistedObject(StateModel state) {
+            if (cbbExistedStates.Items.Contains(state))
+                cbbExistedStates.Items.Remove(state);
+            lblExistedStates.Text = "States (" + cbbExistedStates.Items.Count.ToString() + ")";
+            cbbExistedStates.SelectedIndex = cbbExistedStates.Items.Count - 1;
+        }
+
+        // remove the object to certain cbb: link
+        public void removeExistedObject(LinkModel link) {
+            if (cbbExistedLinks.Items.Contains(link))
+                cbbExistedLinks.Items.Remove(link);
+            lblExistedLinks.Text = "Links (" + cbbExistedLinks.Items.Count.ToString() + ")";
+            cbbExistedLinks.SelectedIndex = cbbExistedLinks.Items.Count - 1;
+        }
+
+        // update the object in cbb: state
+        public void updateExistedObject(StateModel state) {
+            if (state is null)
+                return;
+
+            int idxInCbb = cbbExistedStates.Items.IndexOf(state);
+            cbbExistedStates.Items.RemoveAt(idxInCbb);
+            cbbExistedStates.Items.Insert(idxInCbb, state);
+            cbbExistedStates.SelectedIndex = idxInCbb;
+        }
+
+        // update the object in cbb: link
+        public void updateExistedObject(LinkModel link) {
+            if (link is null)
+                return;
+
+            int idxInCbb = cbbExistedLinks.Items.IndexOf(link);
+            cbbExistedLinks.Items.RemoveAt(idxInCbb);
+            cbbExistedLinks.Items.Insert(idxInCbb, link);
+            cbbExistedLinks.SelectedIndex = idxInCbb;
+        }
+
+        // select the object in cbb: state
+        public void selectExistedObject(StateModel state) {
+            cbbExistedStates.SelectedIndex = cbbExistedStates.Items.IndexOf(state);
+            ModelManager.showInfoPanel(
+                ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.getStateViewById(state.Id)
+            );
+        }
+
+        // select the object in cbb: link
+        public void selectExistedObject(LinkModel link) {
+            cbbExistedLinks.SelectedIndex = cbbExistedLinks.Items.IndexOf(link);
+            ModelManager.showInfoPanel(
+                ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.getLinkViewById(link.Id)
+            );
+        }
+
         /* ============================================================== */
         /* user events */
 
@@ -420,6 +515,16 @@ namespace SWE_Final_Project {
 
             // invalidate the start-state-view on the shell if needs
             Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+
+            // re-load into cbb's if there's any remained scripts
+            if (ModelManager.CurrentSelectedScriptIndex >= 0)
+                Program.form.reloadExistedObjects(
+                    ModelManager.getCurrentWorkingScript().getStateList(),
+                    ModelManager.getCurrentWorkingScript().getAllLinksInWholeScript()
+                );
+            // clear all cbb's if no any opened scripts
+            else
+                Program.form.clearExistedObjects();
         }
 
         // mouse-up event on the tab-control
@@ -496,6 +601,15 @@ namespace SWE_Final_Project {
                 new AlertForm("No script opened", "There is NO any scripts opened.").ShowDialog();
             else
                 doScreenshot(((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas, "Exported successfully!");
+        }
+
+        // selected-index-changed at cbb-existed-states
+        private void CbbExistedStates_SelectedIndexChanged(object sender, EventArgs e) {
+            selectExistedObject(cbbExistedStates.SelectedItem as StateModel);
+        }
+
+        private void CbbExistedLinks_SelectedIndexChanged(object sender, EventArgs e) {
+            selectExistedObject(cbbExistedLinks.SelectedItem as LinkModel);
         }
     }
 }

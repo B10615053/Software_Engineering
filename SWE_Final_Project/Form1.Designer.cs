@@ -35,6 +35,10 @@
             this.runThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopRunningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wholeWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentWorkingScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.withScriptNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.withoutScriptNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_main = new System.Windows.Forms.TableLayoutPanel();
@@ -45,15 +49,21 @@
             this.txtCmdUserInput = new System.Windows.Forms.TextBox();
             this.rtxtCmdOutput = new System.Windows.Forms.RichTextBox();
             this.panelInfoContainer = new System.Windows.Forms.Panel();
-            this.wholeWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.currentWorkingScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.withScriptNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.withoutScriptNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanelAtRightSide = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelInfoPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelExistedObjectsContainer = new System.Windows.Forms.TableLayoutPanel();
+            this.cbbExistedStates = new System.Windows.Forms.ComboBox();
+            this.cbbExistedLinks = new System.Windows.Forms.ComboBox();
+            this.lblExistedStates = new System.Windows.Forms.Label();
+            this.lblExistedLinks = new System.Windows.Forms.Label();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
             this.tableLayout_mainWithoutCmd.SuspendLayout();
             this.tableLayout_cmd.SuspendLayout();
+            this.panelInfoContainer.SuspendLayout();
+            this.tableLayoutPanelAtRightSide.SuspendLayout();
+            this.tableLayoutPanelExistedObjectsContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayout_base
@@ -105,21 +115,21 @@
             // newScriptToolStripMenuItem
             // 
             this.newScriptToolStripMenuItem.Name = "newScriptToolStripMenuItem";
-            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
             this.newScriptToolStripMenuItem.Text = "New Script";
             this.newScriptToolStripMenuItem.Click += new System.EventHandler(this.NewScriptToolStripMenuItem_Click);
             // 
             // openScriptToolStripMenuItem
             // 
             this.openScriptToolStripMenuItem.Name = "openScriptToolStripMenuItem";
-            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
             this.openScriptToolStripMenuItem.Text = "Open Script";
             this.openScriptToolStripMenuItem.Click += new System.EventHandler(this.OpenScriptToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
             this.saveToolStripMenuItem.Text = "Save Script";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
@@ -169,6 +179,36 @@
             this.screenshotToolStripMenuItem.Name = "screenshotToolStripMenuItem";
             this.screenshotToolStripMenuItem.Size = new System.Drawing.Size(100, 24);
             this.screenshotToolStripMenuItem.Text = "Screenshot";
+            // 
+            // wholeWindowToolStripMenuItem
+            // 
+            this.wholeWindowToolStripMenuItem.Name = "wholeWindowToolStripMenuItem";
+            this.wholeWindowToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
+            this.wholeWindowToolStripMenuItem.Text = "Whole window";
+            this.wholeWindowToolStripMenuItem.Click += new System.EventHandler(this.WholeWindowToolStripMenuItem_Click);
+            // 
+            // currentWorkingScriptToolStripMenuItem
+            // 
+            this.currentWorkingScriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.withScriptNameToolStripMenuItem,
+            this.withoutScriptNameToolStripMenuItem});
+            this.currentWorkingScriptToolStripMenuItem.Name = "currentWorkingScriptToolStripMenuItem";
+            this.currentWorkingScriptToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
+            this.currentWorkingScriptToolStripMenuItem.Text = "Current working script";
+            // 
+            // withScriptNameToolStripMenuItem
+            // 
+            this.withScriptNameToolStripMenuItem.Name = "withScriptNameToolStripMenuItem";
+            this.withScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
+            this.withScriptNameToolStripMenuItem.Text = "With script name";
+            this.withScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithScriptNameToolStripMenuItem_Click);
+            // 
+            // withoutScriptNameToolStripMenuItem
+            // 
+            this.withoutScriptNameToolStripMenuItem.Name = "withoutScriptNameToolStripMenuItem";
+            this.withoutScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
+            this.withoutScriptNameToolStripMenuItem.Text = "Without script name";
+            this.withoutScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithoutScriptNameToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -290,6 +330,7 @@
             // 
             // panelInfoContainer
             // 
+            this.panelInfoContainer.Controls.Add(this.tableLayoutPanelAtRightSide);
             this.panelInfoContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelInfoContainer.Location = new System.Drawing.Point(1576, 30);
             this.panelInfoContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -297,35 +338,100 @@
             this.panelInfoContainer.Size = new System.Drawing.Size(302, 880);
             this.panelInfoContainer.TabIndex = 2;
             // 
-            // wholeWindowToolStripMenuItem
+            // tableLayoutPanelAtRightSide
             // 
-            this.wholeWindowToolStripMenuItem.Name = "wholeWindowToolStripMenuItem";
-            this.wholeWindowToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
-            this.wholeWindowToolStripMenuItem.Text = "Whole window";
-            this.wholeWindowToolStripMenuItem.Click += new System.EventHandler(this.WholeWindowToolStripMenuItem_Click);
+            this.tableLayoutPanelAtRightSide.ColumnCount = 1;
+            this.tableLayoutPanelAtRightSide.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelAtRightSide.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelAtRightSide.Controls.Add(this.tableLayoutPanelInfoPanel, 0, 0);
+            this.tableLayoutPanelAtRightSide.Controls.Add(this.tableLayoutPanelExistedObjectsContainer, 0, 1);
+            this.tableLayoutPanelAtRightSide.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelAtRightSide.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanelAtRightSide.Name = "tableLayoutPanelAtRightSide";
+            this.tableLayoutPanelAtRightSide.RowCount = 2;
+            this.tableLayoutPanelAtRightSide.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelAtRightSide.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelAtRightSide.Size = new System.Drawing.Size(302, 880);
+            this.tableLayoutPanelAtRightSide.TabIndex = 0;
             // 
-            // currentWorkingScriptToolStripMenuItem
+            // tableLayoutPanelInfoPanel
             // 
-            this.currentWorkingScriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.withScriptNameToolStripMenuItem,
-            this.withoutScriptNameToolStripMenuItem});
-            this.currentWorkingScriptToolStripMenuItem.Name = "currentWorkingScriptToolStripMenuItem";
-            this.currentWorkingScriptToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
-            this.currentWorkingScriptToolStripMenuItem.Text = "Current working script";
+            this.tableLayoutPanelInfoPanel.ColumnCount = 1;
+            this.tableLayoutPanelInfoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelInfoPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelInfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelInfoPanel.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanelInfoPanel.Name = "tableLayoutPanelInfoPanel";
+            this.tableLayoutPanelInfoPanel.RowCount = 1;
+            this.tableLayoutPanelInfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelInfoPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 434F));
+            this.tableLayoutPanelInfoPanel.Size = new System.Drawing.Size(296, 434);
+            this.tableLayoutPanelInfoPanel.TabIndex = 0;
             // 
-            // withScriptNameToolStripMenuItem
+            // tableLayoutPanelExistedObjectsContainer
             // 
-            this.withScriptNameToolStripMenuItem.Name = "withScriptNameToolStripMenuItem";
-            this.withScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
-            this.withScriptNameToolStripMenuItem.Text = "With script name";
-            this.withScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithScriptNameToolStripMenuItem_Click);
+            this.tableLayoutPanelExistedObjectsContainer.ColumnCount = 1;
+            this.tableLayoutPanelExistedObjectsContainer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelExistedObjectsContainer.Controls.Add(this.lblExistedLinks, 0, 2);
+            this.tableLayoutPanelExistedObjectsContainer.Controls.Add(this.cbbExistedLinks, 0, 3);
+            this.tableLayoutPanelExistedObjectsContainer.Controls.Add(this.cbbExistedStates, 0, 1);
+            this.tableLayoutPanelExistedObjectsContainer.Controls.Add(this.lblExistedStates, 0, 0);
+            this.tableLayoutPanelExistedObjectsContainer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanelExistedObjectsContainer.Location = new System.Drawing.Point(3, 443);
+            this.tableLayoutPanelExistedObjectsContainer.Name = "tableLayoutPanelExistedObjectsContainer";
+            this.tableLayoutPanelExistedObjectsContainer.RowCount = 4;
+            this.tableLayoutPanelExistedObjectsContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanelExistedObjectsContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanelExistedObjectsContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+            this.tableLayoutPanelExistedObjectsContainer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanelExistedObjectsContainer.Size = new System.Drawing.Size(296, 129);
+            this.tableLayoutPanelExistedObjectsContainer.TabIndex = 1;
             // 
-            // withoutScriptNameToolStripMenuItem
+            // cbbExistedStates
             // 
-            this.withoutScriptNameToolStripMenuItem.Name = "withoutScriptNameToolStripMenuItem";
-            this.withoutScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
-            this.withoutScriptNameToolStripMenuItem.Text = "Without script name";
-            this.withoutScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithoutScriptNameToolStripMenuItem_Click);
+            this.cbbExistedStates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbbExistedStates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbExistedStates.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbbExistedStates.FormattingEnabled = true;
+            this.cbbExistedStates.Location = new System.Drawing.Point(3, 33);
+            this.cbbExistedStates.Name = "cbbExistedStates";
+            this.cbbExistedStates.Size = new System.Drawing.Size(290, 28);
+            this.cbbExistedStates.TabIndex = 0;
+            this.cbbExistedStates.SelectedIndexChanged += new System.EventHandler(this.CbbExistedStates_SelectedIndexChanged);
+            // 
+            // cbbExistedLinks
+            // 
+            this.cbbExistedLinks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbbExistedLinks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbExistedLinks.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbbExistedLinks.FormattingEnabled = true;
+            this.cbbExistedLinks.Location = new System.Drawing.Point(3, 96);
+            this.cbbExistedLinks.Name = "cbbExistedLinks";
+            this.cbbExistedLinks.Size = new System.Drawing.Size(290, 28);
+            this.cbbExistedLinks.TabIndex = 1;
+            this.cbbExistedLinks.SelectedIndexChanged += new System.EventHandler(this.CbbExistedLinks_SelectedIndexChanged);
+            // 
+            // lblExistedStates
+            // 
+            this.lblExistedStates.AutoSize = true;
+            this.lblExistedStates.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblExistedStates.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExistedStates.Location = new System.Drawing.Point(3, 10);
+            this.lblExistedStates.Name = "lblExistedStates";
+            this.lblExistedStates.Size = new System.Drawing.Size(290, 20);
+            this.lblExistedStates.TabIndex = 2;
+            this.lblExistedStates.Text = "States (0)";
+            // 
+            // lblExistedLinks
+            // 
+            this.lblExistedLinks.AutoSize = true;
+            this.lblExistedLinks.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblExistedLinks.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExistedLinks.Location = new System.Drawing.Point(3, 73);
+            this.lblExistedLinks.Name = "lblExistedLinks";
+            this.lblExistedLinks.Size = new System.Drawing.Size(290, 20);
+            this.lblExistedLinks.TabIndex = 3;
+            this.lblExistedLinks.Text = "Links (0)";
             // 
             // Form1
             // 
@@ -336,7 +442,6 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "State Machine Simulator - G03";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.tableLayout_base.ResumeLayout(false);
             this.tableLayout_base.PerformLayout();
             this.mainMenuStrip.ResumeLayout(false);
@@ -345,6 +450,10 @@
             this.tableLayout_mainWithoutCmd.ResumeLayout(false);
             this.tableLayout_cmd.ResumeLayout(false);
             this.tableLayout_cmd.PerformLayout();
+            this.panelInfoContainer.ResumeLayout(false);
+            this.tableLayoutPanelAtRightSide.ResumeLayout(false);
+            this.tableLayoutPanelExistedObjectsContainer.ResumeLayout(false);
+            this.tableLayoutPanelExistedObjectsContainer.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -366,7 +475,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayout_cmd;
         private System.Windows.Forms.TextBox txtCmdUserInput;
         private System.Windows.Forms.Panel statesListPanel;
-        public System.Windows.Forms.Panel panelInfoContainer;
+        private System.Windows.Forms.Panel panelInfoContainer;
         private System.Windows.Forms.ToolStripMenuItem stepByStepToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runThroughToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
@@ -377,6 +486,13 @@
         private System.Windows.Forms.ToolStripMenuItem currentWorkingScriptToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem withScriptNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem withoutScriptNameToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelAtRightSide;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanelInfoPanel;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelExistedObjectsContainer;
+        private System.Windows.Forms.ComboBox cbbExistedStates;
+        private System.Windows.Forms.ComboBox cbbExistedLinks;
+        private System.Windows.Forms.Label lblExistedStates;
+        private System.Windows.Forms.Label lblExistedLinks;
     }
 }
 

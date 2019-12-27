@@ -339,7 +339,7 @@ namespace SWE_Final_Project.Views {
 
                     // not simulating, show info-panel of this link
                     else
-                        ModelManager.showInfoPanel(MouseManager.coveringLinkView);
+                        Program.form.selectExistedObject(MouseManager.coveringLinkView.Model);
                 }
             }
 

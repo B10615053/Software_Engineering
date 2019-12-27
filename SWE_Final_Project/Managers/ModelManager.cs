@@ -54,8 +54,6 @@ namespace SWE_Final_Project.Managers {
             return mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(id);
         }
 
-       
-
         // add new script, and return the re-adjusted script name
         public static ScriptModel addNewScript(string newScriptName, List<StateModel> stateModels = null) {
             // deal w/ duplicated script names
@@ -74,6 +72,9 @@ namespace SWE_Final_Project.Managers {
 
             // invalidate the start-state-view on the shell if needs
             Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+
+            // clear all of the existed objects in cbb's at the form
+            Program.form.clearExistedObjects();
 
             return newScriptModel;
         }
@@ -96,6 +97,9 @@ namespace SWE_Final_Project.Managers {
 
                 // invalidate the start-state-view on the shell if needs
                 Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+
+                // re-load all existed objects into cbb's at the form
+                Program.form.reloadExistedObjects(scriptModel.getStateList(), scriptModel.getAllLinksInWholeScript());
 
                 return true;
             }
@@ -121,6 +125,13 @@ namespace SWE_Final_Project.Managers {
 
             // invalidate the start-state-view on the shell if needs
             Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+
+            // re-load all existed objects into cbb's at the form
+            if (CurrentSelectedScriptIndex >= 0 && CurrentSelectedScriptIndex < mOpenedScriptList.Count)
+                Program.form.reloadExistedObjects(
+                    mOpenedScriptList[CurrentSelectedScriptIndex].getStateList(),
+                    mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinksInWholeScript()
+                );
         }
 
         // rename the current working-on script
@@ -150,6 +161,9 @@ namespace SWE_Final_Project.Managers {
             // add a record in its own history management
             HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
 
+            // add into cbb at the form as well
+            Program.form.addExistedObject(newStateModel);
+
             // debugPrint();
         }
 
@@ -157,6 +171,10 @@ namespace SWE_Final_Project.Managers {
         public static void modifyStateOnCertainScript(StateView stateView, bool makeHistory) {
             if (CurrentSelectedScriptIndex < 0)
                 return;
+
+            string origContentText = "";
+            if (!(mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(stateView.Id) is null))
+                origContentText = mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(stateView.Id).ContentText;
 
             mOpenedScriptList[CurrentSelectedScriptIndex].modifyState(stateView);
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
@@ -166,6 +184,13 @@ namespace SWE_Final_Project.Managers {
                 HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
 
             Program.form.MarkUnsavedScript();
+
+            // update the cbb at from as well
+            if (!(mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(stateView.Id) is null) &&
+                    origContentText != stateView.StateContent) {
+                Program.form.updateExistedObject(getStateModelByIdAtCurrentScript(stateView.Id));
+            }
+
             // debugPrint();
         }
 
@@ -182,6 +207,9 @@ namespace SWE_Final_Project.Managers {
             HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
 
             Program.form.MarkUnsavedScript();
+
+            // add into cbb at the form as well
+            Program.form.addExistedObject(linkModel);
         }
 
         // remove a link between two states
@@ -197,12 +225,15 @@ namespace SWE_Final_Project.Managers {
             HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
 
             Program.form.MarkUnsavedScript();
+
+            // remove from cbb at the form as well
+            Program.form.removeExistedObject(linkModel);
         }
 
         // show the info-panel at the right-side of the form
         public static void showInfoPanel(PictureBox view) {
             // get the panel as the container
-            Panel infoContainer = Program.form.panelInfoContainer;
+            Panel infoContainer = Program.form.tableLayoutPanelInfoPanel;
 
             // create a new info-apnel
             if (view is StateView)
@@ -215,9 +246,11 @@ namespace SWE_Final_Project.Managers {
             infoContainer.Controls.Add(mInfoPanel);
 
             // focus on the txt-show-text
-            Control[] controls = mInfoPanel.Controls.Find("txtShowText", false);
-            if (controls.Length == 1)
-                controls[0].Select();
+            if (!(mInfoPanel is null)) {
+                Control[] controls = mInfoPanel.Controls.Find("txtShowText", false);
+                if (!(controls is null) && controls.Length == 1)
+                    controls[0].Select();
+            }
         }
 
         // remove the info-panel
@@ -226,7 +259,7 @@ namespace SWE_Final_Project.Managers {
                 return;
 
             // get the panel as the container
-            Panel infoContainer = Program.form.panelInfoContainer;
+            Panel infoContainer = Program.form.tableLayoutPanelInfoPanel;
 
             // remove
             infoContainer.Controls.Clear();
@@ -250,15 +283,19 @@ namespace SWE_Final_Project.Managers {
 
         public static bool removeStateModelByIDAtCurrentScript(string id) {
                 List<LinkModel> ret = new List<LinkModel>();
-                ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinks(id);
+                ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinksThatAreConnectedWithCertainState(id);
                 foreach (var s in ret)
                 {
+                Program.form.removeExistedObject(s);
                     removeLinkModelAtCurrentScript(s, false);
-                    
-                }
+            }
 
-                mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
+            // remove from cbb at the form as well
+            Program.form.removeExistedObject(mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(id));
+
+            mOpenedScriptList[CurrentSelectedScriptIndex].removeState(id);
                HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
 
             return true;
         }
@@ -269,10 +306,9 @@ namespace SWE_Final_Project.Managers {
                 return null;
 
             List<LinkModel> ret = new List<LinkModel>();
-            ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinks(id);
+            ret = mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinksThatAreConnectedWithCertainState(id);
             return ret;
         }
-
 
         // remove the linkModel form srcState and dstState
         public static bool removeLinkModelAtCurrentScript(LinkModel deleteLinkModel, bool updateModel) {
@@ -282,7 +318,7 @@ namespace SWE_Final_Project.Managers {
 
             string dstStateId = deleteLinkModel.DstStateModel.Id;
             PortType dst = deleteLinkModel.DstPortType;
-            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(dstStateId).deleteLinkAtCertainPort(deleteLinkModel, dst, true);
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateModelById(dstStateId).deleteLinkAtCertainPort(deleteLinkModel, dst, false);
 
             // mark this script as unsaved
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
@@ -290,6 +326,9 @@ namespace SWE_Final_Project.Managers {
 
             // add a record in its own history management
             HistoryManager.Do(mOpenedScriptList[CurrentSelectedScriptIndex]);
+
+            // remove from cbb as well
+            Program.form.removeExistedObject(deleteLinkModel);
 
             return true;
         }
@@ -317,6 +356,9 @@ namespace SWE_Final_Project.Managers {
                 if (!(currentTop is null)) {
                     mOpenedScriptList[idx] = new ScriptModel(currentTop);
                     Program.form.invalidateCanvasAtCurrentScript(mOpenedScriptList[idx]);
+
+                    // re-load to cbb's
+                    Program.form.reloadExistedObjects(mOpenedScriptList[idx].getStateList(), mOpenedScriptList[idx].getAllLinksInWholeScript());
                 }
             }
         }
@@ -331,6 +373,9 @@ namespace SWE_Final_Project.Managers {
                 if (!(currentTop is null)) {
                     mOpenedScriptList[idx] = new ScriptModel(currentTop);
                     Program.form.invalidateCanvasAtCurrentScript(mOpenedScriptList[idx]);
+
+                    // re-load to cbb's
+                    Program.form.reloadExistedObjects(mOpenedScriptList[idx].getStateList(), mOpenedScriptList[idx].getAllLinksInWholeScript());
                 }
             }
         }

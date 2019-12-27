@@ -506,9 +506,8 @@ namespace SWE_Final_Project.Views.States {
             // if the both locations when clicking down and when up are the same point,
             // which means that the mouse didn't move during down and up,
             // show the info-panel
-            if (lx + e.X == mMouseDownCanvasLocX && ly + e.Y == mMouseDownCanvasLocY) {
-                ModelManager.showInfoPanel(this);
-            }
+            if (lx + e.X == mMouseDownCanvasLocX && ly + e.Y == mMouseDownCanvasLocY)
+                Program.form.selectExistedObject(ModelManager.getStateModelByIdAtCurrentScript(Id));
         }
 
         // re-draw
