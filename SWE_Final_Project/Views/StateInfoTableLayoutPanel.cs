@@ -262,6 +262,36 @@ namespace SWE_Final_Project.Views {
             Controls.Add(cbbDstStatePort, 1, 4);
             #endregion
 
+            /* === */
+
+            // label: link-text offset X
+            TextBox lblTextOffsetX = new TextBox();
+            lblTextOffsetX.Text = "Offset X";
+            lblTextOffsetX.BorderStyle = BorderStyle.None;
+            lblTextOffsetX.ReadOnly = true;
+            Controls.Add(lblTextOffsetX, 0, 5);
+
+            // text-box: link-text offset X
+            TextBox txtTextOffsetX = new TextBox();
+            txtTextOffsetX.Name = "txtTextOffsetX";
+            txtTextOffsetX.Text = linkView.Model.LinkTextOffsetX.ToString();
+            Controls.Add(txtTextOffsetX, 1, 5);
+
+            /* === */
+
+            // label: link-text offset Y
+            TextBox lblTextOffsetY = new TextBox();
+            lblTextOffsetY.Text = "Offset Y";
+            lblTextOffsetY.BorderStyle = BorderStyle.None;
+            lblTextOffsetY.ReadOnly = true;
+            Controls.Add(lblTextOffsetY, 0, 6);
+
+            // text-box: link-text offset Y
+            TextBox txtTextOffsetY = new TextBox();
+            txtTextOffsetY.Name = "txtTextOffsetY";
+            txtTextOffsetY.Text = linkView.Model.LinkTextOffsetY.ToString();
+            Controls.Add(txtTextOffsetY, 1, 6);
+
             /* ============================= */
             /* ============================= */
             /* ============================= */
@@ -345,7 +375,7 @@ namespace SWE_Final_Project.Views {
             /* ============================= */
 
             // for pressing enter key at txt-show-text
-            KeyPressEventHandler keyPressText = (sender, e) => {
+            KeyPressEventHandler eventHandlerkeyPressText = (sender, e) => {
                 // press enter
                 if (e.KeyChar == 13) {
                     string newLinkText = txtShowText.Text.ToString().Trim();
@@ -354,7 +384,32 @@ namespace SWE_Final_Project.Views {
                 }
             };
             if (txtShowText.Enabled)
-                txtShowText.KeyPress += keyPressText;
+                txtShowText.KeyPress += eventHandlerkeyPressText;
+
+            /* ============================= */
+
+            // for pressing enter key at txt-offset-x & txt-offset-y
+            KeyPressEventHandler eventHandlerOffsets = (sender, e) => {
+                // press enter
+                if (e.KeyChar == 13) {
+                    try {
+                        int newOffsetX = int.Parse(txtTextOffsetX.Text.ToString());
+                        int newOffsetY = int.Parse(txtTextOffsetY.Text.ToString());
+
+                        linkView.Model.LinkTextOffsetX = newOffsetX;
+                        linkView.Model.LinkTextOffsetY = newOffsetY;
+
+                        Program.form.invalidateCanvasAtCurrentScript();
+                    } catch (FormatException) {
+                        // show the alert form to hint user
+                        AlertForm alertForm = new AlertForm("Wrong number format",
+                            "Only integer is allowed.");
+                        alertForm.ShowDialog();
+                    }
+                }
+            };
+            txtTextOffsetX.KeyPress += eventHandlerOffsets;
+            txtTextOffsetY.KeyPress += eventHandlerOffsets;
 
             /* ============================= */
 

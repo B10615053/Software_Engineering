@@ -20,9 +20,17 @@ namespace SWE_Final_Project.Models {
         private int mCornerRadius;
         public int CornerRadius { get => mCornerRadius; set => mCornerRadius = value; }
 
-        // link text
+        // the link text
         private string mLinkText;
         public string LinkText { get => mLinkText; set => mLinkText = value; }
+
+        // the x-axis offset of the link text
+        private int mLinkTextOffsetX;
+        public int LinkTextOffsetX { get => mLinkTextOffsetX; set => mLinkTextOffsetX = value; }
+
+        // the y-axis offset of the link text
+        private int mLinkTextOffsetY;
+        public int LinkTextOffsetY { get => mLinkTextOffsetY; set => mLinkTextOffsetY = value; }
 
         // the arrow starts at a certain state-model
         private StateModel mSource;
@@ -50,8 +58,7 @@ namespace SWE_Final_Project.Models {
 
         /* ============================== */
 
-        private static readonly int ARROW_SIGN_OFFSET_PARALEL = 12;
-        private static readonly int ARROW_SIGN_OFFSET_CHUIZHI = 6;
+        // the length of the arrow sign
         private static readonly int ARROW_SIGN_LENGTH = 12;
 
         /* ========================================= */
@@ -83,6 +90,10 @@ namespace SWE_Final_Project.Models {
 
             // there could be many sections within a single link
             mSectionList = new List<LineModel>();
+
+            // initialize the link-text offsets both to zeros
+            mLinkTextOffsetX = 0;
+            mLinkTextOffsetY = 0;
         }
 
         // adjust the locations of lines that comprised the link

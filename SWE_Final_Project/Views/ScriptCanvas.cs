@@ -233,6 +233,7 @@ namespace SWE_Final_Project.Views {
                         Cursor = Cursors.Hand;
                         // set the current-covering link-view
                         MouseManager.coveringLinkView = linkView;
+
                         break;
                     }
                 }
@@ -240,9 +241,6 @@ namespace SWE_Final_Project.Views {
                 if (SimulationManager.isSimulating())
                     Invalidate();
             }
-        }
-
-        protected override void OnMouseUp(MouseEventArgs e) {
         }
 
         // mouse entered (not dragging)
@@ -397,8 +395,13 @@ namespace SWE_Final_Project.Views {
                     int x = (int) ((pair.Key.X + (pair.Value.Width / 2.0F)) - (w / 2.0F));
                     int y = (int) ((pair.Key.Y + (pair.Value.Height / 2.0F)) - (h / 2.0F));
 
-                    // create the rectangle
-                    Rectangle rect = new Rectangle(x, y, w, h);
+                    // create the rectangle for locating the text
+                    Rectangle rect = new Rectangle(
+                        x + it.Model.LinkTextOffsetX,
+                        y + it.Model.LinkTextOffsetY,
+                        w,
+                        h
+                    );
 
                     // for aligning the text to center
                     StringFormat stringFormat = new StringFormat();
