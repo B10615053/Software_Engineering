@@ -32,7 +32,6 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepByStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runThroughToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopRunningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wholeWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,10 +51,10 @@
             this.tableLayoutPanelAtRightSide = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelInfoPanel = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelExistedObjectsContainer = new System.Windows.Forms.TableLayoutPanel();
-            this.cbbExistedStates = new System.Windows.Forms.ComboBox();
-            this.cbbExistedLinks = new System.Windows.Forms.ComboBox();
-            this.lblExistedStates = new System.Windows.Forms.Label();
             this.lblExistedLinks = new System.Windows.Forms.Label();
+            this.cbbExistedLinks = new System.Windows.Forms.ComboBox();
+            this.cbbExistedStates = new System.Windows.Forms.ComboBox();
+            this.lblExistedStates = new System.Windows.Forms.Label();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -115,59 +114,55 @@
             // newScriptToolStripMenuItem
             // 
             this.newScriptToolStripMenuItem.Name = "newScriptToolStripMenuItem";
-            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
-            this.newScriptToolStripMenuItem.Text = "New Script";
+            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
+            this.newScriptToolStripMenuItem.Text = "New Script (Ctrl, N)";
             this.newScriptToolStripMenuItem.Click += new System.EventHandler(this.NewScriptToolStripMenuItem_Click);
             // 
             // openScriptToolStripMenuItem
             // 
             this.openScriptToolStripMenuItem.Name = "openScriptToolStripMenuItem";
-            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
-            this.openScriptToolStripMenuItem.Text = "Open Script";
+            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
+            this.openScriptToolStripMenuItem.Text = "Open Script (Ctrl, O)";
             this.openScriptToolStripMenuItem.Click += new System.EventHandler(this.OpenScriptToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
+            this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
-            this.saveToolStripMenuItem.Text = "Save Script";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
+            this.saveToolStripMenuItem.Text = "Save Script (Ctrl, S)";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
+            this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(369, 26);
-            this.saveAsToolStripMenuItem.Text = "Export the current working script as JPG";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
+            this.saveAsToolStripMenuItem.Text = "Export the current working script as JPG (Ctrl, Shift, S)";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // runToolStripMenuItem
             // 
             this.runToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stepByStepToolStripMenuItem,
-            this.runThroughToolStripMenuItem,
             this.stopRunningToolStripMenuItem});
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
-            this.runToolStripMenuItem.Text = "Run";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(82, 24);
+            this.runToolStripMenuItem.Text = "Run (F5)";
             // 
             // stepByStepToolStripMenuItem
             // 
+            this.stepByStepToolStripMenuItem.Enabled = false;
             this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.stepByStepToolStripMenuItem.Text = "Step by step";
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.stepByStepToolStripMenuItem.Text = "Start";
             this.stepByStepToolStripMenuItem.Click += new System.EventHandler(this.StepByStepToolStripMenuItem_Click);
-            // 
-            // runThroughToolStripMenuItem
-            // 
-            this.runThroughToolStripMenuItem.Name = "runThroughToolStripMenuItem";
-            this.runThroughToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.runThroughToolStripMenuItem.Text = "Run through";
-            this.runThroughToolStripMenuItem.Click += new System.EventHandler(this.RunThroughToolStripMenuItem_Click);
             // 
             // stopRunningToolStripMenuItem
             // 
+            this.stopRunningToolStripMenuItem.Enabled = false;
             this.stopRunningToolStripMenuItem.Name = "stopRunningToolStripMenuItem";
-            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.stopRunningToolStripMenuItem.Text = "Stop";
             this.stopRunningToolStripMenuItem.Click += new System.EventHandler(this.StopRunningToolStripMenuItem_Click);
             // 
@@ -184,7 +179,7 @@
             // 
             this.wholeWindowToolStripMenuItem.Name = "wholeWindowToolStripMenuItem";
             this.wholeWindowToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
-            this.wholeWindowToolStripMenuItem.Text = "Whole window";
+            this.wholeWindowToolStripMenuItem.Text = "Whole window (F11)";
             this.wholeWindowToolStripMenuItem.Click += new System.EventHandler(this.WholeWindowToolStripMenuItem_Click);
             // 
             // currentWorkingScriptToolStripMenuItem
@@ -192,6 +187,7 @@
             this.currentWorkingScriptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.withScriptNameToolStripMenuItem,
             this.withoutScriptNameToolStripMenuItem});
+            this.currentWorkingScriptToolStripMenuItem.Enabled = false;
             this.currentWorkingScriptToolStripMenuItem.Name = "currentWorkingScriptToolStripMenuItem";
             this.currentWorkingScriptToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
             this.currentWorkingScriptToolStripMenuItem.Text = "Current working script";
@@ -199,15 +195,15 @@
             // withScriptNameToolStripMenuItem
             // 
             this.withScriptNameToolStripMenuItem.Name = "withScriptNameToolStripMenuItem";
-            this.withScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
-            this.withScriptNameToolStripMenuItem.Text = "With script name";
+            this.withScriptNameToolStripMenuItem.Size = new System.Drawing.Size(312, 26);
+            this.withScriptNameToolStripMenuItem.Text = "With script name (Ctrl, F11)";
             this.withScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithScriptNameToolStripMenuItem_Click);
             // 
             // withoutScriptNameToolStripMenuItem
             // 
             this.withoutScriptNameToolStripMenuItem.Name = "withoutScriptNameToolStripMenuItem";
-            this.withoutScriptNameToolStripMenuItem.Size = new System.Drawing.Size(233, 26);
-            this.withoutScriptNameToolStripMenuItem.Text = "Without script name";
+            this.withoutScriptNameToolStripMenuItem.Size = new System.Drawing.Size(312, 26);
+            this.withoutScriptNameToolStripMenuItem.Text = "Without script name (Shift, F11)";
             this.withoutScriptNameToolStripMenuItem.Click += new System.EventHandler(this.WithoutScriptNameToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
@@ -387,17 +383,16 @@
             this.tableLayoutPanelExistedObjectsContainer.Size = new System.Drawing.Size(296, 129);
             this.tableLayoutPanelExistedObjectsContainer.TabIndex = 1;
             // 
-            // cbbExistedStates
+            // lblExistedLinks
             // 
-            this.cbbExistedStates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbbExistedStates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbExistedStates.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbbExistedStates.FormattingEnabled = true;
-            this.cbbExistedStates.Location = new System.Drawing.Point(3, 33);
-            this.cbbExistedStates.Name = "cbbExistedStates";
-            this.cbbExistedStates.Size = new System.Drawing.Size(290, 28);
-            this.cbbExistedStates.TabIndex = 0;
-            this.cbbExistedStates.SelectedIndexChanged += new System.EventHandler(this.CbbExistedStates_SelectedIndexChanged);
+            this.lblExistedLinks.AutoSize = true;
+            this.lblExistedLinks.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblExistedLinks.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblExistedLinks.Location = new System.Drawing.Point(3, 73);
+            this.lblExistedLinks.Name = "lblExistedLinks";
+            this.lblExistedLinks.Size = new System.Drawing.Size(290, 20);
+            this.lblExistedLinks.TabIndex = 3;
+            this.lblExistedLinks.Text = "Links (0)";
             // 
             // cbbExistedLinks
             // 
@@ -411,6 +406,18 @@
             this.cbbExistedLinks.TabIndex = 1;
             this.cbbExistedLinks.SelectedIndexChanged += new System.EventHandler(this.CbbExistedLinks_SelectedIndexChanged);
             // 
+            // cbbExistedStates
+            // 
+            this.cbbExistedStates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbbExistedStates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbExistedStates.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbbExistedStates.FormattingEnabled = true;
+            this.cbbExistedStates.Location = new System.Drawing.Point(3, 33);
+            this.cbbExistedStates.Name = "cbbExistedStates";
+            this.cbbExistedStates.Size = new System.Drawing.Size(290, 28);
+            this.cbbExistedStates.TabIndex = 0;
+            this.cbbExistedStates.SelectedIndexChanged += new System.EventHandler(this.CbbExistedStates_SelectedIndexChanged);
+            // 
             // lblExistedStates
             // 
             this.lblExistedStates.AutoSize = true;
@@ -421,17 +428,6 @@
             this.lblExistedStates.Size = new System.Drawing.Size(290, 20);
             this.lblExistedStates.TabIndex = 2;
             this.lblExistedStates.Text = "States (0)";
-            // 
-            // lblExistedLinks
-            // 
-            this.lblExistedLinks.AutoSize = true;
-            this.lblExistedLinks.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblExistedLinks.Font = new System.Drawing.Font("Consolas", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblExistedLinks.Location = new System.Drawing.Point(3, 73);
-            this.lblExistedLinks.Name = "lblExistedLinks";
-            this.lblExistedLinks.Size = new System.Drawing.Size(290, 20);
-            this.lblExistedLinks.TabIndex = 3;
-            this.lblExistedLinks.Text = "Links (0)";
             // 
             // Form1
             // 
@@ -477,7 +473,6 @@
         private System.Windows.Forms.Panel statesListPanel;
         private System.Windows.Forms.Panel panelInfoContainer;
         private System.Windows.Forms.ToolStripMenuItem stepByStepToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runThroughToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem promptTypingFormWhenCreatingGeneralStateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopRunningToolStripMenuItem;

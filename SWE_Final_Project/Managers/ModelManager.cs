@@ -76,6 +76,9 @@ namespace SWE_Final_Project.Managers {
             // clear all of the existed objects in cbb's at the form
             Program.form.clearExistedObjects();
 
+            // set operations which need at least a script exists into enabled
+            Program.form.setOperationsWhichNeedScriptExists(true);
+
             return newScriptModel;
         }
 
@@ -100,6 +103,9 @@ namespace SWE_Final_Project.Managers {
 
                 // re-load all existed objects into cbb's at the form
                 Program.form.reloadExistedObjects(scriptModel.getStateList(), scriptModel.getAllLinksInWholeScript());
+
+                // set operations which need at least a script exists into enabled
+                Program.form.setOperationsWhichNeedScriptExists(true);
 
                 return true;
             }
@@ -132,6 +138,10 @@ namespace SWE_Final_Project.Managers {
                     mOpenedScriptList[CurrentSelectedScriptIndex].getStateList(),
                     mOpenedScriptList[CurrentSelectedScriptIndex].getAllLinksInWholeScript()
                 );
+
+            // disable all operations that need at least one script opened
+            if (mOpenedScriptList.Count == 0)
+                Program.form.setOperationsWhichNeedScriptExists(false);
         }
 
         // rename the current working-on script

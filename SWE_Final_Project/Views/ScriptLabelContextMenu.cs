@@ -17,9 +17,9 @@ namespace SWE_Final_Project.Views {
         // constructor
         public ScriptLabelContextMenu(TabControl tabControl) {
             // add the functionalities
-            MenuItems.Add("Rename");
-            MenuItems.Add("Save");
-            MenuItems.Add("Close");
+            MenuItems.Add("Rename (Ctrl, R)");
+            MenuItems.Add("Save (Ctrl, S)");
+            MenuItems.Add("Close (Ctrl, W)");
 
             // delegate all menu-items events
             foreach (MenuItem item in MenuItems)
@@ -37,15 +37,15 @@ namespace SWE_Final_Project.Views {
             MenuItem item = sender as MenuItem;
 
             // rename
-            if (item.Text == "Rename")
+            if (item.Text == "Rename (Ctrl, R)")
                 renameScript();
 
             // save
-            else if (item.Text == "Save")
+            else if (item.Text == "Save (Ctrl, S)")
                 saveScript();
 
             // close
-            else if (item.Text == "Close")
+            else if (item.Text == "Close (Ctrl, W)")
                 closeScript();
         }
 

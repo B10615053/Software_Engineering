@@ -307,6 +307,20 @@ namespace SWE_Final_Project {
                 new AlertForm("Alert", msgWhenScreenshottedSuccessfully).ShowDialog();
             }
         }
+        
+        // set operations which need at least a script exists
+        public void setOperationsWhichNeedScriptExists(bool isEnabled) {
+            // save script
+            saveToolStripMenuItem.Enabled = isEnabled;
+            // export as an image
+            saveAsToolStripMenuItem.Enabled = isEnabled;
+            // simulation start
+            stepByStepToolStripMenuItem.Enabled = isEnabled;
+            // simulation end
+            stopRunningToolStripMenuItem.Enabled = isEnabled;
+            // screenshot at the current working script (w/ & w/o script name)
+            currentWorkingScriptToolStripMenuItem.Enabled = isEnabled;
+        }
 
         // clear all existed objects in cbb's
         public void clearExistedObjects() {
@@ -488,6 +502,45 @@ namespace SWE_Final_Project {
                         if (SimulationManager.checkSimulating() == false)
                             ModelManager.redo(scriptsTabControl.SelectedIndex);
                     }
+
+                    // Ctrl + W: close the current working-on script
+                    else if (e.KeyCode == Keys.W) {
+                        if (scriptsTabControl.TabPages.Count > 0 && ModelManager.CurrentSelectedScriptIndex >= 0) {
+                            // has unsaved changes in the current working-on script
+                            if (ModelManager.getScriptModelByIndex(scriptsTabControl.SelectedIndex).HaveUnsavedChanges) {
+                                AlertForm alertForm = new AlertForm("Alert", "The script has been modified and it's unsaved. Do you want to save it?", true, true, true);
+                                DialogResult result = alertForm.ShowDialog();
+
+                                bool doesSaveSuccessfully = true;
+
+                                // don't do closing
+                                if (result == DialogResult.Cancel)
+                                    return;
+                                // yes, do saving, then closing
+                                else if (result == DialogResult.Yes)
+                                    doesSaveSuccessfully = Program.form.saveCertainScript(scriptsTabControl.SelectedIndex);
+
+                                // not actually saving
+                                if (!doesSaveSuccessfully)
+                                    return;
+                            }
+
+                            // close the script
+                            ModelManager.closeScript();
+                            scriptsTabControl.TabPages.RemoveAt(scriptsTabControl.SelectedIndex);
+                        }
+                    }
+
+                    // Ctrl + R: rename the current working-on script
+                    else if (e.KeyCode == Keys.R) {
+                        if (scriptsTabControl.TabPages.Count > 0 && ModelManager.CurrentSelectedScriptIndex >= 0) {
+                            DialogResult result = new TypingForm("Rename the script", "Type the new title for your script.", false).ShowDialog();
+                            if (result == DialogResult.OK) {
+                                ModelManager.renameScript(TypingForm.userTypedResultText, false);
+                                scriptsTabControl.SelectedTab.Text = TypingForm.userTypedResultText + "*";
+                            }
+                        }
+                    }
                 }
 
                 // F5 pressed: start/stop a simulation
@@ -498,9 +551,12 @@ namespace SWE_Final_Project {
                         SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
                 }
 
-                // Ctrl + Shift + P, for debugging
-                else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.P) {
-                    //ModelManager.debugPrint();
+                // Ctrl + Shift + S: export the current script as an image in JPG format
+                else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.S) {
+                    if (scriptsTabControl is null || scriptsTabControl.SelectedTab is null)
+                        new AlertForm("No script opened", "There is NO any scripts opened.").ShowDialog();
+                    else
+                        doScreenshot(((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas, "Exported successfully!");
                 }
             }
         }
