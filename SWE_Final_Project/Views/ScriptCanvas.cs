@@ -26,6 +26,12 @@ namespace SWE_Final_Project.Views {
         // the list of existed ingoing link-views
         private List<LinkView> mExistedIngoingLinks = new List<LinkView>();
 
+        // check if the mouse-right is down or not currently
+        private bool mIsMouseRightDown = false;
+
+        // check if the shift-key is down or not currently
+        private bool mIsShiftDown = false;
+
         /* ==================================================================== */
 
         // constructor
@@ -198,6 +204,7 @@ namespace SWE_Final_Project.Views {
 
         // get a certain state-view by id
         public StateView getStateViewById(string id) => mExistedStateViewList.Find(it => it.Id == id);
+        
         // not yet implement
         public void translateToState(StateView srcStateView)
         {
@@ -216,17 +223,18 @@ namespace SWE_Final_Project.Views {
             }
             Invalidate();
         }
+        
         // translate the all state and link in this script
         private void translateUpdate(Keys direction) {
             foreach (StateView stateView in mExistedStateViewList) { 
                 if (direction == Keys.Right)
-                    stateView.relocateState(stateView.Location.X + 5, stateView.Location.Y, false);
+                    stateView.relocateState(stateView.Location.X + 5, stateView.Location.Y, false, false);
                 else if (direction == Keys.Left)
-                    stateView.relocateState(stateView.Location.X - 5, stateView.Location.Y, false);
+                    stateView.relocateState(stateView.Location.X - 5, stateView.Location.Y, false, false);
                 else if (direction == Keys.Up)
-                    stateView.relocateState(stateView.Location.X, stateView.Location.Y + 5, false);
+                    stateView.relocateState(stateView.Location.X, stateView.Location.Y + 5, false, false);
                 else if (direction == Keys.Down)
-                    stateView.relocateState(stateView.Location.X, stateView.Location.Y - 5, false);
+                    stateView.relocateState(stateView.Location.X, stateView.Location.Y - 5, false, false);
                 
             }
             foreach(LinkView linkView in mExistedIngoingLinks) {
@@ -242,9 +250,11 @@ namespace SWE_Final_Project.Views {
 
             Refresh();
         }
+        
         // scale the all state and link in this script
         private float scaleScript = 1.0f;
         public float currentScale = 1.0f;
+
         public void scaleUpdate(bool scale, double x, double y)
         {
             if (scale)
@@ -281,6 +291,7 @@ namespace SWE_Final_Project.Views {
                 currentScale = 1.0f;
             Refresh();
         }
+        
         // get a certain link-view by id
         public LinkView getLinkViewById(string id) => mExistedOutgoingLinks.Find(it => it.Model.Id == id);
 
@@ -295,11 +306,19 @@ namespace SWE_Final_Project.Views {
             {
                 translateUpdate(e.KeyCode);
             }
+
+            else if (e.Modifiers == Keys.Shift || e.KeyCode == Keys.Shift)
+                mIsShiftDown = true;
+
             //else if (e.KeyCode == Keys.T)
             //    translateToState(mExistedStateViewList[0]);
             Invalidate();
         }
-        
+
+        protected override void OnKeyUp(KeyEventArgs e) {
+            mIsShiftDown = false;
+        }
+
         // re-draw when mouse moving and is dragging existed state-views
         protected override void OnMouseMove(MouseEventArgs e) {
             // when the mouse is dragging an existed state-view
@@ -337,17 +356,52 @@ namespace SWE_Final_Project.Views {
             }
         }
 
+        // mouse-down, certainly used to check if the mouse-button is mouse-right
+        protected override void OnMouseDown(MouseEventArgs e) {
+            if (e.Button == MouseButtons.Right)
+                mIsMouseRightDown = true;
+        }
+
+        // mouse-up, disable the boolean of m-is-mouse-right-down
+        protected override void OnMouseUp(MouseEventArgs e) {
+            mIsMouseRightDown = false;
+        }
+
         // mouse entered (not dragging)
         protected override void OnMouseEnter(EventArgs e) {
 
         }
+        
         // re-draw when mousewheel
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (e.Delta > 0)
-                scaleUpdate(true, (int)e.X, (int)e.Y);
-            else if (e.Delta < 0)
-                scaleUpdate(false, (int)e.X, (int)e.Y);
+            // mouse-right is down -> do scaling
+            if (mIsMouseRightDown) {
+                if (e.Delta > 0)
+                    scaleUpdate(true, (int)e.X, (int)e.Y);
+                else if (e.Delta < 0)
+                    scaleUpdate(false, (int)e.X, (int)e.Y);
+            }
+
+            // mouse-right is not down -> do translating
+            else {
+                // shift-key is down -> go left/right
+                if (mIsShiftDown) {
+                    if (e.Delta > 0)
+                        translateUpdate(Keys.Left);
+                    else if (e.Delta < 0)
+                        translateUpdate(Keys.Right);
+                }
+
+                // shift-key is not down -> go up/down
+                else {
+                    if (e.Delta > 0)
+                        translateUpdate(Keys.Up);
+                    else if (e.Delta < 0)
+                        translateUpdate(Keys.Down);
+                }
+            }
+
             Invalidate();
         }
 
@@ -389,6 +443,7 @@ namespace SWE_Final_Project.Views {
                 // resize the state with current scale 
                 newStateView.Size = new Size((int)(newStateView.Size.Width * currentScale), 
                     (int)(newStateView.Size.Height * currentScale ));
+                newStateView.resetPortPositions();
                 // add model
                 ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView));
 
