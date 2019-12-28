@@ -154,7 +154,7 @@
             // 
             this.stepByStepToolStripMenuItem.Enabled = false;
             this.stepByStepToolStripMenuItem.Name = "stepByStepToolStripMenuItem";
-            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.stepByStepToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.stepByStepToolStripMenuItem.Text = "Start";
             this.stepByStepToolStripMenuItem.Click += new System.EventHandler(this.StepByStepToolStripMenuItem_Click);
             // 
@@ -162,7 +162,7 @@
             // 
             this.stopRunningToolStripMenuItem.Enabled = false;
             this.stopRunningToolStripMenuItem.Name = "stopRunningToolStripMenuItem";
-            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.stopRunningToolStripMenuItem.Text = "Stop";
             this.stopRunningToolStripMenuItem.Click += new System.EventHandler(this.StopRunningToolStripMenuItem_Click);
             // 
@@ -269,6 +269,7 @@
             this.scriptsTabControl.TabIndex = 0;
             this.scriptsTabControl.SelectedIndexChanged += new System.EventHandler(this.ScriptsTabControl_SelectedIndexChanged);
             this.scriptsTabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScriptsTabControl_KeyDown);
+            this.scriptsTabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.scriptsTabControl_MouseDown);
             this.scriptsTabControl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ScriptsTabControl_MouseUp);
             // 
             // statesListPanel

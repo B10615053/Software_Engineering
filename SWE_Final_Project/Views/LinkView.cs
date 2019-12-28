@@ -157,5 +157,22 @@ namespace SWE_Final_Project.Views {
             // invalidate the start-state-view on the shell if needs
             // Program.form.getCertainStateViewOnTheShell(0).Invalidate();
         }
+
+        public void translate(int x, int y)
+        {
+            mModel.StartLocOnScript = new Point(mModel.StartLocOnScript.X + x, mModel.StartLocOnScript.Y + y);
+            mModel.EndLocOnScript = new Point(mModel.EndLocOnScript.X + x, mModel.EndLocOnScript.Y + y);
+            ModelManager.modifyLinkOnCertainScript(this, true);
+        }
+        public void scale(double x, double y, double scale)
+        {
+            double newX = scale * ((double)mModel.StartLocOnScript.X - x) + x;
+            double newY = scale * ((double)mModel.StartLocOnScript.Y - y) + y;
+            mModel.StartLocOnScript = new Point((int)newX, (int)newY);
+            newX = scale * ((double)mModel.EndLocOnScript.X - x) + x;
+            newY = scale * ((double)mModel.EndLocOnScript.Y - y) + y;
+            mModel.EndLocOnScript = new Point((int)newX, (int)newY);
+            ModelManager.modifyLinkOnCertainScript(this, true);
+        }
     }
 }

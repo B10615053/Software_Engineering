@@ -198,7 +198,89 @@ namespace SWE_Final_Project.Views {
 
         // get a certain state-view by id
         public StateView getStateViewById(string id) => mExistedStateViewList.Find(it => it.Id == id);
+        // not yet implement
+        public void translateToState(StateView srcStateView)
+        {
+            foreach (StateView stateView in mExistedStateViewList)
+            {
+                
+                    int newX = stateView.Location.X - srcStateView.Location.X + Size.Width / 2;
+                    int newY = stateView.Location.Y - srcStateView.Location.Y + Size.Height / 2;
+                    stateView.relocateState(newX, newY, false);
+                stateView.OutlineGphPath.Reset();
+                
+            }
+            foreach (LinkView linkView in mExistedIngoingLinks)
+            {
 
+            }
+            Invalidate();
+        }
+        // translate the all state and link in this script
+        private void translateUpdate(Keys direction) {
+            foreach (StateView stateView in mExistedStateViewList) { 
+                if (direction == Keys.Right)
+                    stateView.relocateState(stateView.Location.X + 5, stateView.Location.Y, false);
+                else if (direction == Keys.Left)
+                    stateView.relocateState(stateView.Location.X - 5, stateView.Location.Y, false);
+                else if (direction == Keys.Up)
+                    stateView.relocateState(stateView.Location.X, stateView.Location.Y + 5, false);
+                else if (direction == Keys.Down)
+                    stateView.relocateState(stateView.Location.X, stateView.Location.Y - 5, false);
+                
+            }
+            foreach(LinkView linkView in mExistedIngoingLinks) {
+                if (direction == Keys.Right)
+                    linkView.translate(-5, 0);
+                else if (direction == Keys.Left)
+                    linkView.translate(5, 0);
+                else if (direction == Keys.Up)
+                    linkView.translate(0, 5);
+                else if (direction == Keys.Down)
+                    linkView.translate(0, -5);
+            }
+
+            Refresh();
+        }
+        // scale the all state and link in this script
+        private float scaleScript = 1.0f;
+        public float currentScale = 1.0f;
+        public void scaleUpdate(bool scale, double x, double y)
+        {
+            if (scale)
+                scaleScript = 1.2f;
+            else
+                scaleScript = 1 / 1.1f;
+
+            currentScale *= scaleScript;
+
+            if (currentScale >= 1.0f)
+            {
+                foreach (StateView stateView in mExistedStateViewList)
+                {
+                    double newX = scaleScript * ((double)stateView.Location.X - x) + x;
+                    double newY = scaleScript * ((double)stateView.Location.Y - y) + y;
+                    stateView.Size = new Size((int)(stateView.Size.Width * scaleScript), (int)(stateView.Size.Height * scaleScript));
+                    stateView.relocateState((int)newX, (int)newY, false);
+                    stateView.resetPortPositions();
+                }
+                foreach (LinkView linkView in mExistedIngoingLinks)
+                {
+                    linkView.scale(x, y, scaleScript);
+                    double newX = scaleScript * ((double)linkView.Location.X - x) + x;
+                    double newY = scaleScript * ((double)linkView.Location.Y - y) + y;
+                    linkView.Location = new Point((int)newX, (int)newY);
+                    
+                }
+                //foreach (LinkView linkView in mExistedOutgoingLinks)
+                //{
+                //    linkView.scale(x, y, scaleScript);
+                //}
+            }
+            else
+                currentScale = 1.0f;
+            Refresh();
+        }
         // get a certain link-view by id
         public LinkView getLinkViewById(string id) => mExistedOutgoingLinks.Find(it => it.Model.Id == id);
 
@@ -206,6 +288,18 @@ namespace SWE_Final_Project.Views {
         /* ==================================================================== */
         /*  events */
 
+        // re-draw when keyDown right, left, up, down
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.Left || e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)
+            {
+                translateUpdate(e.KeyCode);
+            }
+            //else if (e.KeyCode == Keys.T)
+            //    translateToState(mExistedStateViewList[0]);
+            Invalidate();
+        }
+        
         // re-draw when mouse moving and is dragging existed state-views
         protected override void OnMouseMove(MouseEventArgs e) {
             // when the mouse is dragging an existed state-view
@@ -245,6 +339,16 @@ namespace SWE_Final_Project.Views {
 
         // mouse entered (not dragging)
         protected override void OnMouseEnter(EventArgs e) {
+
+        }
+        // re-draw when mousewheel
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+                scaleUpdate(true, (int)e.X, (int)e.Y);
+            else if (e.Delta < 0)
+                scaleUpdate(false, (int)e.X, (int)e.Y);
+            Invalidate();
         }
 
         // drag-entered
@@ -282,6 +386,9 @@ namespace SWE_Final_Project.Views {
                     break;
             }
             if (!(newStateView is null)) {
+                // resize the state with current scale 
+                newStateView.Size = new Size((int)(newStateView.Size.Width * currentScale), 
+                    (int)(newStateView.Size.Height * currentScale ));
                 // add model
                 ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView));
 
@@ -367,18 +474,27 @@ namespace SWE_Final_Project.Views {
 
                 /* draw the lines of the link */
                 // is simulating and the mouse is covering a walkable link
-                if (isSimulatingAndTheMouseIsCoveringThisLink) {
+                if (isSimulatingAndTheMouseIsCoveringThisLink)
+                {
                     g.DrawPath(new Pen(Color.Red, 2), it.LinesGphPath);
                     dstStateViewId = it.Model.DstStateModel.Id;
                 }
                 // is simulating
-                else if (SimulationManager.isSimulating()) {
+                else if (SimulationManager.isSimulating())
+                {
                     Color simulatingLinkColor = SimulationManager.getSimulatingLinkColor(it.CurrentSimulatingStatus);
                     g.DrawPath(new Pen(simulatingLinkColor), it.LinesGphPath);
                 }
                 // is not simulating
                 else
+                {
+                    for (int i = 0; i < it.LinesGphPath.PathPoints.Length; ++i)
+                    {
+                        PointF pt = it.LinesGphPath.PathPoints[i];
+                        it.LinesGphPath.PathPoints[i] = new PointF(pt.X * (float)scaleScript, pt.Y * (float)scaleScript);
+                    }
                     g.DrawPath(Pens.Black, it.LinesGphPath);
+                }
 
                 // draw the transparent link text for mouse events
                 g.FillPath(Brushes.Transparent, it.TextGphPath);

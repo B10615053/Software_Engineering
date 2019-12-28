@@ -404,9 +404,9 @@ namespace SWE_Final_Project {
         // select the object in cbb: state
         public void selectExistedObject(StateModel state) {
             cbbExistedStates.SelectedIndex = cbbExistedStates.Items.IndexOf(state);
-            ModelManager.showInfoPanel(
-                ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.getStateViewById(state.Id)
-            );
+            StateView stateView = ((ScriptTabPage)scriptsTabControl.SelectedTab).TheScriptCanvas.getStateViewById(state.Id);
+            ModelManager.showInfoPanel(stateView);
+            //((ScriptTabPage)scriptsTabControl.SelectedTab).TheScriptCanvas.translateToState(stateView);
         }
 
         // select the object in cbb: link
@@ -558,6 +558,8 @@ namespace SWE_Final_Project {
                     else
                         doScreenshot(((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas, "Exported successfully!");
                 }
+
+               
             }
         }
 
@@ -571,7 +573,7 @@ namespace SWE_Final_Project {
 
             // invalidate the start-state-view on the shell if needs
             Program.form.getCertainStateViewOnTheShell(0).Invalidate();
-
+            
             // re-load into cbb's if there's any remained scripts
             if (ModelManager.CurrentSelectedScriptIndex >= 0)
                 Program.form.reloadExistedObjects(
@@ -587,7 +589,7 @@ namespace SWE_Final_Project {
         private void ScriptsTabControl_MouseUp(object sender, MouseEventArgs e) {
             if (SimulationManager.checkSimulating())
                 return;
-
+ 
             // check if the right mouse button was pressed
             if (e.Button == MouseButtons.Right) {
                 // iterate through all the tab pages
@@ -666,6 +668,11 @@ namespace SWE_Final_Project {
 
         private void CbbExistedLinks_SelectedIndexChanged(object sender, EventArgs e) {
             selectExistedObject(cbbExistedLinks.SelectedItem as LinkModel);
+        }
+
+        private void scriptsTabControl_MouseDown(object sender, MouseEventArgs e)
+        {
+            
         }
     }
 }
