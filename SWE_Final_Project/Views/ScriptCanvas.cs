@@ -387,13 +387,18 @@ namespace SWE_Final_Project.Views {
 
                 // draw the string of the link text
                 using (Font font = new Font("Consolas", 12.0F, FontStyle.Regular, GraphicsUnit.Point)) {
+                    // get the pair of point at left-up corner & size
                     var pair = it.Model.getLeftUpCornerPositionOnScriptAndGroundSize();
-                    Rectangle rect = new Rectangle(
-                        pair.Key.X,
-                        pair.Key.Y,
-                        pair.Value.Width,
-                        pair.Value.Height
-                    );
+
+                    // calculate the enlarged textbox-rectangle
+                    const float R = 500.0F;
+                    int w = (int) (pair.Value.Width * R);
+                    int h = (int) (pair.Value.Height * R);
+                    int x = (int) ((pair.Key.X + (pair.Value.Width / 2.0F)) - (w / 2.0F));
+                    int y = (int) ((pair.Key.Y + (pair.Value.Height / 2.0F)) - (h / 2.0F));
+
+                    // create the rectangle
+                    Rectangle rect = new Rectangle(x, y, w, h);
 
                     // for aligning the text to center
                     StringFormat stringFormat = new StringFormat();
