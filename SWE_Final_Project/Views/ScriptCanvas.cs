@@ -14,6 +14,9 @@ using System.Drawing.Drawing2D;
 
 namespace SWE_Final_Project.Views {
     public class ScriptCanvas: PictureBox {
+        static private int TRANSLATION_STEP = 10;
+        static private int SCALING_STEP = 3;
+
         // the script name
         private string mScriptNameAtCanvas = "";
 
@@ -226,26 +229,26 @@ namespace SWE_Final_Project.Views {
         
         // translate the all state and link in this script
         private void translateUpdate(Keys direction) {
-            foreach (StateView stateView in mExistedStateViewList) { 
+            foreach (StateView stateView in mExistedStateViewList) {
                 if (direction == Keys.Right)
-                    stateView.relocateState(stateView.Location.X + 5, stateView.Location.Y, false, false);
+                    stateView.relocateState(stateView.Location.X - TRANSLATION_STEP, stateView.Location.Y, false, false);
                 else if (direction == Keys.Left)
-                    stateView.relocateState(stateView.Location.X - 5, stateView.Location.Y, false, false);
+                    stateView.relocateState(stateView.Location.X + TRANSLATION_STEP, stateView.Location.Y, false, false);
                 else if (direction == Keys.Up)
-                    stateView.relocateState(stateView.Location.X, stateView.Location.Y + 5, false, false);
+                    stateView.relocateState(stateView.Location.X, stateView.Location.Y + TRANSLATION_STEP, false, false);
                 else if (direction == Keys.Down)
-                    stateView.relocateState(stateView.Location.X, stateView.Location.Y - 5, false, false);
-                
+                    stateView.relocateState(stateView.Location.X, stateView.Location.Y - TRANSLATION_STEP, false, false);
             }
+
             foreach(LinkView linkView in mExistedIngoingLinks) {
                 if (direction == Keys.Right)
-                    linkView.translate(-5, 0);
+                    linkView.translate(-SCALING_STEP, 0);
                 else if (direction == Keys.Left)
-                    linkView.translate(5, 0);
+                    linkView.translate(SCALING_STEP, 0);
                 else if (direction == Keys.Up)
-                    linkView.translate(0, 5);
+                    linkView.translate(0, SCALING_STEP);
                 else if (direction == Keys.Down)
-                    linkView.translate(0, -5);
+                    linkView.translate(0, -SCALING_STEP);
             }
 
             Refresh();
