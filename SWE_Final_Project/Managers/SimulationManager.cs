@@ -14,7 +14,7 @@ namespace SWE_Final_Project.Managers {
     // the types of simulation
     public enum SimulationType {
         NOT_SIMULATING,
-        RUN_THROUGH,
+        VALIDATION,
         STEP_BY_STEP
     }
 
@@ -55,6 +55,14 @@ namespace SWE_Final_Project.Managers {
         VISITABLE,
         // unreachable from the current state
         UNVISITABLE
+    }
+
+    // the results of a validation
+    public enum ValidationResult {
+        VALID,
+        INVALID_NO_BRANCH_MATCHES,
+        INVALID_REMAINED_PRESET_BRANCHES_NOT_CONSUMED,
+        INVALID_FINAL_STATE_IS_NOT_END_STATE
     }
 
     public class SimulationManager {
@@ -110,9 +118,59 @@ namespace SWE_Final_Project.Managers {
         /* ===================================== */
 
         // start the simulation
-        public static void startSimulation(SimulationType simulationType) {
+        public static void startSimulation(SimulationType simulationType, List<string> presetBranches = null) {
             // local function: really start the simulation
             void reallyStartSimulation() {
+                // local function of local function: validation, simulate the state machine automatically
+                KeyValuePair<ValidationResult, int> doValidation(StateModel pStartStateModel) {
+                    // first step to the START state
+                    bool stillHasBranch = stepOnNextState(null, pStartStateModel);
+
+                    // step on the next state automatically
+                    for (int k = 0; k < presetBranches.Count; ++k) {
+                        // get the current pre-set branch
+                        string presetBranch = presetBranches[k];
+
+                        // check if it's at END state now
+                        bool isAtEndState_inner = mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Count > 0
+                                         && mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT][0].StateType == StateType.END;
+
+                        // still has remained pre-set branches, but it's already in an END
+                        if (isAtEndState_inner)
+                            return new KeyValuePair<ValidationResult, int>(ValidationResult.INVALID_REMAINED_PRESET_BRANCHES_NOT_CONSUMED, k);
+
+                        // no available branches -> stucked
+                        if (stillHasBranch == false)
+                            return new KeyValuePair<ValidationResult, int>(ValidationResult.INVALID_NO_BRANCH_MATCHES, k);
+
+                        // get the link whose link-text equals to the current preset branch
+                        LinkModel nextLink = mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Find(it => it.LinkText == presetBranch);
+                        // no matches found among all the available links -> stucked
+                        if (nextLink is null)
+                            return new KeyValuePair<ValidationResult, int>(ValidationResult.INVALID_NO_BRANCH_MATCHES, k);
+
+                        // go to the next state
+                        stillHasBranch = stepOnNextState(nextLink, nextLink.DstStateModel);
+                    }
+
+                    /* important! */
+                    /* we say that the state machine is valid if and only if
+                     * all pre-set branches are consumed AND the final state is an END state
+                     */
+                    bool isAtEndState = mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT].Count > 0
+                                     && mCurrentStateViewsStatuses[SimulatingStateStatus.CURRENT][0].StateType == StateType.END;
+                    if (isAtEndState)
+                        return new KeyValuePair<ValidationResult, int>(ValidationResult.VALID, presetBranches.Count);
+                    else
+                        return new KeyValuePair<ValidationResult, int>(ValidationResult.INVALID_FINAL_STATE_IS_NOT_END_STATE, presetBranches.Count);
+                }
+
+                // it's a validation but the list of pre-set branches is a null value -> error
+                if (simulationType == SimulationType.VALIDATION && (presetBranches is null)) {
+                    new AlertForm("Validation error", "No pre-set branches in a validation.").ShowDialog();
+                    return;
+                }
+
                 // clear the route
                 mRouteStatesStack.Clear();
 
@@ -123,11 +181,41 @@ namespace SWE_Final_Project.Managers {
                 ModelManager.removeInfoPanel();
 
                 // log out
-                LogManager.Log(LogType.SIMULATION_START_OR_END, "Simulation starts.");
+                if (mCurrentSimulationType == SimulationType.STEP_BY_STEP)
+                    LogManager.Log(LogType.SIMULATION_START_OR_END, "Simulation starts.");
+                else if (mCurrentSimulationType == SimulationType.VALIDATION)
+                    LogManager.Log(LogType.SIMULATION_START_OR_END, "Validation starts.");
+
+                // get the START state as the beginning of the simulation
+                StateModel startStateModel = mAllStateModelList.Find(it => it.StateType == StateType.START);
 
                 // start the simulation by classifying and re-rendering all the states
-                StateModel startStateModel = mAllStateModelList.Find(it => it.StateType == StateType.START);
-                stepOnNextState(null, startStateModel);
+                if (mCurrentSimulationType == SimulationType.STEP_BY_STEP)
+                    stepOnNextState(null, startStateModel);
+                // do validation
+                else if (mCurrentSimulationType == SimulationType.VALIDATION) {
+                    KeyValuePair<ValidationResult, int> result = doValidation(startStateModel);
+
+                    LogManager.Log(LogType.VALIDATION_FINAL_ROUTE, "Final route: " + String.Join(" => ", mRouteStatesStack.Reverse()));
+
+                    switch (result.Key) {
+                        case ValidationResult.VALID:
+                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: VALID");
+                            break;
+                        case ValidationResult.INVALID_FINAL_STATE_IS_NOT_END_STATE:
+                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: The final state is NOT an END state.");
+                            break;
+                        case ValidationResult.INVALID_NO_BRANCH_MATCHES:
+                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: The validation process was stucked since no available link is matched.\r\n\tBranch: " + String.Join(",", presetBranches.ToArray()));
+                            break;
+                        case ValidationResult.INVALID_REMAINED_PRESET_BRANCHES_NOT_CONSUMED:
+                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: Although the validation has reached an END state, there\'re still pre-set branches which are NOT consumed.\r\n\tBranch: " + String.Join(",", presetBranches.ToArray()));
+                            break;
+                    }
+
+                    //LogManager.Log(LogType.SIMULATION_START_OR_END, "Press F6 to end the validation process.");
+                    stopSimulation();
+                }
             }
 
             if (isSimulating())
@@ -160,24 +248,37 @@ namespace SWE_Final_Project.Managers {
             // yes, it is simulate-able
             if (err == SimulateabilityError.SIMULATEABLE)
                 reallyStartSimulation();
+
             // no, it is not simulate-able
             else {
                 // err = no END or the END state is not reachable
-                if (err == SimulateabilityError.END_NOT_REACHABLE ||
-                        err == SimulateabilityError.NO_END) {
-                    // let users to decide if they want to boost up the simulation anyways or not
-                    DialogResult dialogResult = new AlertForm(
-                        mSimulateabilityErrMsgs[err],
-                        "Do you still want to start the simulation?",
-                        false,
-                        true,
-                        true
-                    ).ShowDialog();
+                if (err == SimulateabilityError.END_NOT_REACHABLE || err == SimulateabilityError.NO_END) {
+                    // running (step-by-step)
+                    if (simulationType == SimulationType.STEP_BY_STEP) {
+                        // let users to decide if they want to boost up the simulation anyways or not
+                        DialogResult dialogResult = new AlertForm(
+                            mSimulateabilityErrMsgs[err],
+                            mSimulateabilityErrMsgs[err] + 
+                            "\r\n\r\nDo you still want to start the simulation?",
+                            false,
+                            true,
+                            true
+                        ).ShowDialog();
 
-                    // yes, they still want to
-                    if (dialogResult == DialogResult.Yes)
-                        reallyStartSimulation();
+                        // yes, they still want to
+                        if (dialogResult == DialogResult.Yes)
+                            reallyStartSimulation();
+                    }
+
+                    // validating
+                    else if (simulationType == SimulationType.VALIDATION) {
+                        new AlertForm(
+                            "Validation error",
+                            "Illegal state machine for the validation! Possible errors as below:\r\n\r\n  1. There\'s no END states.\r\n\r\n  2. There\'s no reachable END states."
+                        ).ShowDialog();
+                    }
                 }
+
                 // err = no START or no START & END
                 else {
                     new AlertForm(
@@ -193,25 +294,28 @@ namespace SWE_Final_Project.Managers {
             if (isSimulating() == false)
                 return;
 
-            // turn the simulation system into not-simulating status
-            mCurrentSimulationType = SimulationType.NOT_SIMULATING;
-
             // clear state- and link- models stored in the simulation system
-            mAllStateModelList.Clear(); mAllStateModelList = null;
-            mAllLinkModelList.Clear(); mAllLinkModelList = null;
+            if (!(mAllStateModelList is null)) { mAllStateModelList.Clear(); mAllStateModelList = null; }
+            if (!(mAllLinkModelList is null)) { mAllLinkModelList.Clear(); mAllLinkModelList = null; }
 
             // clear state- and link- views' statuses
-            mCurrentStateViewsStatuses.Clear(); mCurrentStateViewsStatuses = null;
-            mCurrentLinkViewStatuses.Clear(); mCurrentLinkViewStatuses = null;
+            if (!(mCurrentStateViewsStatuses is null)) { mCurrentStateViewsStatuses.Clear(); mCurrentStateViewsStatuses = null; }
+            if (!(mCurrentLinkViewStatuses is null)) { mCurrentLinkViewStatuses.Clear(); mCurrentLinkViewStatuses = null; }
 
             // clear the route
-            mRouteStatesStack.Clear();
+            if (!(mRouteStatesStack is null)) { mRouteStatesStack.Clear(); }
 
             // re-render
             Program.form.invalidateCanvasAtCurrentScript();
 
             // log out
-            LogManager.Log(LogType.SIMULATION_START_OR_END, "Simulation ends.");
+            if (mCurrentSimulationType == SimulationType.STEP_BY_STEP)
+                LogManager.Log(LogType.SIMULATION_START_OR_END, "Simulation ends.");
+            else if (mCurrentSimulationType == SimulationType.VALIDATION)
+                LogManager.Log(LogType.SIMULATION_START_OR_END, "Validation ends.");
+
+            // turn the simulation system into NOT_SIMULATING status
+            mCurrentSimulationType = SimulationType.NOT_SIMULATING;
         }
 
         // check if it's a simulate-able state machine, e.g., if it has a START and an END or not
@@ -313,19 +417,23 @@ namespace SWE_Final_Project.Managers {
         public static Color getSimulatingLinkColor(SimulatingLinkStatus simulatingLinkStatus)
             => mSimulatingLinkColors[simulatingLinkStatus];
 
-        // step on the next state during the simulation
-        public static void stepOnNextState(LinkModel walkedLinkModel, StateModel nextStateModel) {
+        // step on the next state during the simulation,
+        // return the boolean value of "if there's still any 1-step available branch"
+        public static bool stepOnNextState(LinkModel walkedLinkModel, StateModel nextStateModel) {
             // push the next-state-model into the route stack
             mRouteStatesStack.Push(nextStateModel);
 
             // classify all states' statuses
-            classifyAllStatesStatusesWhenOnNextStep(walkedLinkModel, nextStateModel);
+            bool stillHasBranch = classifyAllStatesStatusesWhenOnNextStep(walkedLinkModel, nextStateModel);
 
             // re-color all the views
             recolorViews();
 
             // log out
             logoutCurrentRoute();
+
+            // return if there's still any branch is 1-step available
+            return stillHasBranch;
         }
 
         // back to a certain step
@@ -380,7 +488,7 @@ namespace SWE_Final_Project.Managers {
 
         // step on the next state during the simulation,
         // classify all states into CURRENT, VISITED, VISITABLE, and UNVISITABLE
-        private static void classifyAllStatesStatusesWhenOnNextStep(LinkModel walkedLinkModel, StateModel walkedOverStateModel) {
+        private static bool classifyAllStatesStatusesWhenOnNextStep(LinkModel walkedLinkModel, StateModel walkedOverStateModel) {
             #region the initialization of every step at the first
             // the first step during the simulation (START state)
             if (mCurrentStateViewsStatuses == null) {
@@ -489,6 +597,8 @@ namespace SWE_Final_Project.Managers {
                 if (visitedLinks.Contains(it) == false && !mCurrentLinkViewStatuses[SimulatingLinkStatus.VISITED].Contains(it))
                     mCurrentLinkViewStatuses[SimulatingLinkStatus.UNVISITABLE].Add(it);
             });
+
+            return (mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Count > 0);
         }
 
         // get the current length of route
@@ -558,17 +668,11 @@ namespace SWE_Final_Project.Managers {
             }
             string routeStr = sBuf.ToString();
 
-            // get the string of spaces with the same length as the route string
-            sBuf.Clear();
-            foreach (char c in routeStr)
-                sBuf.Append(" ");
-            string spaces = sBuf.ToString();
-
             // build the list of log texts
             List<string> logTexts = new List<string>();
             logTexts.Add(routeStr);
             foreach (LinkModel linkModel in mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE])
-                logTexts.Add(spaces + " - " + linkModel.LinkText + " => " + linkModel.DstStateModel.ToString());
+                logTexts.Add("  - " + linkModel.LinkText + " => " + linkModel.DstStateModel.ToString());
 
             LogManager.Log(LogType.SIMULATION_ROUTE, logTexts);
         }

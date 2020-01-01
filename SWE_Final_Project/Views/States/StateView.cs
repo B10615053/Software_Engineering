@@ -304,11 +304,19 @@ namespace SWE_Final_Project.Views.States {
                     // mouse is at the inner stuff of this state-view
                     // -> do moving (relocating the dragged state-view)
                     if (MouseManager.CurrentMouseAction == MouseAction.DRAGGING_EXISTED_STATE_VIEW) {
-                        relocateState(
+                        Point newLoc = new Point(
                             Location.X + e.X - MouseManager.posOnStateViewX + Size.Width / 2,
-                            Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2,
-                            updateModel: false
+                            Location.Y + e.Y - MouseManager.posOnStateViewY + Size.Height / 2
                         );
+                        // failed
+                        //newLoc = ModelManager.getAlignedLocWithOtherStates(
+                        //    newLoc.X,
+                        //    newLoc.Y,
+                        //    Size.Width,
+                        //    Size.Height
+                        //);
+
+                        relocateState(newLoc.X, newLoc.Y, updateModel: false);
                     }
 
                     // mouse is on the 4 borders of this state-view

@@ -9,14 +9,18 @@ using System.Windows.Forms;
 namespace SWE_Final_Project.Managers {
     public enum LogType {
         SIMULATION_START_OR_END,
-        SIMULATION_ROUTE
+        SIMULATION_ROUTE,
+        VALIDATION_RESULT,
+        VALIDATION_FINAL_ROUTE
     }
 
     public class LogManager {
         // the dictionary used to store classified log texts
         private static Dictionary<LogType, List<string>> mLogTextDict = new Dictionary<LogType, List<string>> {
             { LogType.SIMULATION_START_OR_END, new List<string>() },
-            { LogType.SIMULATION_ROUTE, new List<string>() }
+            { LogType.SIMULATION_ROUTE, new List<string>() },
+            { LogType.VALIDATION_RESULT, new List<string>() },
+            { LogType.VALIDATION_FINAL_ROUTE, new List<string>() }
         };
 
         // do logging w/ a single text
@@ -64,6 +68,10 @@ namespace SWE_Final_Project.Managers {
                     return Color.Orange;
                 case LogType.SIMULATION_ROUTE:
                     return Color.White;
+                case LogType.VALIDATION_RESULT:
+                    return Color.IndianRed;
+                case LogType.VALIDATION_FINAL_ROUTE:
+                    return Color.Crimson;
             }
             return Color.White;
         }

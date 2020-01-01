@@ -33,6 +33,7 @@
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stepByStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopRunningToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.validateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.screenshotToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wholeWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentWorkingScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,6 +92,7 @@
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.runToolStripMenuItem,
+            this.validateToolStripMenuItem,
             this.screenshotToolStripMenuItem,
             this.settingsToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
@@ -165,6 +167,13 @@
             this.stopRunningToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
             this.stopRunningToolStripMenuItem.Text = "Stop";
             this.stopRunningToolStripMenuItem.Click += new System.EventHandler(this.StopRunningToolStripMenuItem_Click);
+            // 
+            // validateToolStripMenuItem
+            // 
+            this.validateToolStripMenuItem.Name = "validateToolStripMenuItem";
+            this.validateToolStripMenuItem.Size = new System.Drawing.Size(111, 24);
+            this.validateToolStripMenuItem.Text = "Validate (F6)";
+            this.validateToolStripMenuItem.Click += new System.EventHandler(this.ValidateToolStripMenuItem_Click);
             // 
             // screenshotToolStripMenuItem
             // 
@@ -489,6 +498,7 @@
         private System.Windows.Forms.ComboBox cbbExistedLinks;
         private System.Windows.Forms.Label lblExistedStates;
         private System.Windows.Forms.Label lblExistedLinks;
+        private System.Windows.Forms.ToolStripMenuItem validateToolStripMenuItem;
     }
 }
 

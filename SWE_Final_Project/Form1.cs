@@ -181,6 +181,7 @@ namespace SWE_Final_Project {
                 } catch (Exception) {
                     new AlertForm("Error happened", "Unfortunately, errors happened when saving the file. Operation failed.").ShowDialog();
                     scriptModel.SavedFilePath = origPathOrNull;
+                    throw;
                     return false;
                 }
 
@@ -204,7 +205,7 @@ namespace SWE_Final_Project {
 
             // show the dialog and result a designated-by-user file
             if (openScriptDialog.ShowDialog() == DialogResult.OK) {
-                try {
+                //try {
                     // get the script-model by de-serializing
                     ScriptModel scriptModel = SerializationManager.Deserialize<ScriptModel>(openScriptDialog.FileName);
 
@@ -217,10 +218,11 @@ namespace SWE_Final_Project {
 
                     // add new tab-page for this script
                     addNewTabPage(scriptModel, false);
-                } catch (Exception) {
-                    new AlertForm("Error happened", "Unfortunately, errors happened when loading the file. Operation failed.").ShowDialog();
-                    return false;
-                }
+                //} catch (Exception) {
+                //    new AlertForm("Error happened", "Unfortunately, errors happened when loading the file. Operation failed.").ShowDialog();
+                //    throw;
+                //    return false;
+                //}
 
                 return true;
             }
@@ -322,6 +324,32 @@ namespace SWE_Final_Project {
             currentWorkingScriptToolStripMenuItem.Enabled = isEnabled;
         }
 
+        public Point getCanvasLocation() {
+            return scriptsTabControl.Location;
+        }
+
+        // do validation of the current working-on state machine
+        public void startOrStopValidation() {
+            if (scriptsTabControl.TabCount <= 0 || ModelManager.CurrentSelectedScriptIndex < 0)
+                return;
+
+            // stop the validation
+            if (SimulationManager.isSimulating())
+                SimulationManager.stopSimulation();
+
+            // start a validation
+            else {
+                DialogResult dialogResult = new TypingForm("Pre-set branches", "Please enter the input sequence.\r\n\r\nEach input must be seperated by a single \',\'", false).ShowDialog();
+                if (dialogResult == DialogResult.OK) {
+                    // start the simulation w/ the type of VALIDATION
+                    SimulationManager.startSimulation(
+                        SimulationType.VALIDATION,
+                        TypingForm.userTypedResultText.Split(',').ToList()
+                    );
+                }
+            }
+        }
+
         // clear all existed objects in cbb's
         public void clearExistedObjects() {
             cbbExistedStates.Items.Clear();
@@ -403,18 +431,47 @@ namespace SWE_Final_Project {
 
         // select the object in cbb: state
         public void selectExistedObject(StateModel state) {
+            if (state is null ||
+                    cbbExistedStates is null ||
+                    cbbExistedStates.Items is null ||
+                    scriptsTabControl is null ||
+                    scriptsTabControl.SelectedTab is null)
+                return;
+
             cbbExistedStates.SelectedIndex = cbbExistedStates.Items.IndexOf(state);
-            StateView stateView = ((ScriptTabPage)scriptsTabControl.SelectedTab).TheScriptCanvas.getStateViewById(state.Id);
+
+            ScriptCanvas canvas = ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas;
+            if (canvas is null)
+                return;
+
+            StateView stateView = canvas.getStateViewById(state.Id);
+            if (stateView is null)
+                return;
+
             ModelManager.showInfoPanel(stateView);
             //((ScriptTabPage)scriptsTabControl.SelectedTab).TheScriptCanvas.translateToState(stateView);
         }
 
         // select the object in cbb: link
         public void selectExistedObject(LinkModel link) {
+            if (link is null ||
+                    cbbExistedLinks is null ||
+                    cbbExistedLinks.Items is null ||
+                    scriptsTabControl is null ||
+                    scriptsTabControl.SelectedTab is null)
+                return;
+
             cbbExistedLinks.SelectedIndex = cbbExistedLinks.Items.IndexOf(link);
-            ModelManager.showInfoPanel(
-                ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.getLinkViewById(link.Id)
-            );
+
+            ScriptCanvas canvas = ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas;
+            if (canvas is null)
+                return;
+
+            LinkView linkView = canvas.getLinkViewById(link.Id);
+            if (linkView is null)
+                return;
+
+            ModelManager.showInfoPanel(linkView);
         }
 
         /* ============================================================== */
@@ -543,13 +600,19 @@ namespace SWE_Final_Project {
                     }
                 }
 
-                // F5 pressed: start/stop a simulation
+                // F5 pressed: start/stop a simulation (not include a validation)
                 else if (e.KeyCode == Keys.F5) {
-                    if (SimulationManager.isSimulating())
-                        SimulationManager.stopSimulation();
+                    if (SimulationManager.isSimulating()) {
+                        if (SimulationManager.CurrentSimulationType == SimulationType.STEP_BY_STEP)
+                            SimulationManager.stopSimulation();
+                    }
                     else
                         SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
                 }
+
+                // F6 pressed: validate the state machine
+                else if (e.KeyCode == Keys.F6)
+                    startOrStopValidation();
 
                 // Ctrl + Shift + S: export the current script as an image in JPG format
                 else if (e.Modifiers == (Keys.Control | Keys.Shift) && e.KeyCode == Keys.S) {
@@ -617,14 +680,10 @@ namespace SWE_Final_Project {
             SimulationManager.startSimulation(SimulationType.STEP_BY_STEP);
         }
 
-        // simulation start: run through
-        private void RunThroughToolStripMenuItem_Click(object sender, EventArgs e) {
-            SimulationManager.startSimulation(SimulationType.RUN_THROUGH);
-        }
-
         // simulation stop
         private void StopRunningToolStripMenuItem_Click(object sender, EventArgs e) {
-            SimulationManager.stopSimulation();
+            if (SimulationManager.CurrentSimulationType == SimulationType.STEP_BY_STEP)
+                SimulationManager.stopSimulation();
         }
 
         // screenshot feature: the whole window
@@ -673,6 +732,11 @@ namespace SWE_Final_Project {
         private void scriptsTabControl_MouseDown(object sender, MouseEventArgs e)
         {
             
+        }
+
+        // validate the current working-on state machine
+        private void ValidateToolStripMenuItem_Click(object sender, EventArgs e) {
+            startOrStopValidation();
         }
     }
 }

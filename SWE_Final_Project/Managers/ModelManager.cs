@@ -3,6 +3,7 @@ using SWE_Final_Project.Views;
 using SWE_Final_Project.Views.States;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -354,6 +355,40 @@ namespace SWE_Final_Project.Managers {
 
             mOpenedScriptList[CurrentSelectedScriptIndex].HaveUnsavedChanges = true;
             Program.form.MarkUnsavedScript();
+        }
+
+        // for states alignment feature
+        public static Point getAlignedLocWithOtherStates(int x, int y, int width, int height) {
+            if (CurrentSelectedScriptIndex < 0 || CurrentSelectedScriptIndex >= mOpenedScriptList.Count)
+                return new Point(x, y);
+
+            int x1 = x;
+            int x2 = x + width;
+            int y1 = y;
+            int y2 = y + height;
+
+            int rx = x;
+            int ry = y;
+
+            mOpenedScriptList[CurrentSelectedScriptIndex].getStateList().ForEach(state => {
+                StateView stateView = Program.form.getCertainInstanceStateViewById(state.Id);
+
+                int sx1 = stateView.Location.X;
+                int sx2 = sx1 + stateView.Size.Width;
+                int sy1 = stateView.Location.Y;
+                int sy2 = sy1 + stateView.Size.Height;
+
+                // overlapping in y-axis
+                if (Math.Abs(y1 - sy1) <= 20) {
+                    Console.WriteLine(y1.ToString() + ", " + y2.ToString());
+                    Console.WriteLine(sy1.ToString() + ", " + sy2.ToString() + "\r\n");
+
+                    rx = x;
+                    ry = sy1;
+                }
+            });
+
+            return new Point(rx, ry);
         }
 
         // undo a change at a certain script
