@@ -53,7 +53,7 @@ namespace SWE_Final_Project.Managers {
                     theFirst = false;
                 }
                 else
-                    rtxtBx.SelectionColor = Color.Green;
+                    rtxtBx.SelectionColor = Color.LightGreen;
                 rtxtBx.AppendText(text + "\r\n");
             }
 
@@ -71,7 +71,7 @@ namespace SWE_Final_Project.Managers {
                 case LogType.VALIDATION_RESULT:
                     return Color.IndianRed;
                 case LogType.VALIDATION_FINAL_ROUTE:
-                    return Color.Crimson;
+                    return Color.LightSalmon;
             }
             return Color.White;
         }

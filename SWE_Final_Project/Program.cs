@@ -13,11 +13,21 @@ namespace SWE_Final_Project {
         /// </summary>
         [STAThread]
         static void Main() {
+            void Run() {
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            form = new Form1();
-            Application.Run(form);
+            Start:
+            try {
+                form = new Form1();
+                Application.Run(form);
+            } catch (Exception) {
+                if (!(form is null))
+                    form.Close();
+                goto Start;
+            }
         }
     }
 }
