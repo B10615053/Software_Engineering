@@ -196,7 +196,8 @@ namespace SWE_Final_Project.Managers {
                 else if (mCurrentSimulationType == SimulationType.VALIDATION) {
                     KeyValuePair<ValidationResult, int> result = doValidation(startStateModel);
 
-                    LogManager.Log(LogType.VALIDATION_FINAL_ROUTE, "Final route: " + String.Join(" => ", mRouteStatesStack.Reverse()));
+                    LogManager.Log(LogType.VALIDATION_FINAL_ROUTE, "Input branch: " + String.Join(",", presetBranches.ToArray()));
+                    LogManager.Log(LogType.VALIDATION_FINAL_ROUTE, "Final routes: " + String.Join(" => ", mRouteStatesStack.Reverse()));
 
                     switch (result.Key) {
                         case ValidationResult.VALID:
@@ -206,10 +207,10 @@ namespace SWE_Final_Project.Managers {
                             LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: The final state is NOT an END state.");
                             break;
                         case ValidationResult.INVALID_NO_BRANCH_MATCHES:
-                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: The validation process was stucked since no available link is matched.\r\n\tBranch: " + String.Join(",", presetBranches.ToArray()));
+                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: The validation process was stucked since no available link is matched.");
                             break;
                         case ValidationResult.INVALID_REMAINED_PRESET_BRANCHES_NOT_CONSUMED:
-                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: Although the validation has reached an END state, there\'re still pre-set branches which are NOT consumed.\r\n\tBranch: " + String.Join(",", presetBranches.ToArray()));
+                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: Although the validation has reached an END state, there\'re still pre-set branches which are NOT consumed.");
                             break;
                     }
 
