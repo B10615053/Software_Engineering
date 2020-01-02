@@ -466,7 +466,7 @@ namespace SWE_Final_Project.Views {
                 newStateView.resetPortPositions();
 
                 // add the state-view
-                AddStateView(newStateView);
+                AddStateView(newStateView, textArgb: Color.Black.ToArgb());
             }
 
             // reset both the holding type and dragging to NONE
