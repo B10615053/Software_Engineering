@@ -738,5 +738,31 @@ namespace SWE_Final_Project {
         private void ValidateToolStripMenuItem_Click(object sender, EventArgs e) {
             startOrStopValidation();
         }
+
+        // show user tips
+        private void HelpToolStripMenuItem_Click(object sender, EventArgs e) {
+            new AlertForm(
+                "User tips",
+                "Feature\t\t\tOperation\t\t\t\t\t\tShortcut\r\n" +
+                "===============================================================================================\r\n" +
+                "File system\r\n" +
+                "Create\t\t\tToolbar -> File -> New script\t\t\t\tCtrl, N\r\n" +
+                "Load\t\t\tToolbar -> File -> Open script\t\t\t\tCtrl, O\r\n" +
+                "Save\t\t\tToolbar -> File -> Save script\t\t\t\tCtrl, S\r\n" +
+                "Export\t\t\tToolbar -> File -> Export as JPG\t\t\tCtrl, Shift, S\r\n" +
+                "\r\n" +
+                "Simulation\r\n" +
+                "Start\t\t\tToolbar -> Run -> Start\t\t\t\t\tF5\r\n" +
+                "Stop\t\t\tToolbar -> Run -> Stop\t\t\t\t\tF5\r\n" +
+                "\r\n" +
+                "Validation\r\n" +
+                "Start\t\t\tToolbar -> Validation\t\t\t\t\tF6\r\n" +
+                "\r\n" +
+                "Screenshot\r\n" +
+                "Whole window\t\tToolbar -> Screenshot -> Whole window\t\t\tF11\r\n" +
+                "Script w/ name\t\tToolbar -> Screenshot -> Script -> With name\t\tCtrl, F11\r\n" +
+                "Script w/o name\t\tToolbar -> Screenshot -> Script -> Without name\t\tShift, F11\r\n"
+            ).Show();
+        }
     }
 }

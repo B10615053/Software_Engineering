@@ -56,6 +56,7 @@
             this.cbbExistedLinks = new System.Windows.Forms.ComboBox();
             this.cbbExistedStates = new System.Windows.Forms.ComboBox();
             this.lblExistedStates = new System.Windows.Forms.Label();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -94,7 +95,8 @@
             this.runToolStripMenuItem,
             this.validateToolStripMenuItem,
             this.screenshotToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
@@ -139,8 +141,8 @@
             // 
             this.saveAsToolStripMenuItem.Enabled = false;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
-            this.saveAsToolStripMenuItem.Text = "Export the current working script as JPG (Ctrl, Shift, S)";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(279, 26);
+            this.saveAsToolStripMenuItem.Text = "Export as JPG (Ctrl, Shift, S)";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItem_Click);
             // 
             // runToolStripMenuItem
@@ -198,8 +200,8 @@
             this.withoutScriptNameToolStripMenuItem});
             this.currentWorkingScriptToolStripMenuItem.Enabled = false;
             this.currentWorkingScriptToolStripMenuItem.Name = "currentWorkingScriptToolStripMenuItem";
-            this.currentWorkingScriptToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
-            this.currentWorkingScriptToolStripMenuItem.Text = "Current working script";
+            this.currentWorkingScriptToolStripMenuItem.Size = new System.Drawing.Size(237, 26);
+            this.currentWorkingScriptToolStripMenuItem.Text = "Script";
             // 
             // withScriptNameToolStripMenuItem
             // 
@@ -439,6 +441,13 @@
             this.lblExistedStates.TabIndex = 2;
             this.lblExistedStates.Text = "States (0)";
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.HelpToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -499,6 +508,7 @@
         private System.Windows.Forms.Label lblExistedStates;
         private System.Windows.Forms.Label lblExistedLinks;
         private System.Windows.Forms.ToolStripMenuItem validateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
     }
 }
 

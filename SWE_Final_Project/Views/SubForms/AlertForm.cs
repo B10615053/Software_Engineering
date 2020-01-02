@@ -58,6 +58,7 @@ namespace SWE_Final_Project.Views.SubForms {
         // confirm and close the alert form
         private void BtnConfirmAtAlertForm_Click(object sender, EventArgs e) {
             DialogResult = DialogResult.Yes;
+            Close();
         }
 
         // repudiate and close the alert form
