@@ -62,7 +62,8 @@ namespace SWE_Final_Project.Managers {
         VALID,
         INVALID_NO_BRANCH_MATCHES,
         INVALID_REMAINED_PRESET_BRANCHES_NOT_CONSUMED,
-        INVALID_FINAL_STATE_IS_NOT_END_STATE
+        INVALID_FINAL_STATE_IS_NOT_END_STATE,
+        INVALID_MULTIPLE_BRANCH_CHOICES
     }
 
     public class SimulationManager {
@@ -144,13 +145,18 @@ namespace SWE_Final_Project.Managers {
                             return new KeyValuePair<ValidationResult, int>(ValidationResult.INVALID_NO_BRANCH_MATCHES, k);
 
                         // get the link whose link-text equals to the current preset branch
-                        LinkModel nextLink = mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].Find(it => it.LinkText == presetBranch);
+                        List<LinkModel> nextLinks = mCurrentLinkViewStatuses[SimulatingLinkStatus.AVAILABLE].FindAll(it => it.LinkText == presetBranch);
+
                         // no matches found among all the available links -> stucked
-                        if (nextLink is null)
+                        if (nextLinks is null || nextLinks.Count == 0)
                             return new KeyValuePair<ValidationResult, int>(ValidationResult.INVALID_NO_BRANCH_MATCHES, k);
 
+                        // there're multiple choices -> invalid
+                        if (nextLinks.Count > 1)
+                            return new KeyValuePair<ValidationResult, int>(ValidationResult.INVALID_MULTIPLE_BRANCH_CHOICES, k);
+
                         // go to the next state
-                        stillHasBranch = stepOnNextState(nextLink, nextLink.DstStateModel);
+                        stillHasBranch = stepOnNextState(nextLinks[0], nextLinks[0].DstStateModel);
                     }
 
                     /* important! */
@@ -211,6 +217,9 @@ namespace SWE_Final_Project.Managers {
                             break;
                         case ValidationResult.INVALID_REMAINED_PRESET_BRANCHES_NOT_CONSUMED:
                             LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: Although the validation has reached an END state, there\'re still pre-set branches which are NOT consumed.");
+                            break;
+                        case ValidationResult.INVALID_MULTIPLE_BRANCH_CHOICES:
+                            LogManager.Log(LogType.VALIDATION_RESULT, "\tResult: INVALID\r\n\tReason: There\'re multiple choices with the pre-set branch \"" + presetBranches[result.Value] + "\" during the process");
                             break;
                     }
 
