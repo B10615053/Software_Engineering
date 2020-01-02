@@ -271,7 +271,8 @@ namespace SWE_Final_Project.Views.States {
             // delete a certain state
             if (e.KeyData.Equals(Keys.Delete))
             {
-                deleteThisState();
+                if (MouseManager.CurrentMouseAction == MouseAction.LOUNGE && SimulationManager.isSimulating() == false)
+                    deleteThisState();
             }
 
             // cut this state

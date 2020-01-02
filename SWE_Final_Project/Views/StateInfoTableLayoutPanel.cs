@@ -492,10 +492,12 @@ namespace SWE_Final_Project.Views {
 
             // delete
             else if (e.KeyCode == Keys.Delete) {
-                if (mPassedView is StateView)
-                    (mPassedView as StateView).deleteThisState();
-                else if (mPassedView is LinkView)
-                    (mPassedView as LinkView).deleteThisLink();
+                if (!(mPassedView is null) && MouseManager.CurrentMouseAction == MouseAction.LOUNGE && SimulationManager.isSimulating() == false) {
+                    if (mPassedView is StateView)
+                        (mPassedView as StateView).deleteThisState();
+                    else if (mPassedView is LinkView)
+                        (mPassedView as LinkView).deleteThisLink();
+                }
             }
 
             // F5
