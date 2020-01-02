@@ -19,8 +19,44 @@ namespace SWE_Final_Project {
         private List<StateView> mStateViewListOnTheShell = new List<StateView>();
 
         public Form1() {
+            AllowDrop = true;
+            DragEnter += new DragEventHandler(Form1_DragEnter);
+            DragDrop += new DragEventHandler(Form1_DragDrop);
+
             InitializeComponent();
             buildUpStatesList();
+
+            scriptsTabControl.AllowDrop = true;
+            scriptsTabControl.DragEnter += new DragEventHandler(Form1_DragEnter);
+            scriptsTabControl.DragDrop += new DragEventHandler(Form1_DragDrop);
+        }
+
+        private void Form1_DragEnter(object sender, DragEventArgs e) {
+            try {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                    e.Effect = DragDropEffects.Copy;
+            } catch (Exception) {}
+        }
+
+        private void Form1_DragDrop(object sender, DragEventArgs e) {
+            try {
+                string[] files = (string[]) e.Data.GetData(DataFormats.FileDrop);
+                foreach (string filename in files) {
+                    if (filename.EndsWith(".sms") == false)
+                        new AlertForm("Dropping files", "Only \".sms\" files allowed!").ShowDialog();
+
+                    // get the script-model by de-serializing
+                    ScriptModel scriptModel = SerializationManager.Deserialize<ScriptModel>(filename);
+
+                    // open the designated script-model,
+                    // if the script is already in the opened script list
+                    if (ModelManager.openScript(scriptModel) == false)
+                        new AlertForm("Alert", "The designated script \"" + filename + "\"is already in the opened script list.").ShowDialog();
+                    // add new tab-page for this script
+                    else
+                        addNewTabPage(scriptModel, false);
+                }
+            } catch (Exception) {}
         }
 
         // put the 3 types of states on the left side of GUI
@@ -205,7 +241,7 @@ namespace SWE_Final_Project {
 
             // show the dialog and result a designated-by-user file
             if (openScriptDialog.ShowDialog() == DialogResult.OK) {
-                //try {
+                try {
                     // get the script-model by de-serializing
                     ScriptModel scriptModel = SerializationManager.Deserialize<ScriptModel>(openScriptDialog.FileName);
 
@@ -218,11 +254,10 @@ namespace SWE_Final_Project {
 
                     // add new tab-page for this script
                     addNewTabPage(scriptModel, false);
-                //} catch (Exception) {
-                //    new AlertForm("Error happened", "Unfortunately, errors happened when loading the file. Operation failed.").ShowDialog();
-                //    throw;
-                //    return false;
-                //}
+                } catch (Exception) {
+                    new AlertForm("Error happened", "Unfortunately, errors happened when loading the file. Operation failed.").ShowDialog();
+                    return false;
+                }
 
                 return true;
             }
