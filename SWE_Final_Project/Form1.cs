@@ -51,7 +51,7 @@ namespace SWE_Final_Project {
                     // open the designated script-model,
                     // if the script is already in the opened script list
                     if (ModelManager.openScript(scriptModel) == false)
-                        new AlertForm("Alert", "The designated script \"" + filename + "\"is already in the opened script list.").ShowDialog();
+                        new AlertForm("Alert", "The designated script \"" + filename + "\" is already in the opened script list.").ShowDialog();
                     // add new tab-page for this script
                     else
                         addNewTabPage(scriptModel, false);

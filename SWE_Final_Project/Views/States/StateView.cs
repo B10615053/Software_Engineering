@@ -556,10 +556,10 @@ namespace SWE_Final_Project.Views.States {
                 int bgColorArgb = ModelManager.getStateModelByIdAtCurrentScript(Id).BackgroundArgb;
                 e.Graphics.FillEllipse(
                     new SolidBrush(Color.FromArgb(bgColorArgb)),
-                    0,
-                    0,
-                    Size.Width - 1,
-                    Size.Height - 1
+                    1,
+                    1,
+                    Size.Width - 3,
+                    Size.Height - 3
                 );
             }
 
