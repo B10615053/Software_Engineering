@@ -1,4 +1,5 @@
 ﻿using SWE_Final_Project.Managers;
+using SWE_Final_Project.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -50,12 +51,17 @@ namespace SWE_Final_Project.Views.States {
 
             if (!mIsInstanceOnScript && mIsMouseMovingOn)
                 color = Color.FromArgb(127, 0, 0, 0);
-            else
-                color = Color.Black;
+            else {
+                StateModel thisModel = ModelManager.getStateModelByIdAtCurrentScript(Id);
+                if (thisModel is null)
+                    color = Color.Black;
+                else
+                    color = Color.FromArgb(thisModel.TextArgb);
+            }
 
             if (SimulationManager.isSimulating() == false) {
                 // draw the kuang-kuang
-                g.DrawEllipse(new Pen(color), 0, 0, Size.Width - 1, Size.Height - 1);
+                g.DrawEllipse(Pens.Black, 0, 0, Size.Width - 1, Size.Height - 1);
             }
 
             // draw the string of state content

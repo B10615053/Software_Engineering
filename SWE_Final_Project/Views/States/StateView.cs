@@ -119,6 +119,20 @@ namespace SWE_Final_Project.Views.States {
             relocateState(Location.X, Location.Y, false, updateModel);
         }
 
+        // set the background color
+        public void setBackgroundColor(int newBgColorArgb) {
+            ModelManager.getStateModelByIdAtCurrentScript(Id).BackgroundArgb = newBgColorArgb;
+            ModelManager.modifyStateOnCertainScript(this, true);
+            Invalidate();
+        }
+
+        // set the text color
+        public void setTextColor(int newTextColorArgb) {
+            ModelManager.getStateModelByIdAtCurrentScript(Id).TextArgb = newTextColorArgb;
+            ModelManager.modifyStateOnCertainScript(this, true);
+            Invalidate();
+        }
+
         // re-size the state once the content text has changed
         protected void resizeStateByContent(string newStateContent, bool updateModel = true) {
             // set the state content
@@ -520,6 +534,18 @@ namespace SWE_Final_Project.Views.States {
 
         // re-draw
         protected override void OnPaint(PaintEventArgs e) {
+            // change the background color
+            if (mIsInstanceOnScript) {
+                int bgColorArgb = ModelManager.getStateModelByIdAtCurrentScript(Id).BackgroundArgb;
+                e.Graphics.FillEllipse(
+                    new SolidBrush(Color.FromArgb(bgColorArgb)),
+                    0,
+                    0,
+                    Size.Width - 1,
+                    Size.Height - 1
+                );
+            }
+
             // render the link-adding hints
             if (mIsInstanceOnScript && mIsMouseMovingOn) {
                 SolidBrush portHintBrush = new SolidBrush(Color.FromArgb(255, 255, 14, 29));

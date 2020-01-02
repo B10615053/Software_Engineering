@@ -318,6 +318,7 @@ namespace SWE_Final_Project.Views {
             Invalidate();
         }
 
+        // key-up
         protected override void OnKeyUp(KeyEventArgs e) {
             mIsShiftDown = false;
         }

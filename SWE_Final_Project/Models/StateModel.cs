@@ -54,7 +54,14 @@ namespace SWE_Final_Project.Models {
         private PortModel mDownPortModel = new PortModel();
         private PortModel mLeftPortModel = new PortModel();
 
-        
+        // the color value of the background
+        private int mBackgroundArgb = 0;
+        public int BackgroundArgb { get => mBackgroundArgb; set => mBackgroundArgb = value; }
+
+        // the color value of the text
+        private int mTextArgb = Color.Black.ToArgb();
+        public int TextArgb { get => mTextArgb; set => mTextArgb = value; }
+
         /* ========================================= */
 
         // constructor

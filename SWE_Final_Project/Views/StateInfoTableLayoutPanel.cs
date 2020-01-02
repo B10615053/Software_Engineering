@@ -124,6 +124,59 @@ namespace SWE_Final_Project.Views {
             TextBox txtShowLocY = new TextBox();
             txtShowLocY.Text = (stateView.Location.Y).ToString();
             Controls.Add(txtShowLocY, 1, 3);
+
+            /* === */
+
+            // if it's a GENERAL state
+            if (stateView is GeneralStateView) {
+                // label: Background color
+                TextBox lblBgColor = new TextBox();
+                lblBgColor.Text = "BG Color";
+                lblBgColor.BorderStyle = BorderStyle.None;
+                lblBgColor.ReadOnly = true;
+                Controls.Add(lblBgColor, 0, 4);
+                
+                // text-box: Background color
+                Button btnBgColorPick = new Button();
+                btnBgColorPick.Text = "Pick";
+                btnBgColorPick.Dock = DockStyle.Fill;
+                btnBgColorPick.Click += (sender, e) => {
+                ColorDialog colorDialog = new ColorDialog();
+                colorDialog.FullOpen = true;
+
+                DialogResult dialogResult = colorDialog.ShowDialog();
+                if (dialogResult == DialogResult.OK) {
+                    int pickedArgb = colorDialog.Color.ToArgb();
+                    stateView.setBackgroundColor(pickedArgb);
+                }
+            };
+                Controls.Add(btnBgColorPick, 1, 4);
+
+                /* === */
+
+                // label: Text color
+                TextBox lblTextColor = new TextBox();
+                lblTextColor.Text = "Text Color";
+                lblTextColor.BorderStyle = BorderStyle.None;
+                lblTextColor.ReadOnly = true;
+                Controls.Add(lblTextColor, 0, 5);
+
+                // text-box: Background color
+                Button btnTextColorPick = new Button();
+                btnTextColorPick.Text = "Pick";
+                btnTextColorPick.Dock = DockStyle.Top;
+                btnTextColorPick.Click += (sender, e) => {
+                    ColorDialog colorDialog = new ColorDialog();
+                    colorDialog.FullOpen = true;
+
+                    DialogResult dialogResult = colorDialog.ShowDialog();
+                    if (dialogResult == DialogResult.OK) {
+                        int pickedArgb = colorDialog.Color.ToArgb();
+                        stateView.setTextColor(pickedArgb);
+                    }
+                };
+                Controls.Add(btnTextColorPick, 1, 5);
+            }
             #endregion
 
             /* ============================= */
