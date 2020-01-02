@@ -1,9 +1,12 @@
 ﻿using SWE_Final_Project.Models;
+using SWE_Final_Project.Views;
+using SWE_Final_Project.Views.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SWE_Final_Project.Managers {
     // be used to manage the history versions of all opened scripts
@@ -11,6 +14,12 @@ namespace SWE_Final_Project.Managers {
         // the history versions stacks of all opened scripts
         private static List<KeyValuePair<Stack<ScriptModel>, Stack<ScriptModel>>>
             mScriptsHistoryStacks = new List<KeyValuePair<Stack<ScriptModel>, Stack<ScriptModel>>>();
+
+        // the copied/cutted state-model
+        private static StateModel mBufferedStateModel = null;
+        public static StateModel BufferedStateModel { get => mBufferedStateModel; }
+
+        /* ======================================================== */
 
         // when creating or opening a script, start it's history record
         public static void startScriptHistory(ScriptModel newScriptModel) {
@@ -101,6 +110,16 @@ namespace SWE_Final_Project.Managers {
             if (scriptIndex >= 0 && scriptIndex < mScriptsHistoryStacks.Count)
                 mScriptsHistoryStacks[scriptIndex].Value.Clear();
         }
+
+        // buffer (copy/cut) the selected state-model
+        public static void bufferStateModel(StateModel stateModel) {
+            if (stateModel is null)
+                return;
+            mBufferedStateModel = stateModel;
+        }
+
+        // check if there's a buffered state-model
+        public static bool hasBufferedStateModel() => (!(mBufferedStateModel is null));
 
         // for debugging
         private static void debugPrint() {

@@ -49,6 +49,12 @@ namespace SWE_Final_Project.Models {
                 mIngoingLinks.Remove(deleteLinkModel);
         }
 
+        // delete all links
+        public void deleteAllLinks() {
+            mOutgoingLinks.Clear();
+            mIngoingLinks.Clear();
+        }
+
         // get links
         public List<LinkModel> getLinks(bool isOutgoing) {
             return isOutgoing ? mOutgoingLinks : mIngoingLinks;

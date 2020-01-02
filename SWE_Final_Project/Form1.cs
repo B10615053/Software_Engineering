@@ -531,6 +531,7 @@ namespace SWE_Final_Project {
                     doScreenshot(this);
             }
 
+            // other cases
             else {
                 // Ctrl pressed
                 if (e.Modifiers == Keys.Control) {
@@ -598,6 +599,46 @@ namespace SWE_Final_Project {
                             }
                         }
                     }
+
+                    // Ctrl + V: paste the copied/cutted view
+                    else if (e.KeyCode == Keys.V) {
+                        if (HistoryManager.hasBufferedStateModel()) {
+                            // paste GENERAL
+                            if (HistoryManager.BufferedStateModel.StateType == StateType.GENERAL) {
+                                ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.AddStateView(new GeneralStateView(
+                                    HistoryManager.BufferedStateModel.LocOnScript.X,
+                                    HistoryManager.BufferedStateModel.LocOnScript.Y,
+                                    HistoryManager.BufferedStateModel.ContentText,
+                                    true
+                                ), HistoryManager.BufferedStateModel.Id,
+                                   HistoryManager.BufferedStateModel.BackgroundArgb,
+                                   HistoryManager.BufferedStateModel.TextArgb
+                                );
+                            }
+
+                            // paste END
+                            else if (HistoryManager.BufferedStateModel.StateType == StateType.END) {
+                                ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.AddStateView(new EndStateView(
+                                    HistoryManager.BufferedStateModel.LocOnScript.X,
+                                    HistoryManager.BufferedStateModel.LocOnScript.Y,
+                                    HistoryManager.BufferedStateModel.ContentText,
+                                    true
+                                ), HistoryManager.BufferedStateModel.Id);
+                            }
+
+                            // paste START only if the previous action is Ctrl + X
+                            else if (HistoryManager.BufferedStateModel.StateType == StateType.START) {
+                                if (ModelManager.getCurrentWorkingScript().Completeness == ScriptModelCompleteness.EMPTY_OR_ONLY_HAS_GENERAL || ModelManager.getCurrentWorkingScript().Completeness == ScriptModelCompleteness.HAS_END_BUT_NO_START) {
+                                    ((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas.AddStateView(new StartStateView(
+                                        HistoryManager.BufferedStateModel.LocOnScript.X,
+                                        HistoryManager.BufferedStateModel.LocOnScript.Y,
+                                        HistoryManager.BufferedStateModel.ContentText,
+                                        true
+                                    ), HistoryManager.BufferedStateModel.Id);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 // F5 pressed: start/stop a simulation (not include a validation)
@@ -621,8 +662,6 @@ namespace SWE_Final_Project {
                     else
                         doScreenshot(((ScriptTabPage) scriptsTabControl.SelectedTab).TheScriptCanvas, "Exported successfully!");
                 }
-
-               
             }
         }
 

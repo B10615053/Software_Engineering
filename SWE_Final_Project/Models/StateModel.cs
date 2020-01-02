@@ -79,23 +79,34 @@ namespace SWE_Final_Project.Models {
                 mId = id;
         }
 
-        // copy constructor
+        // copy constructor (but the id is NOT copied)
         public StateModel(StateModel stateModel): this(
             stateModel.StateType,
             stateModel.LocOnScript,
             stateModel.SizeOnScript,
-            stateModel.ContentText,
-            stateModel.Id
-        ) {}
+            stateModel.ContentText
+        ) {
+            mTextArgb = stateModel.mTextArgb;
+            mBackgroundArgb = stateModel.mBackgroundArgb;
+        }
 
         // constructor
-        public StateModel(ref StateView stateView) {
+        public StateModel(ref StateView stateView, string id = null, int bgColorArgb = 0, int textColorArgb = 0) {
             setDataByStateView(stateView);
 
-            // generate unique id
-            mId = Guid.NewGuid().ToString("N");
+            // generate the unique id
+            if (id is null)
+                mId = Guid.NewGuid().ToString("N");
+            // use the passed id
+            else
+                mId = id;
+
             // assign to the state-view
             stateView.Id = mId;
+
+            // give the colors
+            mBackgroundArgb = bgColorArgb;
+            mTextArgb = textColorArgb;
         }
 
         // set the state-model data by a state-view
@@ -211,6 +222,14 @@ namespace SWE_Final_Project.Models {
                 case PortType.LEFT:
                     mLeftPortModel.deleteLink(deleteLinkModel, isOutgoing); break;
             }
+        }
+
+        // delete all links in all ports
+        public void deleteAllLinks() {
+            mUpPortModel.deleteAllLinks();
+            mRightPortModel.deleteAllLinks();
+            mDownPortModel.deleteAllLinks();
+            mLeftPortModel.deleteAllLinks();
         }
 
         // get a certain (up, right, down, left) port-model

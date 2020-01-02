@@ -273,6 +273,22 @@ namespace SWE_Final_Project.Views.States {
             {
                 deleteThisState();
             }
+
+            // cut this state
+            else if (e.Modifiers == Keys.Control) {
+                if (e.KeyCode == Keys.C || e.KeyCode == Keys.X) {
+                    StateModel model = ModelManager.getStateModelByIdAtCurrentScript(Id);
+                    StateModel newModel = new StateModel(model);
+                    newModel.LocOnScript = new Point(
+                        model.LocOnScript.X + model.SizeOnScript.Width,
+                        model.LocOnScript.Y + model.SizeOnScript.Height
+                    );
+
+                    HistoryManager.bufferStateModel(newModel);
+                    if (e.KeyCode == Keys.X)
+                        deleteThisState();
+                }
+            }
         }
 
         // mouse entered, set is-mouse-moving-on to true, and re-draw

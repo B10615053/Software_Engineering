@@ -14,6 +14,7 @@ namespace SWE_Final_Project.Views {
     public class StateInfoTableLayoutPanel: TableLayoutPanel {
         // the view that just passed in
         private PictureBox mPassedView = null;
+        public PictureBox PassedView { get => mPassedView; }
 
         /* ============================================================= */
 

@@ -41,6 +41,7 @@
             this.withoutScriptNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_main = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayout_mainWithoutCmd = new System.Windows.Forms.TableLayoutPanel();
             this.scriptsTabControl = new System.Windows.Forms.TabControl();
@@ -56,7 +57,6 @@
             this.cbbExistedLinks = new System.Windows.Forms.ComboBox();
             this.cbbExistedStates = new System.Windows.Forms.ComboBox();
             this.lblExistedStates = new System.Windows.Forms.Label();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayout_base.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
             this.tableLayout_main.SuspendLayout();
@@ -118,14 +118,14 @@
             // newScriptToolStripMenuItem
             // 
             this.newScriptToolStripMenuItem.Name = "newScriptToolStripMenuItem";
-            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
+            this.newScriptToolStripMenuItem.Size = new System.Drawing.Size(279, 26);
             this.newScriptToolStripMenuItem.Text = "New Script (Ctrl, N)";
             this.newScriptToolStripMenuItem.Click += new System.EventHandler(this.NewScriptToolStripMenuItem_Click);
             // 
             // openScriptToolStripMenuItem
             // 
             this.openScriptToolStripMenuItem.Name = "openScriptToolStripMenuItem";
-            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
+            this.openScriptToolStripMenuItem.Size = new System.Drawing.Size(279, 26);
             this.openScriptToolStripMenuItem.Text = "Open Script (Ctrl, O)";
             this.openScriptToolStripMenuItem.Click += new System.EventHandler(this.OpenScriptToolStripMenuItem_Click);
             // 
@@ -133,7 +133,7 @@
             // 
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(463, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(279, 26);
             this.saveToolStripMenuItem.Text = "Save Script (Ctrl, S)";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
@@ -189,7 +189,7 @@
             // wholeWindowToolStripMenuItem
             // 
             this.wholeWindowToolStripMenuItem.Name = "wholeWindowToolStripMenuItem";
-            this.wholeWindowToolStripMenuItem.Size = new System.Drawing.Size(249, 26);
+            this.wholeWindowToolStripMenuItem.Size = new System.Drawing.Size(237, 26);
             this.wholeWindowToolStripMenuItem.Text = "Whole window (F11)";
             this.wholeWindowToolStripMenuItem.Click += new System.EventHandler(this.WholeWindowToolStripMenuItem_Click);
             // 
@@ -232,6 +232,13 @@
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Size = new System.Drawing.Size(419, 26);
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Text = "Prompt typing box when creating general state";
             this.promptTypingFormWhenCreatingGeneralStateToolStripMenuItem.Click += new System.EventHandler(this.PromptTypingFormWhenCreatingGeneralStateToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.HelpToolStripMenuItem_Click);
             // 
             // tableLayout_main
             // 
@@ -440,13 +447,6 @@
             this.lblExistedStates.Size = new System.Drawing.Size(297, 20);
             this.lblExistedStates.TabIndex = 2;
             this.lblExistedStates.Text = "States (0)";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
-            this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.HelpToolStripMenuItem_Click);
             // 
             // Form1
             // 

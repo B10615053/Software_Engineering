@@ -109,6 +109,22 @@ namespace SWE_Final_Project.Views {
             Invalidate();
         }
 
+        // add a new state-view
+        public void AddStateView(StateView newStateView, string id = null, int bgArgb = 0, int textArgb = 0) {
+            // add model
+            ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView, id, bgArgb, textArgb));
+
+            // add view
+            Controls.Add(newStateView);
+            mExistedStateViewList.Add(newStateView);
+
+            // show info panel
+            ModelManager.showInfoPanel(newStateView);
+
+            // invalidate the start-state-view on the shell if needs
+            Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+        }
+
         // re-set the whole script
         public void setDataByScriptModel(ScriptModel scriptModel) {
             if (scriptModel is null)
@@ -448,18 +464,9 @@ namespace SWE_Final_Project.Views {
                 newStateView.Size = new Size((int)(newStateView.Size.Width * currentScale), 
                     (int)(newStateView.Size.Height * currentScale ));
                 newStateView.resetPortPositions();
-                // add model
-                ModelManager.addNewStateOnCertainScript(new StateModel(ref newStateView));
 
-                // add view
-                Controls.Add(newStateView);
-                mExistedStateViewList.Add(newStateView);
-
-                // show info panel
-                ModelManager.showInfoPanel(newStateView);
-
-                // invalidate the start-state-view on the shell if needs
-                Program.form.getCertainStateViewOnTheShell(0).Invalidate();
+                // add the state-view
+                AddStateView(newStateView);
             }
 
             // reset both the holding type and dragging to NONE

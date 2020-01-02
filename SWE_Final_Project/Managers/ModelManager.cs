@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace SWE_Final_Project.Managers {
     class ModelManager {
+        // the info-panel (attribute bar) of a certain (state- or link-) view
         private static StateInfoTableLayoutPanel mInfoPanel = null;
 
         // the index of current working-on script of all opened scripts
@@ -20,6 +21,8 @@ namespace SWE_Final_Project.Managers {
 
         // store all opened scripts
         private static List<ScriptModel> mOpenedScriptList = new List<ScriptModel>();
+
+        /* =================================== */
 
         // get (deep-) copied opened script list
         public static List<ScriptModel> getCopiedScriptList() {
@@ -162,7 +165,7 @@ namespace SWE_Final_Project.Managers {
 
         // add new state on a certain script
         public static void addNewStateOnCertainScript(StateModel newStateModel) {
-            if (CurrentSelectedScriptIndex < 0)
+            if (CurrentSelectedScriptIndex < 0 || (newStateModel is null))
                 return;
 
             mOpenedScriptList[CurrentSelectedScriptIndex].addNewState(newStateModel);
@@ -276,6 +279,12 @@ namespace SWE_Final_Project.Managers {
             infoContainer.Controls.Clear();
             mInfoPanel = null;
         }
+
+        // check if there's an info-panel shown
+        public static bool hasInfoPanel() => (!(mInfoPanel is null));
+
+        // get the shown info-panel
+        public static StateInfoTableLayoutPanel getInfoPanel() => mInfoPanel;
 
         // for debugging
         public static void debugPrint() {
