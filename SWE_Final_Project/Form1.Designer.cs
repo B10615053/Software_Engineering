@@ -23,6 +23,7 @@
         /// 這個方法的內容。
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tableLayout_base = new System.Windows.Forms.TableLayoutPanel();
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -454,9 +455,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1924, 912);
             this.Controls.Add(this.tableLayout_base);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
-            this.Text = "State Machine Simulator - G03";
+            this.Text = "State-of-the-art Simulator - SOTAS";
             this.tableLayout_base.ResumeLayout(false);
             this.tableLayout_base.PerformLayout();
             this.mainMenuStrip.ResumeLayout(false);

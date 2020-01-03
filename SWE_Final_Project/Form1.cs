@@ -824,6 +824,8 @@ namespace SWE_Final_Project {
                 "Load\t\t\tToolbar -> File -> Open script\t\t\t\tCtrl, O\r\n" +
                 "Save\t\t\tToolbar -> File -> Save script\t\t\t\tCtrl, S\r\n" +
                 "Export\t\t\tToolbar -> File -> Export as JPG\t\t\tCtrl, Shift, S\r\n" +
+                "Close\t\t\tRight click on the tab -> Close\t\t\t\tCtrl, W\r\n" +
+                "Rename\t\t\tRight click on the tab -> Rename\t\t\tCtrl, R\r\n" +
                 "\r\n" +
                 "Simulation\r\n" +
                 "Start\t\t\tToolbar -> Run -> Start\t\t\t\t\tF5\r\n" +
@@ -835,7 +837,14 @@ namespace SWE_Final_Project {
                 "Screenshot\r\n" +
                 "Whole window\t\tToolbar -> Screenshot -> Whole window\t\t\tF11\r\n" +
                 "Script w/ name\t\tToolbar -> Screenshot -> Script -> With name\t\tCtrl, F11\r\n" +
-                "Script w/o name\t\tToolbar -> Screenshot -> Script -> Without name\t\tShift, F11\r\n"
+                "Script w/o name\t\tToolbar -> Screenshot -> Script -> Without name\t\tShift, F11\r\n" +
+                "\r\n" +
+                "Edition\r\n" +
+                "Copy state\t\t\t\t\t\t\t\t\tCtrl, C\r\n" +
+                "Cut state\t\t\t\t\t\t\t\t\tCtrl, X\r\n" +
+                "Paste state\t\t\t\t\t\t\t\t\tCtrl, V\r\n" +
+                "Undo\t\t\t\t\t\t\t\t\t\tCtrl, Z\r\n" +
+                "Redo\t\t\t\t\t\t\t\t\t\tCtrl, Y\r\n"
             ).Show();
         }
     }
